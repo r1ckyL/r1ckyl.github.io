@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>test1</title>
+    <link href="/2023/08/22/test1/"/>
+    <url>/2023/08/22/test1/</url>
+    
+    <content type="html"><![CDATA[<p>图片查看：</p><p><img src="/img/image-20230822153329596.png" alt="image-20230822153329596"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>测试分类1</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>测试标签1</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>test</title>
     <link href="/2023/08/22/test/"/>
     <url>/2023/08/22/test/</url>

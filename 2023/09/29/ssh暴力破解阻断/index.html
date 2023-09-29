@@ -1,0 +1,827 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="r1">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="暴力破解的自动阻断项目背景： 只要是暴漏在公网云服务器，每天都会有大量的暴力破解行为 解决方法： 1.更换端口（无济于事）2.买云防护，waf （贵） 爆破破解的一个自动阻断 re正则表达式re模块findall  找到匹配到的所有子串，并返回一个列表，如果没有匹配到就返回空  search函数 扫描整个字符串，并且返回第一个，如果没匹配到就返回空  匹配元字符 1234\d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh暴力破解阻断">
+<meta property="og:url" content="http://example.com/2023/09/29/ssh%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%E9%98%BB%E6%96%AD/index.html">
+<meta property="og:site_name" content="r1ckyL&#39;s blog">
+<meta property="og:description" content="暴力破解的自动阻断项目背景： 只要是暴漏在公网云服务器，每天都会有大量的暴力破解行为 解决方法： 1.更换端口（无济于事）2.买云防护，waf （贵） 爆破破解的一个自动阻断 re正则表达式re模块findall  找到匹配到的所有子串，并返回一个列表，如果没有匹配到就返回空  search函数 扫描整个字符串，并且返回第一个，如果没匹配到就返回空  匹配元字符 1234\d">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/image-20230905100541279.png">
+<meta property="og:image" content="http://example.com/img/image-20230905100937856.png">
+<meta property="og:image" content="http://example.com/img/image-20230905101528009.png">
+<meta property="og:image" content="http://example.com/img/image-20230905102515659.png">
+<meta property="og:image" content="http://example.com/img/image-20230905102757945.png">
+<meta property="og:image" content="http://example.com/img/image-20230905103436862.png">
+<meta property="og:image" content="http://example.com/img/image-20230905104011139.png">
+<meta property="og:image" content="http://example.com/img/image-20230905104828290.png">
+<meta property="og:image" content="http://example.com/img/image-20230905105310566.png">
+<meta property="og:image" content="http://example.com/img/image-20230905111931877.png">
+<meta property="og:image" content="http://example.com/img/image-20230905112026716.png">
+<meta property="og:image" content="http://example.com/img/image-20230905112414933.png">
+<meta property="og:image" content="http://example.com/img/image-20230905141601763.png">
+<meta property="og:image" content="http://example.com/img/image-20230905141623837.png">
+<meta property="og:image" content="http://example.com/img/image-20230905142517181.png">
+<meta property="og:image" content="http://example.com/img/image-20230905142454064.png">
+<meta property="og:image" content="http://example.com/img/image-20230905145051484.png">
+<meta property="og:image" content="http://example.com/img/image-20230905145301828.png">
+<meta property="og:image" content="http://example.com/img/image-20230905150423999.png">
+<meta property="og:image" content="http://example.com/img/image-20230905150508377.png">
+<meta property="og:image" content="http://example.com/img/image-20230905152954772.png">
+<meta property="og:image" content="http://example.com/img/image-20230905153708461.png">
+<meta property="og:image" content="http://example.com/img/image-20230905153851379.png">
+<meta property="og:image" content="http://example.com/img/image-20230905153939709.png">
+<meta property="og:image" content="http://example.com/img/image-20230929155319929.png">
+<meta property="og:image" content="http://example.com/img/image-20230905170317267.png">
+<meta property="og:image" content="http://example.com/img/image-20230905170308672.png">
+<meta property="og:image" content="http://example.com/2023/%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/md%E6%96%87%E4%BB%B6%E5%9B%BE%E7%89%87%E5%AD%98%E6%94%BE/image-20230905170519218.png">
+<meta property="article:published_time" content="2023-09-29T07:56:39.000Z">
+<meta property="article:modified_time" content="2023-09-29T08:01:45.866Z">
+<meta property="article:author" content="r1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/image-20230905100541279.png">
+  
+  
+  
+  <title>ssh暴力破解阻断 - r1ckyL&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"VM6iIPhII9dNKYvDTSfaQlfY-MdYXbMMI","app_key":"ji1dPD8DG5BrS1OfKrqzGDUL","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>r1ckyL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ssh暴力破解阻断"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-09-29 15:56" pubdate>
+          2023年9月29日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ssh暴力破解阻断</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="暴力破解的自动阻断"><a href="#暴力破解的自动阻断" class="headerlink" title="暴力破解的自动阻断"></a>暴力破解的自动阻断</h1><p>项目背景：</p>
+<p>只要是暴漏在公网云服务器，每天都会有大量的暴力破解行为</p>
+<p>解决方法：</p>
+<p>1.更换端口（无济于事）<br>2.买云防护，waf （贵）</p>
+<p>爆破破解的一个自动阻断</p>
+<h2 id="re正则表达式"><a href="#re正则表达式" class="headerlink" title="re正则表达式"></a>re正则表达式</h2><h3 id="re模块"><a href="#re模块" class="headerlink" title="re模块"></a>re模块</h3><p><strong>findall</strong>  找到匹配到的所有子串，并返回一个列表，如果没有匹配到就返回空</p>
+<p><img src="/img/image-20230905100541279.png" srcset="/img/loading.gif" lazyload alt="image-20230905100541279"></p>
+<p><strong>search</strong>函数 扫描整个字符串，并且返回第一个，如果没匹配到就返回空</p>
+<p><img src="/img/image-20230905100937856.png" srcset="/img/loading.gif" lazyload alt="image-20230905100937856"></p>
+<p><strong>匹配元字符</strong></p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-string">\d</span>               匹配所有数字<span class="hljs-number">0</span>-<span class="hljs-number">9</span><br><span class="hljs-string">\D</span>               匹配非数字<br><span class="hljs-string">\w</span>               匹配所有单词字符，包括大小写字母 数字 下划线 中文<br><span class="hljs-string">\W</span>               匹配剩下的，空格 换行符 特殊字符<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20230905101528009.png" srcset="/img/loading.gif" lazyload alt="image-20230905101528009"></p>
+<p><strong>匹配字符集</strong></p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs inform7">字符的集合，用<span class="hljs-comment">[]</span>表示，字符集内用“^”表示“非”<br>\d=<span class="hljs-comment">[0-9]</span><br>\D=<span class="hljs-comment">[ ^ 0-9]</span><br>\w!=<span class="hljs-comment">[a-zA-Z_0-9]</span>??? 还有中文<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20230905102515659.png" srcset="/img/loading.gif" lazyload alt="image-20230905102515659"></p>
+<p><strong>匹配空白字符</strong></p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs livescript">空白符包含：<br><span class="hljs-string">&#x27; &#x27;</span>空格    <span class="hljs-string">\n换行符</span>   <span class="hljs-string">\t制表符</span>   <span class="hljs-string">\r回车符</span><br>使用<span class="hljs-string">\s来匹配他们</span><br>[^<span class="hljs-string">\s]</span> = <span class="hljs-string">\S</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20230905102757945.png" srcset="/img/loading.gif" lazyload alt="image-20230905102757945"></p>
+<p>**{} **表示匹配标定字符数量</p>
+<p><img src="/img/image-20230905103436862.png" srcset="/img/loading.gif" lazyload alt="image-20230905103436862"></p>
+<p><strong>特殊数量符号</strong></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">特殊数量符号：<br><span class="hljs-bullet">*              </span>匹配前一个字符0or无限次<br>+              匹配前一个字符1or无限次<br><span class="hljs-bullet">.              </span>匹配除换行符\n意外的任意1个字符<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20230905104011139.png" srcset="/img/loading.gif" lazyload alt="image-20230905104011139"></p>
+<p><strong>字符组</strong><br>把字符用()括起来，叫字符组，目的就为将匹配成的字符串分组</p>
+<p><img src="/img/image-20230905104828290.png" srcset="/img/loading.gif" lazyload alt="image-20230905104828290"></p>
+<p><strong>匹配参数模式</strong></p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs 1c">findall方法其实他有第三个参数，他是默认参数，参数模式。<br>re.I         忽略大小写<br>re.S         匹配空白符<br>多个参数用   “<span class="hljs-string">|”</span><br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20230905105310566.png" srcset="/img/loading.gif" lazyload alt="image-20230905105310566" style="zoom:80%;" />
+
+<h2 id="subprocess模块"><a href="#subprocess模块" class="headerlink" title="subprocess模块"></a>subprocess模块</h2><p><strong>项目需求：执行命令并将输出劫持实现日志的监控</strong></p>
+<p>用于启动新的进程的模块，它可以用于执行外部命令，获取进程的输出，向进程发送输入和等待进程结束。</p>
+<p>多进程协同，python里大概有这么三种方式<br>1.os.system函数<br>阻塞式<br>2.multiprocessing 模块<br>使用场景，密集型的计算</p>
+<p>3.subprocess模块</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">subprocess.run </span>  执行指定的命令，等待命令执行完成后返回一个对象<br><span class="hljs-keyword">subprocess.call	</span>执行指定的命令，返回命令执行的状态 （成功为<span class="hljs-number">0</span>  失败为非<span class="hljs-number">0</span>）<br><span class="hljs-keyword">subprocess.check_all	</span>与上面类似，区别是会输出报错<br><span class="hljs-keyword">subprocess.getoutput	</span>执行命令，返回结果<br></code></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs routeros">subprocess.<span class="hljs-built_in">run</span>(args, *, <span class="hljs-attribute">stdin</span>=None, <span class="hljs-attribute">input</span>=None, <span class="hljs-attribute">stdout</span>=None, <span class="hljs-attribute">stderr</span>=None, <span class="hljs-attribute">shell</span>=<span class="hljs-literal">False</span>, <span class="hljs-attribute">timeout</span>=None, <span class="hljs-attribute">check</span>=<span class="hljs-literal">False</span>, <span class="hljs-attribute">universal_newlines</span>=<span class="hljs-literal">False</span>)<br><br>subprocess.call(args, *, <span class="hljs-attribute">stdin</span>=None, <span class="hljs-attribute">stdout</span>=None, <span class="hljs-attribute">stderr</span>=None, <span class="hljs-attribute">shell</span>=<span class="hljs-literal">False</span>, <span class="hljs-attribute">timeout</span>=None)<br><br>args：要执行的命令，必须是个字符串，字符串参数列表<br>stdin stdout stderr : 子进程的标准输入 输出 错误 最常用的是subprocess.PIPE<br>timeout : 设置命令超时<br>shell : 值为bool，如果参数为ture 将通过操作系统的shell执行命令<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20230905111931877.png" srcset="/img/loading.gif" lazyload alt="image-20230905111931877" style="zoom:67%;" />
+
+<img src="/img/image-20230905112026716.png" srcset="/img/loading.gif" lazyload alt="image-20230905112026716" style="zoom:67%;" />
+
+<img src="/img/image-20230905112414933.png" srcset="/img/loading.gif" lazyload alt="image-20230905112414933" style="zoom:67%;" />
+
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs livecodeserver">subprocess.Popen (它是上述几个方法的父类)<br><span class="hljs-built_in">process</span> = subprocess.Popen(<br>	cmd,<br>	<span class="hljs-built_in">shell</span>=True,<br>	<span class="hljs-keyword">stdout</span> = subprocess.PIPE,<br>	<span class="hljs-keyword">stdin</span> = subprocess.PIPE,<br>	<span class="hljs-keyword">stderr</span> = subprocess.PIPE)<br>	<br><span class="hljs-built_in">shell</span>: 打开终端，Linux中是终端，Windows中是cmd<br><span class="hljs-keyword">stdout</span>=subprocess.PIPE:如果该命令执行成功，那么将该命令的标准输出放入管道<br><br>终端输入命令分两种：<br><span class="hljs-number">1.</span>直接在终端输入<br><span class="hljs-number">2.</span>进入环境再输入，比如python<br></code></pre></td></tr></table></figure>
+
+<p>在shell中执行命令：</p>
+<p><img src="/img/image-20230905141601763.png" srcset="/img/loading.gif" lazyload alt="image-20230905141601763"></p>
+<p>在python终端中执行命令：</p>
+<p><img src="/img/image-20230905141623837.png" srcset="/img/loading.gif" lazyload alt="image-20230905141623837"></p>
+<p>命令联动：</p>
+<p><img src="/img/image-20230905142517181.png" srcset="/img/loading.gif" lazyload alt="image-20230905142517181"></p>
+<p><img src="/img/image-20230905142454064.png" srcset="/img/loading.gif" lazyload alt="image-20230905142454064"></p>
+<h2 id="Linux日志分析"><a href="#Linux日志分析" class="headerlink" title="Linux日志分析"></a>Linux日志分析</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-regexp">/var/</span>log/cron     记录系统的定时任务<br><span class="hljs-regexp">/var/</span>log/cups     打印信息的日志<br><span class="hljs-regexp">/var/</span>log/message    记录的系统重要信息的日志<br><span class="hljs-regexp">/var/</span>log/btmp       登录失败<br><span class="hljs-regexp">/var/</span>log/lastlog     最后一次登录<br><span class="hljs-regexp">/var/</span>log/wtmp      成功登录记录<br><span class="hljs-regexp">/var/</span>log/secure     登录日志<br><span class="hljs-regexp">/var/</span>log/utmp      目前登录用户的信息<br><br>登录成功     Accepted password <span class="hljs-keyword">for</span> root <span class="hljs-keyword">from</span> <span class="hljs-number">172.30</span>.<span class="hljs-number">230.1</span> port <span class="hljs-number">59865</span> ssh2<br>登录失败     Failed password <span class="hljs-keyword">for</span> root <span class="hljs-keyword">from</span> <span class="hljs-number">172.30</span>.<span class="hljs-number">230.1</span> port <span class="hljs-number">59891</span> ssh2<br><br>常用命令：<br><span class="hljs-keyword">find</span>  <span class="hljs-keyword">grep</span>  awk  sed  cat  tail  head<br></code></pre></td></tr></table></figure>
+
+<p>案例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/passwd从第10行开始显示5行<br><span class="hljs-built_in">cat</span> /etc/passwd | <span class="hljs-built_in">tail</span> -n +10 | <span class="hljs-built_in">head</span> -n 5<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20230905145051484.png" srcset="/img/loading.gif" lazyload alt="image-20230905145051484"></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">只显示<span class="hljs-regexp">/etc/</span>passwd的账户名<br>cat <span class="hljs-regexp">/etc/</span>passwd | awk -F <span class="hljs-string">&#x27;:&#x27;</span> <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20230905145301828.png" srcset="/img/loading.gif" lazyload alt="image-20230905145301828" style="zoom:67%;" />
+
+
+
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gradle">定位有多少个ip在爆破主机的root账户   从<span class="hljs-regexp">/var/</span>log/secure中分析<br>登录失败：<span class="hljs-keyword">grep</span> <span class="hljs-string">&quot;Failed password for root&quot;</span> <span class="hljs-regexp">/var/</span>log/secure | awk <span class="hljs-string">&#x27;&#123;print $11&#125;&#x27;</span> | <span class="hljs-keyword">sort</span> | uniq -c | <span class="hljs-keyword">sort</span> -nr<br><br>登录成功：<span class="hljs-keyword">grep</span> <span class="hljs-string">&quot;Accepted&quot;</span> <span class="hljs-regexp">/var/</span>log/secure | awk <span class="hljs-string">&#x27;&#123;print $11&#125;&#x27;</span> | <span class="hljs-keyword">sort</span> | uniq -c | <span class="hljs-keyword">sort</span> -nr<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20230905150423999.png" srcset="/img/loading.gif" lazyload alt="image-20230905150423999"></p>
+<p><img src="/img/image-20230905150508377.png" srcset="/img/loading.gif" lazyload alt="image-20230905150508377"></p>
+<p><strong>封禁</strong></p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs accesslog">hosts黑名单          /etc/hosts.deny<br>hosts白名单          /etc/hosts.allow<br>配置格式：<br>服务:地址:允许/封禁<br>服务： <br>ssh  ftp  smb  telnet 关键字（all）：禁止或允许运行所有的服务<br>all:<span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">0</span>.<span class="hljs-number">10</span>:deny(全封)<br>all:<span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">0</span>.<span class="hljs-number">10</span>:allow(加白)<br><br>地址：<br><span class="hljs-number">192.168.0.10</span><br><span class="hljs-number">192.168.0.10</span>/<span class="hljs-number">24</span>（封C段）<br><span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">0</span>.*（封C段）<br><span class="hljs-number">192</span>.<span class="hljs-number">168</span>.<span class="hljs-number">0</span>. （封C段）<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs diff">密码爆破 hydra<br>hydra -l root -P 密码字典.txt -vV -e ns 10.210.100.131 ssh<br><span class="hljs-deletion">-l 指定用户</span><br><span class="hljs-deletion">-L 指定用户字典</span><br><span class="hljs-deletion">-P 指定密码字典</span><br><span class="hljs-deletion">-vV 显示提示信息</span><br><span class="hljs-deletion">-e ns 允许为空密码</span><br>ip<br>爆破的服务<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20230905152954772.png" srcset="/img/loading.gif" lazyload alt="image-20230905152954772" style="zoom:67%;" />
+
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">封禁：<br><span class="hljs-symbol">sshd:</span><span class="hljs-number">10.210</span><span class="hljs-number">.100</span><span class="hljs-number">.128</span>:deny<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20230905153708461.png" srcset="/img/loading.gif" lazyload alt="image-20230905153708461" style="zoom:67%;" />
+
+<p>攻击机无法连接和爆破</p>
+<img src="/img/image-20230905153851379.png" srcset="/img/loading.gif" lazyload alt="image-20230905153851379" style="zoom:80%;" />
+
+<p><img src="/img/image-20230905153939709.png" srcset="/img/loading.gif" lazyload alt="image-20230905153939709"></p>
+<h2 id="项目实现思路"><a href="#项目实现思路" class="headerlink" title="项目实现思路"></a>项目实现思路</h2><p>1.打开安全日志</p>
+<p>2.实时监控安全日志</p>
+<p>3.解析日志每一行的内容，找出正在爆破的ip</p>
+<p>4.设置一个阈值，超过阈值后，封禁ip 添加到hosts.deny中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python3</span><br><br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">import</span> subprocess<br><span class="hljs-keyword">import</span> time<br><br><span class="hljs-comment">#安全日志</span><br>logFile = <span class="hljs-string">&#x27;/var/log/secure&#x27;</span><br><span class="hljs-comment">#黑名单</span><br>hostDeny = <span class="hljs-string">&#x27;/etc/hosts.deny&#x27;</span><br><span class="hljs-comment">#封禁阈值</span><br>password_wrong_num = <span class="hljs-number">5</span><br><br><span class="hljs-comment">#获取已经加入黑名单的ip，转换为字典</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getDenies</span>():<br>    deniedDict = &#123;&#125;<br>    <span class="hljs-built_in">list</span> = <span class="hljs-built_in">open</span>(hostDeny).readlines()<br>    <span class="hljs-keyword">for</span> ip <span class="hljs-keyword">in</span> <span class="hljs-built_in">list</span>:<br>        group = re.search(<span class="hljs-string">r&#x27;(\d+\.\d+\.\d+\.\d+)&#x27;</span>,ip)<br>        <span class="hljs-keyword">if</span> group:<br>            deniedDict[group[<span class="hljs-number">1</span>]] = <span class="hljs-string">&#x27;1&#x27;</span>  <span class="hljs-comment">#标记该ip为1</span><br>    <span class="hljs-keyword">return</span> deniedDict<br><br><span class="hljs-comment">#监控方法</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">monitorLog</span>(<span class="hljs-params">Logfile</span>):<br>    <span class="hljs-comment">#统计密码错误的次数</span><br>    tempIp = &#123;&#125;<br>    <span class="hljs-comment">#已经存到黑名单中的ip</span><br>    deniedDict = getDenies()<br>    <span class="hljs-comment">#读取安全日志</span><br>    popen = subprocess.Popen(<span class="hljs-string">&#x27;tail -f &#x27;</span>+logFile,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=<span class="hljs-literal">True</span>)<br><br>    <span class="hljs-comment">#开始监控</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        time.sleep(<span class="hljs-number">0.1</span>)<br>        <span class="hljs-comment">#读取日志</span><br>        line = popen.stdout.readline().strip()  <span class="hljs-comment">#str.strip() 去除字符串两边的空格</span><br>        <span class="hljs-keyword">if</span> line:<br>            <span class="hljs-comment">#出现Failed 说明：这个用户存在，但是密码错误</span><br>            <span class="hljs-comment">#出现Invalid 说明：这个用户都不存在</span><br>            group = re.search(<span class="hljs-string">&#x27;Invalid user \w+ from (\d+\.\d+\.\d+\.\d+)&#x27;</span>,<span class="hljs-built_in">str</span>(line))<br>            <span class="hljs-comment">#不存在用户直接封</span><br>            <span class="hljs-keyword">if</span> group <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> deniedDict.get(group[<span class="hljs-number">1</span>]):<br>                subprocess.getoutput(<span class="hljs-string">&#x27;echo \&#x27;sshd:&#123;&#125;\&#x27; &gt;&gt; &#123;&#125;&#x27;</span>.<span class="hljs-built_in">format</span>(group[<span class="hljs-number">1</span>],hostDeny))<br>                deniedDict[group[<span class="hljs-number">1</span>]] = <span class="hljs-string">&#x27;1&#x27;</span><br>                time_str = time.strftime(<span class="hljs-string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>,time.localtime(time.time()))<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&#123;&#125; --- and ip:&#123;&#125; to hosts.deny for invalid usr&#x27;</span>.<span class="hljs-built_in">format</span>(time_str,group[<span class="hljs-number">1</span>]))<br>                <span class="hljs-keyword">continue</span><br>            <span class="hljs-comment">#用户名合法 （存在该用户） 密码错误</span><br>            group = re.search(<span class="hljs-string">&#x27;Failed password for \w+ from (\d+\.\d+\.\d+\.\d+)&#x27;</span>,<span class="hljs-built_in">str</span>(line))<br>            <span class="hljs-keyword">if</span> group:<br>                ip = group[<span class="hljs-number">1</span>]<br>                <span class="hljs-comment">#统计ip错误的次数</span><br>                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> tempIp.get(ip):<br>                    tempIp[ip] = <span class="hljs-number">1</span><br>                <span class="hljs-keyword">else</span>:<br>                    tempIp[ip] = tempIp[ip]+<span class="hljs-number">1</span><br>                <span class="hljs-comment">#如果错误次数大于阈值，封禁该ip</span><br>                <span class="hljs-keyword">if</span> tempIp[ip] &gt; password_wrong_num <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> deniedDict.get(ip):<br>                    <span class="hljs-keyword">del</span> tempIp[ip]<br>                    subprocess.getoutput(<span class="hljs-string">&#x27;echo \&#x27;sshd:&#123;&#125;\&#x27; &gt;&gt; &#123;&#125;&#x27;</span>.<span class="hljs-built_in">format</span>(ip,hostDeny))<br>                    deniedDict[ip]=<span class="hljs-string">&#x27;1&#x27;</span><br>                    time_str = time.strftime(<span class="hljs-string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>,time.localtime(time.time()))<br>                    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&#123;&#125; --- and ip:&#123;&#125; to hosts.deny for invalid password&#x27;</span>.<span class="hljs-built_in">format</span>(time_str,group[<span class="hljs-number">1</span>]))<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    monitorLog(logFile)<br></code></pre></td></tr></table></figure>
+
+<p>其中group[1]即匹配到的ip</p>
+<img src="/img/image-20230929155319929.png" srcset="/img/loading.gif" lazyload alt="image-20230929155319929" style="zoom:67%;" />
+
+<p>靶机启动脚本：</p>
+<p><img src="/img/image-20230905170317267.png" srcset="/img/loading.gif" lazyload alt="image-20230905170317267"></p>
+<p>攻击机执行爆破：</p>
+<p><img src="/img/image-20230905170308672.png" srcset="/img/loading.gif" lazyload alt="image-20230905170308672"></p>
+<img src="../../../安全学习/md文件图片存放/image-20230905170519218.png" srcset="/img/loading.gif" lazyload alt="image-20230905170519218" style="zoom:80%;" />
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%84%9A%E6%9C%AC%E7%BC%96%E7%A8%8B/" class="category-chain-item">脚本编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ssh暴力破解阻断</div>
+      <div>http://example.com/2023/09/29/ssh暴力破解阻断/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>r1</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年9月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/22/pythonScript/" title="pythonScript">
+                        <span class="hidden-mobile">pythonScript</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

